@@ -302,3 +302,23 @@ intersphinx_mapping = {
 }
 
 print(f"loading configurations for {project} {version} ...", file=sys.stderr)
+
+# -- Biocsetup configuration -------------------------------------------------
+
+# Enable execution of code chunks in markdown
+extensions.remove('myst_parser')
+extensions.append('myst_nb')
+
+# Less verbose api documentation
+extensions.append('sphinx_autodoc_typehints')
+
+autodoc_default_options = {
+    "special-members": True,
+    "undoc-members": True,
+    "exclude-members": "__weakref__, __dict__, __str__, __module__",
+}
+
+autosummary_generate = True
+autosummary_imported_members = True
+
+html_theme = "furo"
