@@ -2,9 +2,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import biocframe
-from summarizedexperiment.RangedSummarizedExperiment import (
-    GRangesOrGRangesList
-)
+from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 from singlecellexperiment import SingleCellExperiment
 
 __author__ = "keviny2"
@@ -37,19 +35,16 @@ class SpatialExperiment(SingleCellExperiment):
         row_pairs: Optional[Any] = None,
         column_pairs: Optional[Any] = None,
 
-        # ============== SpatialExperiment additional arguments ===============
-        sample_id: Optional[str] = "sample01",
+        # ============== SpatialExperiment arguments ===============
 
-        # Bioconductor implementation allows for both spatialCoord and spatialCoordsNames to be None
+        sample_id: Optional[str] = "sample01",
         spatial_coords: Optional[biocframe.BiocFrame] = None,
         spatial_coords_names: Optional[List[str]] = None,
-
         scale_factors: Optional[Union[int, float, List[Union[int, float]], str]] = 1,
         img_data: Optional[pd.DataFrame] = None,
         image_sources: Optional[Union[str, List[str]]] = None,
         image_id: Optional[List[str]] = None,
         load_image: bool = True,
-
         validate: bool = True,
     ) -> None:
         """Initialize a spatial experiment.
@@ -123,35 +118,42 @@ class SpatialExperiment(SingleCellExperiment):
                 Column pairings/relationships between cells.
 
                 Defaults to None.
-            
+
             spatial_coords:
 
 
             validate:
                 Internal use only.
         """
-        if spatial_coords_names is None:
-            if spatial_coords is None:
-                raise ValueError("If `spatial_coords_names` is None, `spatial_coords` must be specified")
+        from copy import deepcopy
 
-            self._spatial_coords = spatial_coords
-        else:
-            missing_names = [name for name in spatial_coords_names if name not in column_data.column_names]
+        # `spatial_coords_names` takes precedence
+        current_column_data = column_data
+
+        # TODO: some nuances when `column_data` has a column named `sample_id`. see 'Details' in the Bioconductor SpatialExperiment vignette (pg. 9)
+        current_column_data = column_data.set_column(
+            "sample_id", [sample_id] * len(column_data)
+        )
+
+        if spatial_coords_names:
+            missing_names = [
+                name for name in spatial_coords_names if name not in current_column_data.column_names
+            ]
             if missing_names:
-                raise ValueError(f"The following names in `spatial_coords_names` are missing from `column_data`: {missing_names}")
-            
-            # TODO: make deep copies of sliced column_data?
-            self._spatial_coords = column_data[:, spatial_coords_names]
-            
-            columns_to_keep = [colname for colname in column_data.column_names not in spatial_coords_names]
-            column_data = column_data[:, columns_to_keep]
-            
+                raise ValueError(
+                    f"The following names in `spatial_coords_names` are missing from `column_data`: {missing_names}"
+                )
+
+            spatial_coords = deepcopy(current_column_data[:, spatial_coords_names])
+            current_column_data = deepcopy(current_column_data[:, [col for col in current_column_data.column_names if col not in spatial_coords_names]])
+
+        self._spatial_coords = spatial_coords
 
         super().__init__(
             assays=assays,
             row_ranges=row_ranges,
             row_data=row_data,
-            column_data=column_data,
+            column_data=current_column_data,
             row_names=row_names,
             column_names=column_names,
             metadata=metadata,
@@ -162,4 +164,68 @@ class SpatialExperiment(SingleCellExperiment):
             column_pairs=column_pairs,
             validate=validate,
         )
-        
+
+    #########################
+    ######>> Copying <<######
+    #########################
+
+    def __deepcopy__(self, memo=None, _nil=[]):
+        """
+        Returns:
+            A deep copy of the current ``SingleCellExperiment``.
+        """
+        from copy import deepcopy
+
+        _assays_copy = deepcopy(self._assays)
+        _rows_copy = deepcopy(self._rows)
+        _rowranges_copy = deepcopy(self._row_ranges)
+        _cols_copy = deepcopy(self._cols)
+        _row_names_copy = deepcopy(self._row_names)
+        _col_names_copy = deepcopy(self._column_names)
+        _metadata_copy = deepcopy(self.metadata)
+        _main_expt_name_copy = deepcopy(self._main_experiment_name)
+        _red_dim_copy = deepcopy(self._reduced_dims)
+        _alt_expt_copy = deepcopy(self._alternative_experiments)
+        _row_pair_copy = deepcopy(self._row_pairs)
+        _col_pair_copy = deepcopy(self._column_pairs)
+
+        current_class_const = type(self)
+        return current_class_const(
+            assays=_assays_copy,
+            row_ranges=_rowranges_copy,
+            row_data=_rows_copy,
+            column_data=_cols_copy,
+            row_names=_row_names_copy,
+            column_names=_col_names_copy,
+            metadata=_metadata_copy,
+            reduced_dims=_red_dim_copy,
+            main_experiment_name=_main_expt_name_copy,
+            alternative_experiments=_alt_expt_copy,
+            row_pairs=_row_pair_copy,
+            column_pairs=_col_pair_copy,
+        )
+
+    def __copy__(self):
+        """
+        Returns:
+            A shallow copy of the current ``SingleCellExperiment``.
+        """
+        current_class_const = type(self)
+        return current_class_const(
+            assays=self._assays,
+            row_ranges=self._row_ranges,
+            row_data=self._rows,
+            column_data=self._cols,
+            row_names=self._row_names,
+            column_names=self._column_names,
+            metadata=self._metadata,
+            reduced_dims=self._reduced_dims,
+            main_experiment_name=self._main_experiment_name,
+            alternative_experiments=self._alternative_experiments,
+            row_pairs=self._row_pairs,
+            column_pairs=self._column_pairs,
+        )
+
+    def copy(self):
+        """Alias for :py:meth:`~__copy__`."""
+        return self.__copy__()

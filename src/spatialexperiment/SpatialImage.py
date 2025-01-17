@@ -1,11 +1,16 @@
+# TODO: consolidate classes into a single one and do data dispatch
+# TODO: just throw and error if user provides a URL
+
 from abc import ABC
 import os
+from PIL import Image
 
 class SpatialImage(ABC):
-    @classmethod
-    def create(cls, x, is_url=None):
+    def __new__(cls, x, is_url=None):
         if isinstance(x, SpatialImage):
             return x
+        elif isinstance(x, Image.Image):
+            return LoadedSpatialImage(image=x)
         elif isinstance(x, str):
             if is_url is None:
                 is_url = x.startswith(("http://", "https://", "ftp://"))
@@ -17,7 +22,6 @@ class SpatialImage(ABC):
             raise ValueError("Unknown input type for 'x'")
 
 class LoadedSpatialImage(SpatialImage):
-    # use PIL (Pillow)?
     def __init__(self, image):
         self.image = image
 
