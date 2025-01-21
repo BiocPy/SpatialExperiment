@@ -49,7 +49,6 @@ class SpatialExperiment(SingleCellExperiment):
         spatial_coords: Optional[biocframe.BiocFrame] = None,
         img_data: Optional[biocframe.BiocFrame] = None,
         validate: bool = True,
-        sample_id: Optional[str] = "sample01",
     ) -> None:
         """Initialize a spatial experiment.
 
@@ -124,9 +123,6 @@ class SpatialExperiment(SingleCellExperiment):
                 Column pairings/relationships between cells.
 
                 Defaults to None.
-
-            sample_id:
-                The sample id.
 
             spatial_coords:
                 Optional :py:class:`~biocframe.BiocFrame.BiocFrame` object containing columns of spatial coordinates.
