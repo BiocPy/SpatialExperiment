@@ -1,3 +1,6 @@
+# TODO: implement readImgData and read10xVisium?
+# TODO: interop w/ SpatialData class from scverse
+# TODO: no type hints in the docstring
 from typing import Any, Dict, List, Optional, Union
 from warnings import warn
 
@@ -5,11 +8,12 @@ from PIL import Image
 import biocframe
 import biocutils as ut
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
+from summarizedexperiment._frameutils import _sanitize_frame
 from singlecellexperiment import SingleCellExperiment
 from SpatialImage import SpatialImage
 
 from utils import flatten_list
-from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data, _validate_id
+from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data, _validate_id, _validate_column_data
 from _frameutils import _sanitize_frame
 
 __author__ = "keviny2"
@@ -43,19 +47,13 @@ class SpatialExperiment(SingleCellExperiment):
         column_pairs: Optional[Any] = None,
 
         # ============== SpatialExperiment arguments ===============
-        sample_id: Optional[str] = "sample01",
         spatial_coords: Optional[biocframe.BiocFrame] = None,
-        spatial_coords_names: Optional[List[str]] = None,
-        scale_factors: Optional[Union[int, float, List[Union[int, float]], str]] = 1,
         img_data: Optional[biocframe.BiocFrame] = None,
-        image_sources: Optional[Union[str, List[str]]] = None,
-        image_id: Optional[List[str]] = None,
-        load_image: bool = False,
         validate: bool = True,
+        sample_id: Optional[str] = "sample01",
     ) -> None:
         """Initialize a spatial experiment.
 
-        # TODO: improve this docstring
         Args:
             assays:
                 A dictionary containing matrices, with assay names as keys
@@ -82,7 +80,9 @@ class SpatialExperiment(SingleCellExperiment):
 
             column_data:
                 Sample data, must be the same length as the number of
-                columns of the matrices in assays.
+                columns of the matrices in assays. For instances of the
+                ``SpatialExperiment`` class, the sample data must include
+                a column named `sample_id`.
 
                 Sample information is coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
@@ -130,92 +130,31 @@ class SpatialExperiment(SingleCellExperiment):
                 The sample id.
 
             spatial_coords:
-                A BiocFrame object containing columns of spatial coordinates.
+                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` object containing columns of spatial coordinates.
 
                 Spatial coordinates are coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
 
-            spatial_coords_names:
-                A list of strings of column names from `column_data` containing spatial coordinates. Alternatively, the `spatial_coords` argument may be provided.
-
-            scale_factors:
-                The scaling factor associated with the image.
-
             img_data:
-                Optional DataFrame containing the image data. Alternatively, this can be built from the arguments `image_sources` and `image_id`.
+                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data.
 
                 Image data are coerced to a 
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
 
-            image_sources:
-                The file path to the image.
-
-            image_id:
-                The image id.
-
-            load_image:
-
             validate:
                 Internal use only.
         """
-        from copy import deepcopy
+        # TODO: what is the relationship between  `sample_id` in `img_data` and `sample_id` in `column_data`?
+        _validate_column_data(column_data=column_data) 
 
-        current_column_data = _sanitize_frame(column_data, self.shape[1])
-
-        # if `column_data` does not have a column named `sample_id`, assign the value from the `sample_id` argument
-        if not column_data.has_column("sample_id"):
-            current_column_data = column_data.set_column(
-                "sample_id", [sample_id] * len(column_data)
-            )
-
-        # `spatial_coords_names` takes precedence
-        if spatial_coords_names is not None:
-            missing_names = [
-                name
-                for name in spatial_coords_names
-                if name not in current_column_data.column_names
-            ]
-            if missing_names:
-                raise ValueError(
-                    f"The following names in `spatial_coords_names` are missing from `column_data`: {missing_names}"
-                )
-
-            extracted_spatial_coords = deepcopy(
-                current_column_data[:, spatial_coords_names]
-            )
-
-            current_column_data = deepcopy(
-                current_column_data[
-                    :,
-                    [
-                        col
-                        for col in current_column_data.column_names
-                        if col not in spatial_coords_names
-                    ],
-                ]
-            )
-
-            self._spatial_coords = extracted_spatial_coords
-        else:
-            self._spatial_coords = _sanitize_frame(spatial_coords)
-
-        if img_data is not None:
-            self._img_data = _sanitize_frame(img_data)
-        else:
-            # NOTE: ignoring wheter `image_id`, `image_sources` and `scale_factors` could be lists
-            _img_data = {
-                "sample_id": sample_id,
-                "image_id": image_id if image_id is not None else sample_id,
-                "data": SpatialImage(image_sources),
-                "scale_factor": scale_factors,
-            }
-            self._img_data = biocframe.BiocFrame(_img_data)
+        self._spatial_coords = _sanitize_frame(spatial_coords)
+        self._img_data = _sanitize_frame(img_data)
 
         super().__init__(
             assays=assays,
             row_ranges=row_ranges,
             row_data=row_data,
-            column_data=current_column_data,
+            column_data=column_data,
             row_names=row_names,
             column_names=column_names,
             metadata=metadata,
@@ -234,7 +173,7 @@ class SpatialExperiment(SingleCellExperiment):
     def __deepcopy__(self, memo=None, _nil=[]):
         """
         Returns:
-            A deep copy of the current ``SingleCellExperiment``.
+            A deep copy of the current ``SpatialExperiment``.
         """
         from copy import deepcopy
 
@@ -274,7 +213,7 @@ class SpatialExperiment(SingleCellExperiment):
     def __copy__(self):
         """
         Returns:
-            A shallow copy of the current ``SingleCellExperiment``.
+            A shallow copy of the current ``SpatialExperiment``.
         """
         current_class_const = type(self)
         return current_class_const(
@@ -384,7 +323,7 @@ class SpatialExperiment(SingleCellExperiment):
         """Access spatial coordinates.
         
         Returns:
-            A BiocFrame object containing columns of spatial coordinates.
+            A ``BiocFrame`` containing columns of spatial coordinates.
         """
         return self._spatial_coords
 
@@ -396,10 +335,10 @@ class SpatialExperiment(SingleCellExperiment):
         """Set new spatial coordinates.
         
         Args:
-            spatial_coords (biocframe.BiocFrame):
+            spatial_coords:
                 New spatial coordinates.
             
-            in_place (bool): Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
+            in_place: Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
         
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
@@ -522,7 +461,8 @@ class SpatialExperiment(SingleCellExperiment):
         Retrieve spatial images based on the provided sample and image ids.
 
         Args:
-            sample_id (Union[str, True, None], optional): The sample id.
+            # TODO: describe what `sample_id=True`, `sample_id=None`, `sample_id="sample_1"` mean
+            sample_id (Union[str, True, None], optional): The sample id. `sample_id=True` then get all samples...
             image_id (Union[str, True, None], optional): The image id.
 
         Returns:
