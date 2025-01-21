@@ -8,7 +8,7 @@ from singlecellexperiment import SingleCellExperiment
 from SpatialImage import SpatialImage
 
 from utils import flatten_list
-from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data
+from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data, _validate_id
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -406,7 +406,40 @@ class SpatialExperiment(SingleCellExperiment):
         sample_id: Union[str, True, None] = None,
         image_id: Union[str, True, None] = None,
     ) -> Union[SpatialImage, List[SpatialImage]]:
-        # TODO: validate that `sample_id` and `image_id` are one of Union[str, True, None]
+        """
+        Retrieve spatial images based on the provided sample and image ids.
+
+        Args:
+            sample_id (Union[str, True, None], optional): The sample id.
+            image_id (Union[str, True, None], optional): The image id.
+
+        Returns:
+            Union[SpatialImage, List[SpatialImage]]: One or more `SpatialImage` objects.
+
+        Behavior:
+            - sample_id = True, image_id = True:
+                Returns all images from all samples.
+
+            - sample_id = None, image_id = None:
+                Returns the first image entry in the dataset.
+
+            - sample_id = True, image_id = None:
+                Returns the first image for each sample.
+
+            - sample_id = None, image_id = True:
+                Returns all images for the first sample.
+
+            - sample_id = <str>, image_id = True:
+                Returns all images for the specified sample.
+
+            - sample_id = <str>, image_id = None:
+                Returns the first image for the specified sample.
+
+            - sample_id = <str>, image_id = <str>:
+                Returns the image matching the specified sample and image identifiers.
+        """
+        _validate_id(sample_id)
+        _validate_id(image_id)
 
         if self._img_data is None:
             return None
@@ -468,6 +501,24 @@ class SpatialExperiment(SingleCellExperiment):
         image_id: Union[str, True, None],
         load: bool = True
     ) -> "SpatialExperiment":
+        """
+        Add a new image entry.
+
+        Args:
+            image_source (str): The file path to the image.
+            scale_factor (float): The scaling factor associated with the image.
+            sample_id (Union[str, True, None]): The sample id.
+            image_id (Union[str, True, None]): The image id.
+            load (bool, optional): Whether to load the image into memory. If `True`,
+                the method reads the image file from `image_source`. Defaults to `True`.
+
+        Returns:
+            SpatialExperiment: The updated SpatialExperiment object containing the
+            newly added image entry.
+
+        Raises:
+            ValueError: If the sample_id and image_id pair already exists.
+        """
         _validate_sample_image_ids(img_data=self._img_data, new_sample_id=sample_id, new_image_id=image_id)
 
         if load:
