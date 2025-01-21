@@ -8,7 +8,7 @@ from singlecellexperiment import SingleCellExperiment
 from SpatialImage import SpatialImage
 
 from utils import flatten_list
-from _validators import _validate_sample_image_ids, _validate_spatial_coords
+from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -272,7 +272,7 @@ class SpatialExperiment(SingleCellExperiment):
         """Access spatial coordinates.
         
         Returns:
-            A BiocFrame dataframe containing columns of spatial coordinates.
+            A BiocFrame object containing columns of spatial coordinates.
         """
         return self._spatial_coords
 
@@ -330,8 +330,75 @@ class SpatialExperiment(SingleCellExperiment):
         )
         self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=True)
 
+    ##############################
+    ########>> img_data <<########
+    ##############################
+
+    def get_image_data(self) -> biocframe.BiocFrame:
+        """Access image data.
+        
+        Returns:
+            A BiocFrame object containing the image data.
+        """
+        return self._img_data
+    
+    def get_img_data(self) -> biocframe.BiocFrame:
+        """Alias for :py:meth:`~get_image_data`."""
+        return self.get_image_data()
+
+    def set_image_data(self, img_data: biocframe.BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+        """Set new image data.
+        
+        Args:
+            img_data (biocframe.BiocFrame):
+                New image data.
+                
+            in_place (bool): Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
+            
+        Returns:
+            A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
+        """
+        _validate_img_data(img_data)
+
+        output = self._define_output(in_place)
+        output._img_data = img_data
+        return output
+
+    def set_img_data(self, img_data: biocframe.BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+        """Alias for :py:meth:`~set_image_data`."""
+        return self.set_image_data(img_data=img_data, in_place=in_place)
+
+    @property
+    def img_data(self) -> biocframe.BiocFrame:
+        """Alias for :py:meth:`~get_image_data`."""
+        return self.get_image_data()
+
+    @img_data.setter
+    def img_data(self, img_data: biocframe.BiocFrame):
+        """Alias for :py:meth:`~set_image_data`."""
+        warn(
+            "Setting property 'img_data' is an in-place operation, use 'set_image_data' instead.",
+            UserWarning
+        )
+        self.set_image_data(img_data=img_data, in_place=True)
+
+    @property
+    def image_data(self) -> biocframe.BiocFrame:
+        """Alias for :py:meth:`~get_image_data`."""
+        return self.get_image_data()
+
+    @image_data.setter
+    def image_data(self, img_data: biocframe.BiocFrame):
+        """Alias for :py:meth:`~set_image_data`."""
+        warn(
+            "Setting property 'img_data' is an in-place operation, use 'set_image_data' instead.",
+            UserWarning
+        )
+        self.set_image_data(img_data=img_data, in_place=True)
+
+
     ################################
-    ######>> img_data funcs <<#####
+    ######>> img_data funcs <<######
     ################################
 
     def get_img(
@@ -429,9 +496,10 @@ class SpatialExperiment(SingleCellExperiment):
             main_experiment_name=self.get_main_experiment_name(),
             alternative_experiments=self.get_alternative_experiments(),
             row_pairs=self.get_row_pairs(),
-            column_pairs=self.get_column_pairs()
+            column_pairs=self.get_column_pairs(),
+            spatial_coords=self.get_spatial_coordinates(),
+            img_data=new_img_data
         )
-
 
     def rmv_img(
         self,

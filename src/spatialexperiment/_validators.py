@@ -16,3 +16,10 @@ def _validate_spatial_coords(spatial_coords, shape):
     
     if shape[1] != spatial_coords.shape[0]:
         raise ValueError(f"Spatial coordinates do not contain coordinates for all cells.")
+
+def _validate_img_data(img_data):
+    if img_data is None:
+        return
+
+    if not isinstance(img_data, biocframe.BiocFrame):
+        raise TypeError("'img_data' is not a BiocFrame object.")
