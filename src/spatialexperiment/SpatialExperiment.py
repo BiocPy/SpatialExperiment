@@ -3,6 +3,7 @@ from warnings import warn
 
 from PIL import Image
 import biocframe
+import biocutils as ut
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 from singlecellexperiment import SingleCellExperiment
 from SpatialImage import SpatialImage
@@ -296,6 +297,84 @@ class SpatialExperiment(SingleCellExperiment):
     def copy(self):
         """Alias for :py:meth:`~__copy__`."""
         return self.__copy__()
+
+    ##########################
+    ######>> Printing <<######
+    ##########################
+
+    # TODO: update this section for SpatialExperiment
+
+    def __repr__(self) -> str:
+        """
+        Returns:
+            A string representation.
+        """
+        output = f"{type(self).__name__}(number_of_rows={self.shape[0]}"
+        output += f", number_of_columns={self.shape[1]}"
+        output += ", assays=" + ut.print_truncated_list(self.assay_names)
+
+        output += ", row_data=" + self._rows.__repr__()
+        if self._row_names is not None:
+            output += ", row_names=" + ut.print_truncated_list(self._row_names)
+
+        output += ", column_data=" + self._cols.__repr__()
+        if self._column_names is not None:
+            output += ", column_names=" + ut.print_truncated_list(self._column_names)
+
+        if self._row_ranges is not None:
+            output += ", row_ranges=" + self._row_ranges.__repr__()
+
+        if self._alternative_experiments is not None:
+            output += ", alternative_experiments=" + ut.print_truncated_list(self.alternative_experiment_names)
+
+        if self._reduced_dims is not None:
+            output += ", reduced_dims=" + ut.print_truncated_list(self.reduced_dim_names)
+
+        if self._main_experiment_name is not None:
+            output += ", main_experiment_name=" + self._main_experiment_name
+
+        if len(self._row_pairs) > 0:
+            output += ", row_pairs=" + ut.print_truncated_dict(self._row_pairs)
+
+        if len(self._column_pairs) > 0:
+            output += ", column_pairs=" + ut.print_truncated_dict(self._column_pairs)
+
+        if len(self._metadata) > 0:
+            output += ", metadata=" + ut.print_truncated_dict(self._metadata)
+
+        output += ")"
+        return output
+
+    def __str__(self) -> str:
+        """
+        Returns:
+            A pretty-printed string containing the contents of this object.
+        """
+        output = f"class: {type(self).__name__}\n"
+
+        output += f"dimensions: ({self.shape[0]}, {self.shape[1]})\n"
+
+        output += f"assays({len(self.assay_names)}): {ut.print_truncated_list(self.assay_names)}\n"
+
+        output += (
+            f"row_data columns({len(self._rows.column_names)}): {ut.print_truncated_list(self._rows.column_names)}\n"
+        )
+        output += f"row_names({0 if self._row_names is None else len(self._row_names)}): {' ' if self._row_names is None else ut.print_truncated_list(self._row_names)}\n"
+
+        output += (
+            f"column_data columns({len(self._cols.column_names)}): {ut.print_truncated_list(self._cols.column_names)}\n"
+        )
+        output += f"column_names({0 if self._column_names is None else len(self._column_names)}): {' ' if self._column_names is None else ut.print_truncated_list(self._column_names)}\n"
+
+        output += f"main_experiment_name: {' ' if self._main_experiment_name is None else self._main_experiment_name}\n"
+        output += f"reduced_dims({len(self.reduced_dim_names)}): {ut.print_truncated_list(self.reduced_dim_names)}\n"
+        output += f"alternative_experiments({len(self.alternative_experiment_names)}): {ut.print_truncated_list(self.alternative_experiment_names)}\n"
+        output += f"row_pairs({len(self.row_pair_names)}): {ut.print_truncated_list(self.row_pair_names)}\n"
+        output += f"column_pairs({len(self.column_pair_names)}): {ut.print_truncated_list(self.column_pair_names)}\n"
+
+        output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+
+        return output
 
     ##############################
     #####>> spatial_coords <<#####
