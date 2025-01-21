@@ -9,6 +9,7 @@ from SpatialImage import SpatialImage
 
 from utils import flatten_list
 from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data, _validate_id
+from _frameutils import _sanitize_frame
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -53,6 +54,7 @@ class SpatialExperiment(SingleCellExperiment):
     ) -> None:
         """Initialize a spatial experiment.
 
+        # TODO: improve this docstring
         Args:
             assays:
                 A dictionary containing matrices, with assay names as keys
@@ -88,7 +90,7 @@ class SpatialExperiment(SingleCellExperiment):
                 A list of strings, same as the number of rows.Defaults to None.
 
             column_names:
-                A list of string, same as the number of columns. Defaults to None.
+                A list of strings, same as the number of columns. Defaults to None.
 
             metadata:
                 Additional experimental metadata describing the methods.
@@ -123,15 +125,41 @@ class SpatialExperiment(SingleCellExperiment):
 
                 Defaults to None.
 
-            spatial_coords:
+            sample_id:
+                The sample id.
 
+            spatial_coords:
+                A BiocFrame object containing columns of spatial coordinates.
+
+                Spatial coordinates are coerced to a
+                :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
+
+            spatial_coords_names:
+                A list of strings of column names from `column_data` containing spatial coordinates. Alternatively, the `spatial_coords` argument may be provided.
+
+            scale_factors:
+                The scaling factor associated with the image.
+
+            img_data:
+                Optional DataFrame containing the image data. Alternatively, this can be built from the arguments `image_sources` and `image_id`.
+
+                Image data are coerced to a 
+                :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
+
+            image_sources:
+                The file path to the image.
+
+            image_id:
+                The image id.
+
+            load_image:
 
             validate:
                 Internal use only.
         """
         from copy import deepcopy
 
-        current_column_data = column_data
+        current_column_data = _sanitize_frame(column_data, self.shape[1])
 
         # if `column_data` does not have a column named `sample_id`, assign the value from the `sample_id` argument
         if not column_data.has_column("sample_id"):
@@ -168,10 +196,10 @@ class SpatialExperiment(SingleCellExperiment):
 
             self._spatial_coords = extracted_spatial_coords
         else:
-            self._spatial_coords = spatial_coords
+            self._spatial_coords = _sanitize_frame(spatial_coords)
 
         if img_data is not None:
-            self._img_data = img_data
+            self._img_data = _sanitize_frame(img_data)
         else:
             # NOTE: ignoring wheter `image_id`, `image_sources` and `scale_factors` could be lists
             _img_data = {

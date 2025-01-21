@@ -1,5 +1,9 @@
 import biocframe
 
+__author__ = "keviny2"
+__copyright__ = "keviny2"
+__license__ = "MIT"
+
 
 def _validate_id(id):
     is_valid = isinstance(id, str) or id is True or id is None
