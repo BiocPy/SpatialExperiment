@@ -237,7 +237,6 @@ class SpatialExperiment(SingleCellExperiment):
         """
         from copy import deepcopy
 
-        # TODO: include SpatialExperiment variables too
         _assays_copy = deepcopy(self._assays)
         _rows_copy = deepcopy(self._rows)
         _rowranges_copy = deepcopy(self._row_ranges)
@@ -250,6 +249,8 @@ class SpatialExperiment(SingleCellExperiment):
         _alt_expt_copy = deepcopy(self._alternative_experiments)
         _row_pair_copy = deepcopy(self._row_pairs)
         _col_pair_copy = deepcopy(self._column_pairs)
+        _spatial_coords_copy = deepcopy(self._spatial_coords)
+        _img_data_copy = deepcopy(self._img_data)
 
         current_class_const = type(self)
         return current_class_const(
@@ -265,6 +266,8 @@ class SpatialExperiment(SingleCellExperiment):
             alternative_experiments=_alt_expt_copy,
             row_pairs=_row_pair_copy,
             column_pairs=_col_pair_copy,
+            spatial_coords=_spatial_coords_copy,
+            img_data=_img_data_copy
         )
 
     def __copy__(self):
@@ -286,6 +289,8 @@ class SpatialExperiment(SingleCellExperiment):
             alternative_experiments=self._alternative_experiments,
             row_pairs=self._row_pairs,
             column_pairs=self._column_pairs,
+            spatial_coords=self._spatial_coords,
+            img_data=self._img_data
         )
 
     def copy(self):
