@@ -1,9 +1,14 @@
 from typing import Any, Dict, List, Optional, Union
+from warnings import warn
 
-import pandas as pd
+from PIL import Image
 import biocframe
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 from singlecellexperiment import SingleCellExperiment
+from SpatialImage import SpatialImage
+
+from utils import flatten_list
+from _validators import _validate_sample_image_ids, _validate_spatial_coords
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -36,15 +41,14 @@ class SpatialExperiment(SingleCellExperiment):
         column_pairs: Optional[Any] = None,
 
         # ============== SpatialExperiment arguments ===============
-
         sample_id: Optional[str] = "sample01",
         spatial_coords: Optional[biocframe.BiocFrame] = None,
         spatial_coords_names: Optional[List[str]] = None,
         scale_factors: Optional[Union[int, float, List[Union[int, float]], str]] = 1,
-        img_data: Optional[pd.DataFrame] = None,
+        img_data: Optional[biocframe.BiocFrame] = None,
         image_sources: Optional[Union[str, List[str]]] = None,
         image_id: Optional[List[str]] = None,
-        load_image: bool = True,
+        load_image: bool = False,
         validate: bool = True,
     ) -> None:
         """Initialize a spatial experiment.
@@ -127,27 +131,56 @@ class SpatialExperiment(SingleCellExperiment):
         """
         from copy import deepcopy
 
-        # `spatial_coords_names` takes precedence
         current_column_data = column_data
 
-        # TODO: some nuances when `column_data` has a column named `sample_id`. see 'Details' in the Bioconductor SpatialExperiment vignette (pg. 9)
-        current_column_data = column_data.set_column(
-            "sample_id", [sample_id] * len(column_data)
-        )
+        # if `column_data` does not have a column named `sample_id`, assign the value from the `sample_id` argument
+        if not column_data.has_column("sample_id"):
+            current_column_data = column_data.set_column(
+                "sample_id", [sample_id] * len(column_data)
+            )
 
-        if spatial_coords_names:
+        # `spatial_coords_names` takes precedence
+        if spatial_coords_names is not None:
             missing_names = [
-                name for name in spatial_coords_names if name not in current_column_data.column_names
+                name
+                for name in spatial_coords_names
+                if name not in current_column_data.column_names
             ]
             if missing_names:
                 raise ValueError(
                     f"The following names in `spatial_coords_names` are missing from `column_data`: {missing_names}"
                 )
 
-            spatial_coords = deepcopy(current_column_data[:, spatial_coords_names])
-            current_column_data = deepcopy(current_column_data[:, [col for col in current_column_data.column_names if col not in spatial_coords_names]])
+            extracted_spatial_coords = deepcopy(
+                current_column_data[:, spatial_coords_names]
+            )
 
-        self._spatial_coords = spatial_coords
+            current_column_data = deepcopy(
+                current_column_data[
+                    :,
+                    [
+                        col
+                        for col in current_column_data.column_names
+                        if col not in spatial_coords_names
+                    ],
+                ]
+            )
+
+            self._spatial_coords = extracted_spatial_coords
+        else:
+            self._spatial_coords = spatial_coords
+
+        if img_data is not None:
+            self._img_data = img_data
+        else:
+            # NOTE: ignoring wheter `image_id`, `image_sources` and `scale_factors` could be lists
+            _img_data = {
+                "sample_id": sample_id,
+                "image_id": image_id if image_id is not None else sample_id,
+                "data": SpatialImage(image_sources),
+                "scale_factor": scale_factors,
+            }
+            self._img_data = biocframe.BiocFrame(_img_data)
 
         super().__init__(
             assays=assays,
@@ -176,6 +209,7 @@ class SpatialExperiment(SingleCellExperiment):
         """
         from copy import deepcopy
 
+        # TODO: include SpatialExperiment variables too
         _assays_copy = deepcopy(self._assays)
         _rows_copy = deepcopy(self._rows)
         _rowranges_copy = deepcopy(self._row_ranges)
@@ -229,3 +263,197 @@ class SpatialExperiment(SingleCellExperiment):
     def copy(self):
         """Alias for :py:meth:`~__copy__`."""
         return self.__copy__()
+
+    ##############################
+    #####>> spatial_coords <<#####
+    ##############################
+
+    def get_spatial_coordinates(self) -> biocframe.BiocFrame:
+        """Access spatial coordinates.
+        
+        Returns:
+            A BiocFrame dataframe containing columns of spatial coordinates.
+        """
+        return self._spatial_coords
+
+    def get_spatial_coords(self) -> biocframe.BiocFrame:
+        """Alias for :py:meth:`~get_spatial_coordinates`."""
+        return self.get_spatial_coordinates()
+
+    def set_spatial_coordinates(self, spatial_coords: biocframe.BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+        """Set new spatial coordinates.
+        
+        Args:
+            spatial_coords (biocframe.BiocFrame):
+                New spatial coordinates.
+            
+            in_place (bool): Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
+        
+        Returns:
+            A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
+        """
+        _validate_spatial_coords(spatial_coords, self.shape)
+
+        output = self._define_output(in_place)
+        output._spatial_coords = spatial_coords
+        return output
+
+    def set_spatial_coords(self, spatial_coords: biocframe.BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+        """Alias for :py:meth:`~set_spatial_coordinates`."""
+        return self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=in_place)
+
+    @property
+    def spatial_coords(self) -> biocframe.BiocFrame:
+        """Alias for :py:meth:`~get_spatial_coordinates`."""
+        return self.get_spatial_coordinates()
+
+    @spatial_coords.setter
+    def spatial_coords(self, spatial_coords: biocframe.BiocFrame):
+        """Alias for :py:meth:`~set_spatial_coordinates`."""
+        warn(
+            "Setting property 'spatial_coords' is an in-place operation, use 'set_spatial_coordinates' instead.",
+            UserWarning
+        )
+        self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=True)
+
+    @property
+    def spatial_coordinates(self) -> biocframe.BiocFrame:
+        """Alias for :py:meth:`~get_spatial_coordinates`."""
+        return self.get_spatial_coordinates()
+
+    @spatial_coordinates.setter
+    def spatial_coordinates(self, spatial_coords: biocframe.BiocFrame):
+        """Alias for :py:meth:`~set_spatial_coordinates`."""
+        warn(
+            "Setting property 'spatial_coords' is an in-place operation, use 'set_spatial_coordinates' instead.",
+            UserWarning
+        )
+        self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=True)
+
+    ################################
+    ######>> img_data funcs <<#####
+    ################################
+
+    def get_img(
+        self,
+        sample_id: Union[str, True, None] = None,
+        image_id: Union[str, True, None] = None,
+    ) -> Union[SpatialImage, List[SpatialImage]]:
+        # TODO: validate that `sample_id` and `image_id` are one of Union[str, True, None]
+
+        if self._img_data is None:
+            return None
+
+        if sample_id is True:
+            if image_id is True:
+                return flatten_list(self._img_data["data"])
+
+            unique_sample_ids = list(set(self._img_data["sample_id"]))
+            sample_id_groups = self._img_data.split("sample_id")
+            imgs = []
+            if image_id is None:
+                # get the first image for all samples
+                for sample_id in unique_sample_ids:
+                    row = sample_id_groups[sample_id].get_row(0)
+                    img = row["data"]
+                    imgs.append(row)
+            else:
+                # get images with `image_id` for all samples
+                for sample_id in unique_sample_ids:
+                    bframe = sample_id_groups[sample_id]
+                    img = bframe[bframe["image_id"] == image_id]["data"]
+                    imgs.append(img)
+
+                return imgs
+
+        if sample_id is None:
+            if image_id is True:
+                # get all images for the first sample
+                first_sample_id = self._img_data["sample_id"][0]
+                imgs = flatten_list(
+                    self._img_data[self._img_data["sample_id"] == first_sample_id][
+                        "data"
+                    ]
+                )
+                return imgs
+
+            if image_id is None:
+                # get the first image entry
+                return self._img_data["data"][0]
+            else:
+                return self._img_data[self._img_data["image_id"] == image_id]["data"][0]
+
+        # `sample_id` is a string
+        subset = self._img_data[self._img_data["sample_id"] == sample_id]
+        if image_id is True:
+            return flatten_list(subset["data"])
+
+        if image_id is None:
+            return subset["data"][0]
+
+        return subset[subset["image_id"] == image_id]["data"]
+
+    def add_img(
+        self,
+        image_source: str,
+        scale_factor: float,
+        sample_id: Union[str, True, None],
+        image_id: Union[str, True, None],
+        load: bool = True
+    ) -> "SpatialExperiment":
+        _validate_sample_image_ids(img_data=self._img_data, new_sample_id=sample_id, new_image_id=image_id)
+
+        if load:
+            img = Image.open(image_source)
+            spi = SpatialImage(img)
+        else:
+            spi = SpatialImage(image_source)
+
+        new_row = biocframe.BiocFrame({
+            "sample_id": sample_id,
+            "image_id": image_id,
+            "data": spi,
+            "scale_factor": scale_factor
+        })
+        new_img_data = self._img_data.combine_rows(new_row)
+
+        self.__init__(
+            assays=self.get_assays(),
+            row_ranges=self.get_row_ranges(),
+            row_data=self.get_row_data(),
+            column_data=self.get_column_data(),
+            row_names=self.get_row_names(),
+            column_names=self.get_column_names(),
+            metadata=self.get_metadata(),
+            reduced_dims=self.get_reduced_dims(),
+            main_experiment_name=self.get_main_experiment_name(),
+            alternative_experiments=self.get_alternative_experiments(),
+            row_pairs=self.get_row_pairs(),
+            column_pairs=self.get_column_pairs()
+        )
+
+
+    def rmv_img(
+        self,
+        sample_id: Union[str, True, None] = None,
+        image_id: Union[str, True, None] = None
+    ) -> "SpatialExperiment":
+        raise NotImplemented()
+
+    def img_source(
+        self,
+        sample_id: Union[str, True, None] = None,
+        image_id: Union[str, True, None] = None,
+        path=False
+    ):
+        raise NotImplemented("This function is irrelevant because it is for `RemoteSpatialImages`")
+
+    def img_raster(self, sample_id=None, image_id=None):
+        # NOTE: this function seems redundant, might be an artifact of the different subclasses of SpatialImage in the R implementation? just call `get_img()` for now
+        self.get_img(sample_id=sample_id, image_id=image_id)
+
+    def rotate_img(self, sample_id=None, image_id=None, degrees=90):
+        raise NotImplemented()
+
+    def mirror_img(self, sample_id=None, image_id=None, axis=("h", "v")):
+        raise NotImplemented()

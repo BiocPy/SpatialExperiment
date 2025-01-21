@@ -1,34 +1,32 @@
-# TODO: consolidate classes into a single one and do data dispatch
-# TODO: just throw and error if user provides a URL
-
-from abc import ABC
 import os
 from PIL import Image
 
-class SpatialImage(ABC):
-    def __new__(cls, x, is_url=None):
+
+class SpatialImage:
+    def __init__(self, x):
         if isinstance(x, SpatialImage):
-            return x
+            self.image = x.image
+            self.path = x.path
         elif isinstance(x, Image.Image):
-            return LoadedSpatialImage(image=x)
+            self.image = x
+            self.path = None
         elif isinstance(x, str):
-            if is_url is None:
-                is_url = x.startswith(("http://", "https://", "ftp://"))
-            if is_url:
-                return RemoteSpatialImage(url=x)
+            if x.startswith(("http://", "https://", "ftp://")):
+                raise ValueError("URLs are not supported for SpatialImage.")
             else:
-                return StoredSpatialImage(path=x)
+                self.image = None
+                self.path = os.path.normpath(x)
         else:
             raise ValueError("Unknown input type for 'x'")
 
-class LoadedSpatialImage(SpatialImage):
-    def __init__(self, image):
-        self.image = image
+    def load_image(self):
+        """Load the image from the stored path into memory."""
+        if self.image is None and self.path is not None:
+            self.image = Image.open(self.path)
+        return self.image
 
-class StoredSpatialImage(SpatialImage):
-    def __init__(self, path):
-        self.path = os.path.normpath(path)
-
-class RemoteSpatialImage(SpatialImage):
-    def __init__(self, url):
-        self.url = url
+    def get_image(self):
+        """Retrieve the image, loading it if necessary."""
+        if self.image is None:
+            return self.load_image()
+        return self.image
