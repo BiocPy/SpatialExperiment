@@ -1,6 +1,5 @@
 # TODO: implement readImgData and read10xVisium?
 # TODO: interop w/ SpatialData class from scverse
-# TODO: no type hints in the docstring
 from typing import Any, Dict, List, Optional, Union
 from warnings import warn
 
@@ -338,7 +337,8 @@ class SpatialExperiment(SingleCellExperiment):
             spatial_coords:
                 New spatial coordinates.
             
-            in_place: Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
+            in_place:
+                Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
         
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
@@ -401,10 +401,11 @@ class SpatialExperiment(SingleCellExperiment):
         """Set new image data.
         
         Args:
-            img_data (biocframe.BiocFrame):
+            img_data:
                 New image data.
                 
-            in_place (bool): Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
+            in_place:
+                Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
             
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
@@ -461,12 +462,18 @@ class SpatialExperiment(SingleCellExperiment):
         Retrieve spatial images based on the provided sample and image ids.
 
         Args:
-            # TODO: describe what `sample_id=True`, `sample_id=None`, `sample_id="sample_1"` mean
-            sample_id (Union[str, True, None], optional): The sample id. `sample_id=True` then get all samples...
-            image_id (Union[str, True, None], optional): The image id.
+            sample_id: The sample id.
+                - `sample_id=True`: Matches all samples.
+                - `sample_id=None`: Matches the first sample.
+                - `sample_id="<str>"`: Matches a sample by its id.
+
+            image_id: The image id.
+                - `image_id=True`: Matches all images for the specified sample(s).
+                - `image_id=None`: Matches the first image for the sample(s).
+                - `image_id="<str>"`: Matches image(s) by its(their) id.
 
         Returns:
-            Union[SpatialImage, List[SpatialImage]]: One or more `SpatialImage` objects.
+            One or more `SpatialImage` objects.
 
         Behavior:
             - sample_id = True, image_id = True:
@@ -557,15 +564,15 @@ class SpatialExperiment(SingleCellExperiment):
         Add a new image entry.
 
         Args:
-            image_source (str): The file path to the image.
-            scale_factor (float): The scaling factor associated with the image.
-            sample_id (Union[str, True, None]): The sample id.
-            image_id (Union[str, True, None]): The image id.
-            load (bool, optional): Whether to load the image into memory. If `True`,
+            image_source: The file path to the image.
+            scale_factor: The scaling factor associated with the image.
+            sample_id: The sample id.
+            image_id: The image id.
+            load: Whether to load the image into memory. If `True`,
                 the method reads the image file from `image_source`. Defaults to `True`.
 
         Returns:
-            SpatialExperiment: The updated SpatialExperiment object containing the
+            The updated SpatialExperiment object containing the
             newly added image entry.
 
         Raises:
