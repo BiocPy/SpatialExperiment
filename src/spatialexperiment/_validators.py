@@ -1,10 +1,18 @@
 import biocframe
+from type_checks import is_list_of_type
 from summarizedexperiment._frameutils import _sanitize_frame
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
 __license__ = "MIT"
 
+
+def _validate_spatial_coords_names(spatial_coords_names, spatial_coords):
+    if not is_list_of_type(spatial_coords_names, str):
+        raise TypeError("'spatial_coords_names' is not a list of strings")
+
+    if len(spatial_coords_names) != spatial_coords.shape[1]:
+        raise ValueError(f"Expected {spatial_coords.shape[1]} names. Got {len(spatial_coords_names)} names.")
 
 def _validate_column_data(column_data):
     error_message = "'column_data' must have a column named 'sample_id'."

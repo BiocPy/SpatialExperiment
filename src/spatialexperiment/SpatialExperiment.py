@@ -12,8 +12,7 @@ from singlecellexperiment import SingleCellExperiment
 from SpatialImage import SpatialImage
 
 from utils import flatten_list
-from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data, _validate_id, _validate_column_data
-from _frameutils import _sanitize_frame
+from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data, _validate_id, _validate_column_data, _validate_spatial_coords_names
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -378,6 +377,76 @@ class SpatialExperiment(SingleCellExperiment):
         self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=True)
 
     ##############################
+    ##>> spatial_coords_names <<##
+    ##############################
+
+    def get_spatial_coordinates_names(self) -> List[str]:
+        """Access spatial coordinates names.
+        
+        Returns:
+            The defined names of the spatial coordinates.
+        """
+        return self._spatial_coords.columns.tolist()
+
+    def get_spatial_coords_names(self) -> List[str]:
+        """Alias for :py:meth:`~get_spatial_coordinate_names`."""
+        return self.get_spatial_coordinate_names()
+
+    def set_spatial_coordinates_names(self, spatial_coords_names: List[str], in_place: bool = False) -> "SpatialExperiment":
+        """Set new spatial coordinates names.
+        
+        Args:
+            spatial_coords_names:
+                New spatial coordinates names.
+            
+            in_place:
+                Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
+        
+        Returns:
+            A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
+        """
+        _validate_spatial_coords_names(spatial_coords_names, self.get_spatial_coordinates())
+
+        old_spatial_coordinates = self.get_spatial_coordinates()
+        new_spatial_coordinates = old_spatial_coordinates.set_column_names(spatial_coords_names)
+
+        output = self._define_output(in_place)
+        output._spatial_coords = new_spatial_coordinates
+        return output
+
+    def set_spatial_coords_names(self, spatial_coords_names: List[str], in_place: bool = False) -> "SpatialExperiment":
+        """Alias for :py:meth:`~set_spatial_coordinates_names`."""
+        return self.set_spatial_coordinates_names(spatial_coords_names=spatial_coords_names, in_place=in_place)
+
+    @property
+    def spatial_coords_names(self) -> List[str]:
+        """Alias for :py:meth:`~get_spatial_coordinates_names`."""
+        return self.get_spatial_coordinates_names()
+
+    @spatial_coords_names.setter
+    def spatial_coords_names(self, spatial_coords_names: List[str]):
+        """Alias for :py:meth:`~set_spatial_coordinates_names`."""
+        warn(
+            "Setting property 'spatial_coords_names' is an in-place operation, use 'set_spatial_coordinates_names' instead.",
+            UserWarning
+        )
+        self.set_spatial_coordinates_names(spatial_coords_names=spatial_coords_names, in_place=True)
+
+    @property
+    def spatial_coordinates_names(self) -> List[str]:
+        """Alias for :py:meth:`~get_spatial_coordinates_names`."""
+        return self.get_spatial_coordinates_names()
+
+    @spatial_coordinates_names.setter
+    def spatial_coordinates_names(self, spatial_coords_names: List[str]):
+        """Alias for :py:meth:`~set_spatial_coordinates_names`."""
+        warn(
+            "Setting property 'spatial_coords_names' is an in-place operation, use 'set_spatial_coordinates_names' instead.",
+            UserWarning
+        )
+        self.set_spatial_coordinates_names(spatial_coords_names=spatial_coords_names, in_place=True)
+
+    ##############################
     ########>> img_data <<########
     ##############################
 
@@ -444,6 +513,11 @@ class SpatialExperiment(SingleCellExperiment):
         )
         self.set_image_data(img_data=img_data, in_place=True)
 
+    ################################
+    #######>> column_data <<########
+    ################################
+
+    # TODO: need to implement a modified `column_data` setter, which ensures that the `SpatialExperiment` object remains valid (see pg.13 of vignette).
 
     ################################
     ######>> img_data funcs <<######
@@ -631,3 +705,11 @@ class SpatialExperiment(SingleCellExperiment):
 
     def mirror_img(self, sample_id=None, image_id=None, axis=("h", "v")):
         raise NotImplemented()
+
+    @staticmethod
+    def to_spatial_experiment():
+        raise NotImplementedError()
+
+    ################################
+    #######>> combine ops <<########
+    ################################
