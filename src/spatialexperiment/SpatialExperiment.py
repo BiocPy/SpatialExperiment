@@ -1,5 +1,6 @@
 # TODO: implement readImgData and read10xVisium?
 # TODO: interop w/ SpatialData class from scverse
+# TODO: combine methods
 from typing import Any, Dict, List, Optional, Union
 from warnings import warn
 
@@ -9,10 +10,10 @@ import biocutils as ut
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 from summarizedexperiment._frameutils import _sanitize_frame
 from singlecellexperiment import SingleCellExperiment
-from SpatialImage import SpatialImage
+from .SpatialImage import SpatialImage
 
-from utils import flatten_list
-from _validators import (
+from .utils import flatten_list
+from ._validators import (
     _validate_sample_image_ids,
     _validate_spatial_coords,
     _validate_img_data,
@@ -153,7 +154,11 @@ class SpatialExperiment(SingleCellExperiment):
         """
         _validate_spatial_coords(spatial_coords=spatial_coords, column_data=column_data)
         _validate_img_data(img_data=img_data)
-        _validate_column_data(column_data=column_data)
+
+        if column_data is None:
+            column_data = biocframe.BiocFrame({"sample_id": []})
+
+        _validate_column_data(column_data=column_data, img_data=img_data)
 
         self._spatial_coords = _sanitize_frame(
             spatial_coords, num_rows=column_data.shape[0]
@@ -415,7 +420,7 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             The defined names of the spatial coordinates.
         """
-        return self._spatial_coords.columns.tolist()
+        return self._spatial_coords.columns.as_list()
 
     def get_spatial_coords_names(self) -> List[str]:
         """Alias for :py:meth:`~get_spatial_coordinate_names`."""
@@ -437,7 +442,7 @@ class SpatialExperiment(SingleCellExperiment):
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
         _validate_spatial_coords_names(
-            spatial_coords_names, self.get_spatial_coordinates()
+            spatial_coords_names, self.spatial_coordinates
         )
 
         old_spatial_coordinates = self.get_spatial_coordinates()
@@ -567,6 +572,12 @@ class SpatialExperiment(SingleCellExperiment):
             UserWarning,
         )
         self.set_image_data(img_data=img_data, in_place=True)
+
+    ##############################
+    #####>> scale_factors <<######
+    ##############################
+
+    # TODO: implement getters and setters
 
     ################################
     ###>> OVERRIDE column_data <<###

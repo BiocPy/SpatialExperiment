@@ -16,3 +16,4 @@ finally:
     del version, PackageNotFoundError
 
 from .SpatialExperiment import SpatialExperiment
+from .SpatialImage import SpatialImage

@@ -1,6 +1,5 @@
 import biocframe
-from type_checks import is_list_of_type
-from summarizedexperiment._frameutils import _sanitize_frame
+import biocutils as ut
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -8,7 +7,7 @@ __license__ = "MIT"
 
 
 def _validate_spatial_coords_names(spatial_coords_names, spatial_coords):
-    if not is_list_of_type(spatial_coords_names, str):
+    if not ut.is_list_of_type(spatial_coords_names, str):
         raise TypeError("'spatial_coords_names' is not a list of strings")
 
     if len(spatial_coords_names) != spatial_coords.shape[1]:
@@ -28,6 +27,9 @@ def _validate_column_data(column_data, img_data):
     
     if "sample_id" not in column_data.columns:
         raise ValueError(error_message)
+
+    if column_data.shape[0] == 0 or img_data.shape[0] == 0:
+        return
 
     num_unique_sample_ids = len(img_data["sample_id"].unique())
     num_unique_sample_ids_provided = len(column_data["sample_id"].unique())
