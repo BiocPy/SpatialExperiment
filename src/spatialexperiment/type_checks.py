@@ -18,4 +18,3 @@ def is_list_of_type(x: Any, target_type: callable) -> bool:
     return isinstance(x, (list, tuple)) and all(
         isinstance(item, target_type) for item in x
     )
-

@@ -12,7 +12,14 @@ from singlecellexperiment import SingleCellExperiment
 from SpatialImage import SpatialImage
 
 from utils import flatten_list
-from _validators import _validate_sample_image_ids, _validate_spatial_coords, _validate_img_data, _validate_id, _validate_column_data, _validate_spatial_coords_names
+from _validators import (
+    _validate_sample_image_ids,
+    _validate_spatial_coords,
+    _validate_img_data,
+    _validate_id,
+    _validate_column_data,
+    _validate_spatial_coords_names,
+)
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -43,7 +50,6 @@ class SpatialExperiment(SingleCellExperiment):
         alternative_experiments: Optional[Dict[str, Any]] = None,
         row_pairs: Optional[Any] = None,
         column_pairs: Optional[Any] = None,
-
         # ============== SpatialExperiment arguments ===============
         spatial_coords: Optional[biocframe.BiocFrame] = None,
         img_data: Optional[biocframe.BiocFrame] = None,
@@ -124,25 +130,34 @@ class SpatialExperiment(SingleCellExperiment):
                 Defaults to None.
 
             spatial_coords:
-                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` object containing columns of spatial coordinates.
+                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`. Typical column names might include:
+
+                    - **['x', 'y']**: For simple 2D coordinates.
+                    - **['pxl_col_in_fullres', 'pxl_row_in_fullres']**: For pixel-based coordinates in full-resolution images.
 
                 Spatial coordinates are coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
 
             img_data:
-                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data.
+                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data, structured with the following columns:
+                    - **sample_id** (str): A string identifier for the sample to which an image corresponds.
+                    - **image_id** (str): A unique string identifier for each image within each sample.
+                    - **data** (SpatialImage): The image itself, represented as a SpatialImage object.
+                    - **scale_factor** (float): A numerical value that indicates the scaling factor applied to the image.
 
-                Image data are coerced to a 
+                Image data are coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
 
             validate:
                 Internal use only.
         """
-        # TODO: what is the relationship between  `sample_id` in `img_data` and `sample_id` in `column_data`?
-        _validate_column_data(column_data=column_data) 
+        _validate_spatial_coords(spatial_coords=spatial_coords, column_data=column_data)
+        _validate_img_data(img_data=img_data)
 
-        self._spatial_coords = _sanitize_frame(spatial_coords)
-        self._img_data = _sanitize_frame(img_data)
+        self._spatial_coords = _sanitize_frame(
+            spatial_coords, num_rows=column_data.shape[0]
+        )
+        self._img_data = _sanitize_frame(img_data, num_rows=0)
 
         super().__init__(
             assays=assays,
@@ -201,7 +216,7 @@ class SpatialExperiment(SingleCellExperiment):
             row_pairs=_row_pair_copy,
             column_pairs=_col_pair_copy,
             spatial_coords=_spatial_coords_copy,
-            img_data=_img_data_copy
+            img_data=_img_data_copy,
         )
 
     def __copy__(self):
@@ -224,7 +239,7 @@ class SpatialExperiment(SingleCellExperiment):
             row_pairs=self._row_pairs,
             column_pairs=self._column_pairs,
             spatial_coords=self._spatial_coords,
-            img_data=self._img_data
+            img_data=self._img_data,
         )
 
     def copy(self):
@@ -258,10 +273,14 @@ class SpatialExperiment(SingleCellExperiment):
             output += ", row_ranges=" + self._row_ranges.__repr__()
 
         if self._alternative_experiments is not None:
-            output += ", alternative_experiments=" + ut.print_truncated_list(self.alternative_experiment_names)
+            output += ", alternative_experiments=" + ut.print_truncated_list(
+                self.alternative_experiment_names
+            )
 
         if self._reduced_dims is not None:
-            output += ", reduced_dims=" + ut.print_truncated_list(self.reduced_dim_names)
+            output += ", reduced_dims=" + ut.print_truncated_list(
+                self.reduced_dim_names
+            )
 
         if self._main_experiment_name is not None:
             output += ", main_experiment_name=" + self._main_experiment_name
@@ -289,14 +308,10 @@ class SpatialExperiment(SingleCellExperiment):
 
         output += f"assays({len(self.assay_names)}): {ut.print_truncated_list(self.assay_names)}\n"
 
-        output += (
-            f"row_data columns({len(self._rows.column_names)}): {ut.print_truncated_list(self._rows.column_names)}\n"
-        )
+        output += f"row_data columns({len(self._rows.column_names)}): {ut.print_truncated_list(self._rows.column_names)}\n"
         output += f"row_names({0 if self._row_names is None else len(self._row_names)}): {' ' if self._row_names is None else ut.print_truncated_list(self._row_names)}\n"
 
-        output += (
-            f"column_data columns({len(self._cols.column_names)}): {ut.print_truncated_list(self._cols.column_names)}\n"
-        )
+        output += f"column_data columns({len(self._cols.column_names)}): {ut.print_truncated_list(self._cols.column_names)}\n"
         output += f"column_names({0 if self._column_names is None else len(self._column_names)}): {' ' if self._column_names is None else ut.print_truncated_list(self._column_names)}\n"
 
         output += f"main_experiment_name: {' ' if self._main_experiment_name is None else self._main_experiment_name}\n"
@@ -315,7 +330,7 @@ class SpatialExperiment(SingleCellExperiment):
 
     def get_spatial_coordinates(self) -> biocframe.BiocFrame:
         """Access spatial coordinates.
-        
+
         Returns:
             A ``BiocFrame`` containing columns of spatial coordinates.
         """
@@ -325,28 +340,40 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~get_spatial_coordinates`."""
         return self.get_spatial_coordinates()
 
-    def set_spatial_coordinates(self, spatial_coords: biocframe.BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+    def set_spatial_coordinates(
+        self, spatial_coords: biocframe.BiocFrame, in_place: bool = False
+    ) -> "SpatialExperiment":
         """Set new spatial coordinates.
-        
+
         Args:
             spatial_coords:
-                New spatial coordinates.
-            
+                :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`. Typical column names might include:
+
+                    - **['x', 'y']**: For simple 2D coordinates.
+                    - **['pxl_col_in_fullres', 'pxl_row_in_fullres']**: For pixel-based coordinates in full-resolution images.
+
+                Spatial coordinates are coerced to a
+                :py:class:`~biocframe.BiocFrame.BiocFrame`.
+
             in_place:
                 Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
-        
+
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _validate_spatial_coords(spatial_coords, self.shape)
+        _validate_spatial_coords(spatial_coords, self.column_data)
 
         output = self._define_output(in_place)
-        output._spatial_coords = spatial_coords
+        output._spatial_coords = _sanitize_frame(spatial_coords)
         return output
 
-    def set_spatial_coords(self, spatial_coords: biocframe.BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+    def set_spatial_coords(
+        self, spatial_coords: biocframe.BiocFrame, in_place: bool = False
+    ) -> "SpatialExperiment":
         """Alias for :py:meth:`~set_spatial_coordinates`."""
-        return self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=in_place)
+        return self.set_spatial_coordinates(
+            spatial_coords=spatial_coords, in_place=in_place
+        )
 
     @property
     def spatial_coords(self) -> biocframe.BiocFrame:
@@ -358,7 +385,7 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~set_spatial_coordinates`."""
         warn(
             "Setting property 'spatial_coords' is an in-place operation, use 'set_spatial_coordinates' instead.",
-            UserWarning
+            UserWarning,
         )
         self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=True)
 
@@ -372,7 +399,7 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~set_spatial_coordinates`."""
         warn(
             "Setting property 'spatial_coords' is an in-place operation, use 'set_spatial_coordinates' instead.",
-            UserWarning
+            UserWarning,
         )
         self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=True)
 
@@ -382,7 +409,7 @@ class SpatialExperiment(SingleCellExperiment):
 
     def get_spatial_coordinates_names(self) -> List[str]:
         """Access spatial coordinates names.
-        
+
         Returns:
             The defined names of the spatial coordinates.
         """
@@ -392,31 +419,41 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~get_spatial_coordinate_names`."""
         return self.get_spatial_coordinate_names()
 
-    def set_spatial_coordinates_names(self, spatial_coords_names: List[str], in_place: bool = False) -> "SpatialExperiment":
+    def set_spatial_coordinates_names(
+        self, spatial_coords_names: List[str], in_place: bool = False
+    ) -> "SpatialExperiment":
         """Set new spatial coordinates names.
-        
+
         Args:
             spatial_coords_names:
                 New spatial coordinates names.
-            
+
             in_place:
                 Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
-        
+
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _validate_spatial_coords_names(spatial_coords_names, self.get_spatial_coordinates())
+        _validate_spatial_coords_names(
+            spatial_coords_names, self.get_spatial_coordinates()
+        )
 
         old_spatial_coordinates = self.get_spatial_coordinates()
-        new_spatial_coordinates = old_spatial_coordinates.set_column_names(spatial_coords_names)
+        new_spatial_coordinates = old_spatial_coordinates.set_column_names(
+            spatial_coords_names
+        )
 
         output = self._define_output(in_place)
         output._spatial_coords = new_spatial_coordinates
         return output
 
-    def set_spatial_coords_names(self, spatial_coords_names: List[str], in_place: bool = False) -> "SpatialExperiment":
+    def set_spatial_coords_names(
+        self, spatial_coords_names: List[str], in_place: bool = False
+    ) -> "SpatialExperiment":
         """Alias for :py:meth:`~set_spatial_coordinates_names`."""
-        return self.set_spatial_coordinates_names(spatial_coords_names=spatial_coords_names, in_place=in_place)
+        return self.set_spatial_coordinates_names(
+            spatial_coords_names=spatial_coords_names, in_place=in_place
+        )
 
     @property
     def spatial_coords_names(self) -> List[str]:
@@ -428,9 +465,11 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~set_spatial_coordinates_names`."""
         warn(
             "Setting property 'spatial_coords_names' is an in-place operation, use 'set_spatial_coordinates_names' instead.",
-            UserWarning
+            UserWarning,
         )
-        self.set_spatial_coordinates_names(spatial_coords_names=spatial_coords_names, in_place=True)
+        self.set_spatial_coordinates_names(
+            spatial_coords_names=spatial_coords_names, in_place=True
+        )
 
     @property
     def spatial_coordinates_names(self) -> List[str]:
@@ -442,9 +481,11 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~set_spatial_coordinates_names`."""
         warn(
             "Setting property 'spatial_coords_names' is an in-place operation, use 'set_spatial_coordinates_names' instead.",
-            UserWarning
+            UserWarning,
         )
-        self.set_spatial_coordinates_names(spatial_coords_names=spatial_coords_names, in_place=True)
+        self.set_spatial_coordinates_names(
+            spatial_coords_names=spatial_coords_names, in_place=True
+        )
 
     ##############################
     ########>> img_data <<########
@@ -452,36 +493,47 @@ class SpatialExperiment(SingleCellExperiment):
 
     def get_image_data(self) -> biocframe.BiocFrame:
         """Access image data.
-        
+
         Returns:
             A BiocFrame object containing the image data.
         """
         return self._img_data
-    
+
     def get_img_data(self) -> biocframe.BiocFrame:
         """Alias for :py:meth:`~get_image_data`."""
         return self.get_image_data()
 
-    def set_image_data(self, img_data: biocframe.BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+    def set_image_data(
+        self, img_data: biocframe.BiocFrame, in_place: bool = False
+    ) -> "SpatialExperiment":
         """Set new image data.
-        
+
         Args:
             img_data:
-                New image data.
-                
+                :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data, structured with the following columns:
+                    - **sample_id** (str): A string identifier for the sample to which an image corresponds.
+                    - **image_id** (str): A unique string identifier for each image within each sample.
+                    - **data** (SpatialImage): The image itself, represented as a SpatialImage object.
+                    - **scale_factor** (float): A numerical value that indicates the scaling factor applied to the image.
+
+                Image data are coerced to a
+                :py:class:`~biocframe.BiocFrame.BiocFrame`.
+
             in_place:
                 Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
-            
+
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
         _validate_img_data(img_data)
 
         output = self._define_output(in_place)
-        output._img_data = img_data
+        output._img_data = _sanitize_frame(img_data)
         return output
 
-    def set_img_data(self, img_data: biocframe.BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+    def set_img_data(
+        self, img_data: biocframe.BiocFrame, in_place: bool = False
+    ) -> "SpatialExperiment":
         """Alias for :py:meth:`~set_image_data`."""
         return self.set_image_data(img_data=img_data, in_place=in_place)
 
@@ -495,7 +547,7 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~set_image_data`."""
         warn(
             "Setting property 'img_data' is an in-place operation, use 'set_image_data' instead.",
-            UserWarning
+            UserWarning,
         )
         self.set_image_data(img_data=img_data, in_place=True)
 
@@ -509,7 +561,7 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~set_image_data`."""
         warn(
             "Setting property 'img_data' is an in-place operation, use 'set_image_data' instead.",
-            UserWarning
+            UserWarning,
         )
         self.set_image_data(img_data=img_data, in_place=True)
 
@@ -628,7 +680,7 @@ class SpatialExperiment(SingleCellExperiment):
         scale_factor: float,
         sample_id: Union[str, True, None],
         image_id: Union[str, True, None],
-        load: bool = True
+        load: bool = True,
     ) -> "SpatialExperiment":
         """
         Add a new image entry.
@@ -648,7 +700,9 @@ class SpatialExperiment(SingleCellExperiment):
         Raises:
             ValueError: If the sample_id and image_id pair already exists.
         """
-        _validate_sample_image_ids(img_data=self._img_data, new_sample_id=sample_id, new_image_id=image_id)
+        _validate_sample_image_ids(
+            img_data=self._img_data, new_sample_id=sample_id, new_image_id=image_id
+        )
 
         if load:
             img = Image.open(image_source)
@@ -656,12 +710,14 @@ class SpatialExperiment(SingleCellExperiment):
         else:
             spi = SpatialImage(image_source)
 
-        new_row = biocframe.BiocFrame({
-            "sample_id": sample_id,
-            "image_id": image_id,
-            "data": spi,
-            "scale_factor": scale_factor
-        })
+        new_row = biocframe.BiocFrame(
+            {
+                "sample_id": sample_id,
+                "image_id": image_id,
+                "data": spi,
+                "scale_factor": scale_factor,
+            }
+        )
         new_img_data = self._img_data.combine_rows(new_row)
 
         self.__init__(
@@ -678,33 +734,35 @@ class SpatialExperiment(SingleCellExperiment):
             row_pairs=self.get_row_pairs(),
             column_pairs=self.get_column_pairs(),
             spatial_coords=self.get_spatial_coordinates(),
-            img_data=new_img_data
+            img_data=new_img_data,
         )
 
     def rmv_img(
         self,
         sample_id: Union[str, True, None] = None,
-        image_id: Union[str, True, None] = None
+        image_id: Union[str, True, None] = None,
     ) -> "SpatialExperiment":
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def img_source(
         self,
         sample_id: Union[str, True, None] = None,
         image_id: Union[str, True, None] = None,
-        path=False
+        path=False,
     ):
-        raise NotImplemented("This function is irrelevant because it is for `RemoteSpatialImages`")
+        raise NotImplementedError(
+            "This function is irrelevant because it is for `RemoteSpatialImages`"
+        )
 
     def img_raster(self, sample_id=None, image_id=None):
         # NOTE: this function seems redundant, might be an artifact of the different subclasses of SpatialImage in the R implementation? just call `get_img()` for now
         self.get_img(sample_id=sample_id, image_id=image_id)
 
     def rotate_img(self, sample_id=None, image_id=None, degrees=90):
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def mirror_img(self, sample_id=None, image_id=None, axis=("h", "v")):
-        raise NotImplemented()
+        raise NotImplementedError()
 
     @staticmethod
     def to_spatial_experiment():

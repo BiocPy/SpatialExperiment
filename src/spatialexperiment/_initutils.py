@@ -7,15 +7,17 @@ from summarizedexperiment._frameutils import _sanitize_frame
 from SpatialImage import SpatialImage
 
 
-def construct_spatial_coords_from_names(spatial_coords_names: List[str], column_data: biocframe.BiocFrame) -> Tuple[biocframe.BiocFrame, biocframe.BiocFrame]:
+def construct_spatial_coords_from_names(
+    spatial_coords_names: List[str], column_data: biocframe.BiocFrame
+) -> Tuple[biocframe.BiocFrame, biocframe.BiocFrame]:
     """Construct the `spatial_coords` dataframe from names.
-    
+
     Args:
         spatial_coords_names:
             A list of strings of column names from `column_data` containing spatial coordinates.
         column_data:
             The sample data.
-    
+
     Returns:
         A tuple containing two `BiocFrame` objects:
         - The first `BiocFrame` contains columns of spatial coordinates.
@@ -36,9 +38,7 @@ def construct_spatial_coords_from_names(spatial_coords_names: List[str], column_
             f"The following names in `spatial_coords_names` are missing from `column_data`: {missing_names}"
         )
 
-    spatial_coords = deepcopy(
-        current_column_data[:, spatial_coords_names]
-    )
+    spatial_coords = deepcopy(current_column_data[:, spatial_coords_names])
 
     column_data_subset = deepcopy(
         current_column_data[
@@ -53,10 +53,17 @@ def construct_spatial_coords_from_names(spatial_coords_names: List[str], column_
 
     return spatial_coords, column_data_subset
 
-def construct_img_data(sample_id: str, image_id: str, image_sources: List[str], scale_factors: List[float], load_image: bool = False) -> biocframe.BiocFrame:
+
+def construct_img_data(
+    sample_id: str,
+    image_id: str,
+    image_sources: List[str],
+    scale_factors: List[float],
+    load_image: bool = False,
+) -> biocframe.BiocFrame:
     """Construct the image data for a `SpatialExperiment`.
 
-    Args: 
+    Args:
         sample_id:
             The sample id.
         image_id:
@@ -68,24 +75,26 @@ def construct_img_data(sample_id: str, image_id: str, image_sources: List[str], 
             `image_sources`.
         load_image:
             Whether to load the images into memory. Defaults to False.
-    
+
     Returns:
         A `BiocFrame` representing the image data for a `SpatialExperiment`.
     """
     if not len(image_id) == len(image_sources) == len(scale_factors):
-        raise ValueError("'image_id', 'image_sources' and 'scale_factors' are not the same length.")
+        raise ValueError(
+            "'image_id', 'image_sources' and 'scale_factors' are not the same length."
+        )
 
     spis = []
     for image_source in image_sources:
         result = Image.open(image_source) if load_image else image_source
         spi = SpatialImage(result)
         spis.append(spi)
-    
+
     img_data = {
         "sample_id": sample_id,
         "image_id": image_id,
         "data": spis,
-        "scale_factor": scale_factors
+        "scale_factor": scale_factors,
     }
 
     return biocframe.BiocFrame(img_data)
