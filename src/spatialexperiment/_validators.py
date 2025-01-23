@@ -24,8 +24,8 @@ def _validate_column_data(column_data, img_data):
     if column_data is None:
         raise ValueError(error_message)
 
-    if not isinstance(column_data, (pd.DataFrame, biocframe.BiocFrame)):
-        raise TypeError("'column_data' must be a DataFrame or BiocFrame object.")
+    if not isinstance(column_data, biocframe.BiocFrame):
+        raise TypeError("'column_data' must be a BiocFrame object.")
     
     if "sample_id" not in column_data.columns:
         raise ValueError(error_message)

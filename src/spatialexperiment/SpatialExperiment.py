@@ -567,10 +567,37 @@ class SpatialExperiment(SingleCellExperiment):
         self.set_image_data(img_data=img_data, in_place=True)
 
     ################################
-    #######>> column_data <<########
+    ###>> OVERRIDE column_data <<###
     ################################
 
-    # TODO: need to implement a modified `column_data` setter, which ensures that the `SpatialExperiment` object remains valid (see pg.13 of vignette).
+    def set_column_data(
+        self, _column_data: Optional[biocframe.BiocFrame], in_place: bool = False
+    ) -> "SpatialExperiment":
+        """Override: Set sample data.
+
+        Args:
+            _column_data:
+                :py:class:`~biocframe.BiocFrame.BiocFrame` containing the new sample data.
+
+            in_place:
+                Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
+
+        Returns:
+            A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
+        """
+        if _column_data is None:
+            column_data = self.column_data[['symbol']]
+
+        else:
+            column_data = _sanitize_frame(_column_data)
+            if "sample_id" not in column_data.columns:
+                column_data["sample_id"] = self.column_data["sample_id"]
+            else:
+                _validate_column_data(column_data=column_data, img_data=self.img_data)
+
+        output = self._define_output(in_place)
+        output._column_data = column_data
+        return output
 
     ################################
     ######>> img_data funcs <<######
