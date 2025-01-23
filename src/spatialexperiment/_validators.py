@@ -1,5 +1,4 @@
 import biocframe
-import pandas as pd
 from type_checks import is_list_of_type
 from summarizedexperiment._frameutils import _sanitize_frame
 
@@ -62,8 +61,8 @@ def _validate_spatial_coords(spatial_coords, column_data):
     if spatial_coords is None:
         return
 
-    if not isinstance(spatial_coords, (pd.DataFrame, biocframe.BiocFrame)):
-        raise TypeError("'spatial_coords' must be a DataFrame or BiocFrame object.")
+    if not isinstance(spatial_coords, biocframe.BiocFrame):
+        raise TypeError("'spatial_coords' must be a BiocFrame object.")
 
     if column_data.shape[0] != spatial_coords.shape[0]:
         raise ValueError("'spatial_coords' do not contain coordinates for all cells.")
@@ -73,8 +72,11 @@ def _validate_img_data(img_data):
     if img_data is None:
         return
 
-    if not isinstance(img_data, (pd.DataFrame, biocframe.BiocFrame)):
-        raise TypeError("'img_data' must be a DataFrame or BiocFrame object.")
+    if not isinstance(img_data, biocframe.BiocFrame):
+        raise TypeError("'img_data' must be a BiocFrame object.")
+
+    if img_data.shape[0] == 0:
+        return
 
     required_columns = ["sample_id", "image_id", "data", "scale_factor"]
     if not all(column in img_data.columns for column in required_columns):
