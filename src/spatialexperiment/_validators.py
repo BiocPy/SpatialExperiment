@@ -18,15 +18,23 @@ def _validate_spatial_coords_names(spatial_coords_names, spatial_coords):
         )
 
 
-def _validate_column_data(column_data):
+def _validate_column_data(column_data, img_data):
     error_message = "'column_data' must have a column named 'sample_id'."
 
     if column_data is None:
         raise ValueError(error_message)
 
-    column_data_sanitized = _sanitize_frame(column_data)
-    if not column_data_sanitized.has_column("sample_id"):
+    if not isinstance(column_data, (pd.DataFrame, biocframe.BiocFrame)):
+        raise TypeError("'column_data' must be a DataFrame or BiocFrame object.")
+    
+    if "sample_id" not in column_data.columns:
         raise ValueError(error_message)
+
+    num_unique_sample_ids = len(img_data["sample_id"].unique())
+    num_unique_sample_ids_provided = len(column_data["sample_id"].unique())
+
+    if num_unique_sample_ids != num_unique_sample_ids_provided:
+        raise ValueError(f"Number of unique 'sample_id's is {num_unique_sample_ids}, but {num_unique_sample_ids_provided} were provided.")
 
 
 def _validate_id(id):

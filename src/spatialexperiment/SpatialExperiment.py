@@ -153,6 +153,7 @@ class SpatialExperiment(SingleCellExperiment):
         """
         _validate_spatial_coords(spatial_coords=spatial_coords, column_data=column_data)
         _validate_img_data(img_data=img_data)
+        _validate_column_data(column_data=column_data)
 
         self._spatial_coords = _sanitize_frame(
             spatial_coords, num_rows=column_data.shape[0]
