@@ -600,13 +600,25 @@ class SpatialExperiment(SingleCellExperiment):
     ################################
 
     def set_column_data(
-        self, _column_data: Optional[biocframe.BiocFrame], in_place: bool = False
+        self,
+        cols: Optional[biocframe.BiocFrame],
+        replace_column_names: bool = False,
+        in_place: bool = False
     ) -> "SpatialExperiment":
         """Override: Set sample data.
 
         Args:
-            _column_data:
-                :py:class:`~biocframe.BiocFrame.BiocFrame` containing the new sample data.
+            cols:
+                New sample data. If `cols` contains a column
+                named `sample_id`s, a check is performed to ensure
+                there is a one-to-one mapping between the
+                `sample_id`s in `cols` and `self.img_data`.
+                If `sample_id` is not present, the original `sample_id`s
+                are retained.
+
+                If `cols` is None, an empty
+                :py:class:`~biocframe.BiocFrame.BiocFrame`
+                object is created.
 
             in_place:
                 Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
@@ -614,14 +626,18 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        column_data = _sanitize_frame(_column_data, num_rows=self.shape[1])
-        if "sample_id" not in column_data.columns:
-            column_data["sample_id"] = self.column_data["sample_id"]
+        cols = _sanitize_frame(cols, num_rows=self.shape[1])
+        if "sample_id" not in cols.columns:
+            cols["sample_id"] = self.column_data["sample_id"]
 
-        _validate_column_data(column_data=column_data, img_data=self.img_data)
+        _validate_column_data(column_data=cols, img_data=self.img_data)
 
         output = self._define_output(in_place)
-        output._column_data = column_data
+        output._cols = cols
+
+        if replace_column_names:
+            return output.set_column_names(cols.row_names, in_place=in_place)
+
         return output
 
     ################################
