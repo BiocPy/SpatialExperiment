@@ -794,21 +794,30 @@ class SpatialExperiment(SingleCellExperiment):
         sample_id: Union[str, True, None],
         image_id: Union[str, True, None],
         load: bool = True,
+        in_place: bool = False
     ) -> "SpatialExperiment":
         """
         Add a new image entry.
 
         Args:
-            image_source: The file path to the image.
-            scale_factor: The scaling factor associated with the image.
-            sample_id: The sample id.
-            image_id: The image id.
-            load: Whether to load the image into memory. If `True`,
-                the method reads the image file from `image_source`. Defaults to `True`.
+            image_source:
+                The file path to the image.
+            scale_factor:
+                The scaling factor associated with the image.
+            sample_id:
+                The sample id of the image.
+            image_id:
+                The image id of the image.
+            load:
+                Whether to load the image into memory. If `True`,
+                the method reads the image file from
+                `image_source`. Defaults to `True`.
+            in_place:
+                Whether to modify the ``SpatialExperiment`` in place.
+                Defaults to False.
 
         Returns:
-            The updated SpatialExperiment object containing the
-            newly added image entry.
+            A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
 
         Raises:
             ValueError: If the sample_id and image_id pair already exists.
@@ -833,22 +842,9 @@ class SpatialExperiment(SingleCellExperiment):
         )
         new_img_data = self._img_data.combine_rows(new_row)
 
-        return self.__init__(
-            assays=self.assays,
-            row_ranges=self.row_ranges,
-            row_data=self.row_data,
-            column_data=self.column_data,
-            row_names=self.row_names,
-            column_names=self.column_names,
-            metadata=self.metadata,
-            reduced_dims=self.reduced_dims,
-            main_experiment_name=self.main_experiment_name,
-            alternative_experiments=self.alternative_experiments,
-            row_pairs=self.row_pairs,
-            column_pairs=self.column_pairs,
-            spatial_coords=self.spatial_coords,
-            img_data=new_img_data,
-        )
+        output = self._define_output(in_place)
+        output._img_data = new_img_data
+        return output
 
     def rmv_img(
         self,

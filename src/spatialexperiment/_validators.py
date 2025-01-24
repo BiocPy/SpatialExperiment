@@ -60,6 +60,8 @@ def _validate_sample_image_ids(img_data, new_sample_id, new_image_id):
                 f"Image with Sample ID: {new_sample_id} and Image ID: {new_image_id} already exists"
             )
 
+    # TODO: check if 'new_sample_id' is present in column_data['sample_id']
+
 
 def _validate_spatial_coords(spatial_coords, column_data):
     if spatial_coords is None:
