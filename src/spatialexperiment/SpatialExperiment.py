@@ -167,7 +167,6 @@ class SpatialExperiment(SingleCellExperiment):
             validate=validate,
         )
 
-        # TODO: figure out how to handle the case where `spatial_coords` is not None but `column_data` is None. in this case, `column_data` should have a `sample_id` column with the default value `sample_01`. this might remove the need for _guess_assay_shape().
         shape = _guess_assay_shape(
             assays=assays if assays is not None else {},
             rows=row_data,
@@ -183,8 +182,9 @@ class SpatialExperiment(SingleCellExperiment):
         spatial_coords = _sanitize_frame(spatial_coords, num_rows=shape[1])
         img_data = _sanitize_frame(img_data, num_rows=0)
 
-        self._spatial_coords = spatial_coords
         self._img_data = img_data
+        self._column_data = column_data
+        self._spatial_coords = spatial_coords
 
         if validate:
             _validate_img_data(img_data=img_data)
