@@ -151,29 +151,6 @@ class SpatialExperiment(SingleCellExperiment):
             validate:
                 Internal use only.
         """
-        # TODO: figure out how to handle the case where `spatial_coords` is not None but `column_data` is None. in this case, `column_data` should have a `sample_id` column with the default value `sample_01`. this might remove the need for _guess_assay_shape().
-        shape = _guess_assay_shape(
-            assays=assays if assays is not None else {},
-            rows=row_data,
-            cols=column_data,
-            row_names=row_names,
-            col_names=column_names,
-        )
-
-        if column_data is None:
-            column_data = biocframe.BiocFrame({"sample_id": []})
-
-        column_data = _sanitize_frame(column_data, num_rows=shape[1])
-        spatial_coords = _sanitize_frame(spatial_coords, num_rows=shape[1])
-        img_data = _sanitize_frame(img_data, num_rows=0)
-
-        _validate_img_data(img_data=img_data)
-        _validate_column_data(column_data=column_data, img_data=img_data)
-        _validate_spatial_coords(spatial_coords=spatial_coords, column_data=column_data)
-
-        self._spatial_coords = spatial_coords
-        self._img_data = img_data
-
         super().__init__(
             assays=assays,
             row_ranges=row_ranges,
@@ -189,6 +166,30 @@ class SpatialExperiment(SingleCellExperiment):
             column_pairs=column_pairs,
             validate=validate,
         )
+
+        # TODO: figure out how to handle the case where `spatial_coords` is not None but `column_data` is None. in this case, `column_data` should have a `sample_id` column with the default value `sample_01`. this might remove the need for _guess_assay_shape().
+        shape = _guess_assay_shape(
+            assays=assays if assays is not None else {},
+            rows=row_data,
+            cols=column_data,
+            row_names=row_names,
+            col_names=column_names,
+        )
+
+        if column_data is None:
+            column_data = biocframe.BiocFrame({"sample_id": ["sample01"] * shape[1]})
+
+        column_data = _sanitize_frame(column_data, num_rows=shape[1])
+        spatial_coords = _sanitize_frame(spatial_coords, num_rows=shape[1])
+        img_data = _sanitize_frame(img_data, num_rows=0)
+
+        self._spatial_coords = spatial_coords
+        self._img_data = img_data
+
+        if validate:
+            _validate_img_data(img_data=img_data)
+            _validate_column_data(column_data=column_data, img_data=img_data)
+            _validate_spatial_coords(spatial_coords=spatial_coords, column_data=column_data)
 
     #########################
     ######>> Copying <<######
@@ -816,19 +817,19 @@ class SpatialExperiment(SingleCellExperiment):
         new_img_data = self._img_data.combine_rows(new_row)
 
         return self.__init__(
-            assays=self.get_assays(),
-            row_ranges=self.get_row_ranges(),
-            row_data=self.get_row_data(),
-            column_data=self.get_column_data(),
-            row_names=self.get_row_names(),
-            column_names=self.get_column_names(),
-            metadata=self.get_metadata(),
-            reduced_dims=self.get_reduced_dims(),
-            main_experiment_name=self.get_main_experiment_name(),
-            alternative_experiments=self.get_alternative_experiments(),
-            row_pairs=self.get_row_pairs(),
-            column_pairs=self.get_column_pairs(),
-            spatial_coords=self.get_spatial_coordinates(),
+            assays=self.assays,
+            row_ranges=self.row_ranges,
+            row_data=self.row_data,
+            column_data=self.column_data,
+            row_names=self.row_names,
+            column_names=self.column_names,
+            metadata=self.metadata,
+            reduced_dims=self.reduced_dims,
+            main_experiment_name=self.main_experiment_name,
+            alternative_experiments=self.alternative_experiments,
+            row_pairs=self.row_pairs,
+            column_pairs=self.column_pairs,
+            spatial_coords=self.spatial_coords,
             img_data=new_img_data,
         )
 

@@ -40,16 +40,16 @@ row_data = BiocFrame(
 
 gr = genomicranges.GenomicRanges.from_pandas(row_data.to_pandas())
 
-col_data = pd.DataFrame(
+col_data = BiocFrame(
     {
         "treatment": ["ChIP", "Input"] * 3,
     }
 )
 
-x_coords = np.random.uniform(low=0.0, high=100.0, size=nrows)
-y_coords = np.random.uniform(low=0.0, high=100.0, size=nrows)
+x_coords = np.random.uniform(low=0.0, high=100.0, size=ncols)
+y_coords = np.random.uniform(low=0.0, high=100.0, size=ncols)
 
-spatial_coords = pd.DataFrame({
+spatial_coords = BiocFrame({
     'x': x_coords,
     'y': y_coords
 })
@@ -73,3 +73,10 @@ def test_SPE_empty_constructor():
     assert len(spe.spatial_coords_names) == 0
     assert isinstance(spe.spatial_coords, BiocFrame)
     assert spe.spatial_coords.shape == (spe.shape[1], 0)
+
+def test_spatial_coords_numeric_matrix():
+    spe = SpatialExperiment(assays={"counts": counts}, spatial_coords=spatial_coords)
+
+    assert isinstance(spe.spatial_coords, BiocFrame)
+    assert spe.spatial_coords == spatial_coords
+    assert spe.spatial_coords_names == spatial_coords.column_names.as_list()

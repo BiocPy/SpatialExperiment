@@ -31,12 +31,12 @@ def _validate_column_data(column_data, img_data):
     if column_data.shape[0] == 0 or img_data.shape[0] == 0:
         return
 
-    num_unique_sample_ids = len(img_data["sample_id"].unique())
-    num_unique_sample_ids_provided = len(column_data["sample_id"].unique())
+    img_data_sample_ids = set(img_data["sample_id"])
+    column_data_sample_ids = set(column_data["sample_id"])
 
-    if num_unique_sample_ids != num_unique_sample_ids_provided:
+    if img_data_sample_ids != column_data_sample_ids:
         raise ValueError(
-            f"Number of unique 'sample_id's is {num_unique_sample_ids}, but {num_unique_sample_ids_provided} were provided."
+            "'sample_id's in 'img_data' do not match with 'sample_id's in 'column_data'."
         )
 
 
