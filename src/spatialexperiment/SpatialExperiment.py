@@ -84,8 +84,12 @@ class SpatialExperiment(SingleCellExperiment):
                 Sample data, must be the same length as the number of
                 columns of the matrices in assays. For instances of the
                 ``SpatialExperiment`` class, the sample data must include
-                a column named `sample_id`.
-                # TODO: add details about default 'sample_id' as 'sample01'
+                a column named `sample_id`. Additionally, every `sample_id`
+                present in `img_data` must also be included in the
+                `sample_id` column of `column_data`.
+                
+                If `sample_id` is not present, a column with this name
+                will be created and filled with the default value `sample01`.
 
                 Sample information is coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
