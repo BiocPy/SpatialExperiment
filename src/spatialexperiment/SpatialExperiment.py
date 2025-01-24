@@ -357,12 +357,12 @@ class SpatialExperiment(SingleCellExperiment):
         return self.get_spatial_coordinates()
 
     def set_spatial_coordinates(
-        self, _spatial_coords: Optional[biocframe.BiocFrame], in_place: bool = False
+        self, spatial_coords: Optional[biocframe.BiocFrame], in_place: bool = False
     ) -> "SpatialExperiment":
         """Set new spatial coordinates.
 
         Args:
-            _spatial_coords:
+            spatial_coords:
                 :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`. Typical column names might include:
 
                     - **['x', 'y']**: For simple 2D coordinates.
@@ -377,7 +377,7 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        spatial_coords = _sanitize_frame(_spatial_coords)
+        spatial_coords = _sanitize_frame(spatial_coords)
         _validate_spatial_coords(spatial_coords, self.column_data)
 
         output = self._define_output(in_place)
@@ -519,12 +519,12 @@ class SpatialExperiment(SingleCellExperiment):
         return self.get_image_data()
 
     def set_image_data(
-        self, _img_data: Optional[biocframe.BiocFrame], in_place: bool = False
+        self, img_data: Optional[biocframe.BiocFrame], in_place: bool = False
     ) -> "SpatialExperiment":
         """Set new image data.
 
         Args:
-            _img_data:
+            img_data:
                 :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data, structured with the following columns:
                     - **sample_id** (str): A string identifier for the sample to which an image corresponds.
                     - **image_id** (str): A unique string identifier for each image within each sample.
@@ -540,7 +540,7 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        img_data = _sanitize_frame(_img_data)
+        img_data = _sanitize_frame(img_data)
         _validate_img_data(img_data)
 
         output = self._define_output(in_place)
