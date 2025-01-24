@@ -1,7 +1,4 @@
-# TODO: implement readImgData and read10xVisium?
-# TODO: interop w/ SpatialData class from scverse
-# TODO: combine methods
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, Sequence
 from warnings import warn
 
 from PIL import Image
@@ -9,6 +6,7 @@ import biocframe
 import biocutils as ut
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 from summarizedexperiment._frameutils import _sanitize_frame
+from summarizedexperiment.BaseSE import _guess_assay_shape
 from singlecellexperiment import SingleCellExperiment
 from .SpatialImage import SpatialImage
 
@@ -87,6 +85,7 @@ class SpatialExperiment(SingleCellExperiment):
                 columns of the matrices in assays. For instances of the
                 ``SpatialExperiment`` class, the sample data must include
                 a column named `sample_id`.
+                # TODO: add details about default 'sample_id' as 'sample01'
 
                 Sample information is coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
@@ -152,18 +151,28 @@ class SpatialExperiment(SingleCellExperiment):
             validate:
                 Internal use only.
         """
-        _validate_spatial_coords(spatial_coords=spatial_coords, column_data=column_data)
-        _validate_img_data(img_data=img_data)
+        # TODO: figure out how to handle the case where `spatial_coords` is not None but `column_data` is None. in this case, `column_data` should have a `sample_id` column with the default value `sample_01`. this might remove the need for _guess_assay_shape().
+        shape = _guess_assay_shape(
+            assays=assays if assays is not None else {},
+            rows=row_data,
+            cols=column_data,
+            row_names=row_names,
+            col_names=column_names,
+        )
 
         if column_data is None:
             column_data = biocframe.BiocFrame({"sample_id": []})
 
-        _validate_column_data(column_data=column_data, img_data=img_data)
+        column_data = _sanitize_frame(column_data, num_rows=shape[1])
+        spatial_coords = _sanitize_frame(spatial_coords, num_rows=shape[1])
+        img_data = _sanitize_frame(img_data, num_rows=0)
 
-        self._spatial_coords = _sanitize_frame(
-            spatial_coords, num_rows=column_data.shape[0]
-        )
-        self._img_data = _sanitize_frame(img_data, num_rows=0)
+        _validate_img_data(img_data=img_data)
+        _validate_column_data(column_data=column_data, img_data=img_data)
+        _validate_spatial_coords(spatial_coords=spatial_coords, column_data=column_data)
+
+        self._spatial_coords = spatial_coords
+        self._img_data = img_data
 
         super().__init__(
             assays=assays,
@@ -441,9 +450,7 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _validate_spatial_coords_names(
-            spatial_coords_names, self.spatial_coordinates
-        )
+        _validate_spatial_coords_names(spatial_coords_names, self.spatial_coordinates)
 
         old_spatial_coordinates = self.get_spatial_coordinates()
         new_spatial_coordinates = old_spatial_coordinates.set_column_names(
@@ -598,19 +605,66 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
+        # TODO: remove this because it is handled in the else case already
         if _column_data is None:
-            column_data = self.column_data[['symbol']]
+            column_data = self.column_data[["symbol"]]
 
         else:
+            # TODO: always pass in num_rows to _sanitize_frame
             column_data = _sanitize_frame(_column_data)
             if "sample_id" not in column_data.columns:
                 column_data["sample_id"] = self.column_data["sample_id"]
             else:
+                # TODO: move out of else; should always validate no matter what
                 _validate_column_data(column_data=column_data, img_data=self.img_data)
 
         output = self._define_output(in_place)
         output._column_data = column_data
         return output
+
+    ################################
+    #########>> slicers <<##########
+    ################################
+
+    def get_slice(
+        self,
+        rows: Optional[Union[str, int, bool, Sequence]],
+        columns: Optional[Union[str, int, bool, Sequence]]
+    ) -> "SpatialExperiment":
+        """Alias for :py:attr:`~__getitem__`."""
+
+        spe = super().get_slice(rows=rows, columns=columns)
+
+        slicer = self._generic_slice(rows=rows, columns=columns)
+        do_slice_cols = not (isinstance(slicer.col_indices, slice) and slicer.col_indices == slice(None))
+
+        new_spatial_coords = None
+
+        if do_slice_cols:
+            new_spatial_coords = self.spatial_coords[slicer.col_indices, :]
+
+        column_sample_ids = set(self.column_data["sample_id"])
+        mask = [sample_id in column_sample_ids for sample_id in self.img_data["sample_id"]]
+
+        new_img_data = self.img_data[mask]
+
+        current_class_const = type(self)
+        return current_class_const(
+            assays=spe.assays,
+            row_ranges=spe.row_ranges,
+            row_data=spe.row_data,
+            column_data=spe.column_data,
+            row_names=spe.row_names,
+            column_names=spe.column_names,
+            metadata=spe.metadata,
+            main_experiment_name=spe.main_experiment_name,
+            reduced_dims=spe.reduced_dims,
+            alternative_experiments=spe.alternative_experiments,
+            row_pairs=spe.row_pairs,
+            column_pairs=spe.column_pairs,
+            spatial_coords=new_spatial_coords,
+            img_data=new_img_data
+        )
 
     ################################
     ######>> img_data funcs <<######
@@ -761,7 +815,7 @@ class SpatialExperiment(SingleCellExperiment):
         )
         new_img_data = self._img_data.combine_rows(new_row)
 
-        self.__init__(
+        return self.__init__(
             assays=self.get_assays(),
             row_ranges=self.get_row_ranges(),
             row_data=self.get_row_data(),

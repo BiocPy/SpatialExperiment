@@ -24,7 +24,7 @@ def _validate_column_data(column_data, img_data):
 
     if not isinstance(column_data, biocframe.BiocFrame):
         raise TypeError("'column_data' must be a BiocFrame object.")
-    
+
     if "sample_id" not in column_data.columns:
         raise ValueError(error_message)
 
@@ -35,7 +35,9 @@ def _validate_column_data(column_data, img_data):
     num_unique_sample_ids_provided = len(column_data["sample_id"].unique())
 
     if num_unique_sample_ids != num_unique_sample_ids_provided:
-        raise ValueError(f"Number of unique 'sample_id's is {num_unique_sample_ids}, but {num_unique_sample_ids_provided} were provided.")
+        raise ValueError(
+            f"Number of unique 'sample_id's is {num_unique_sample_ids}, but {num_unique_sample_ids_provided} were provided."
+        )
 
 
 def _validate_id(id):
