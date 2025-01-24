@@ -372,6 +372,8 @@ class SpatialExperiment(SingleCellExperiment):
                     - **['x', 'y']**: For simple 2D coordinates.
                     - **['pxl_col_in_fullres', 'pxl_row_in_fullres']**: For pixel-based coordinates in full-resolution images.
 
+                To remove coordinate information, set `spatial_coords=None`.
+
                 Spatial coordinates are coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`.
 
@@ -381,7 +383,8 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        spatial_coords = _sanitize_frame(spatial_coords)
+        spatial_coords = _sanitize_frame(spatial_coords, self.shape[1])
+
         _validate_spatial_coords(spatial_coords, self.column_data)
 
         output = self._define_output(in_place)
@@ -544,7 +547,8 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        img_data = _sanitize_frame(img_data)
+        img_data = _sanitize_frame(img_data, num_rows=0)
+
         _validate_img_data(img_data)
 
         output = self._define_output(in_place)
@@ -610,18 +614,11 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        # TODO: remove this because it is handled in the else case already
-        if _column_data is None:
-            column_data = self.column_data[["symbol"]]
+        column_data = _sanitize_frame(_column_data, num_rows=self.shape[1])
+        if "sample_id" not in column_data.columns:
+            column_data["sample_id"] = self.column_data["sample_id"]
 
-        else:
-            # TODO: always pass in num_rows to _sanitize_frame
-            column_data = _sanitize_frame(_column_data)
-            if "sample_id" not in column_data.columns:
-                column_data["sample_id"] = self.column_data["sample_id"]
-            else:
-                # TODO: move out of else; should always validate no matter what
-                _validate_column_data(column_data=column_data, img_data=self.img_data)
+        _validate_column_data(column_data=column_data, img_data=self.img_data)
 
         output = self._define_output(in_place)
         output._column_data = column_data
