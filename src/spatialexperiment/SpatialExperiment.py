@@ -10,7 +10,7 @@ from summarizedexperiment.BaseSE import _guess_assay_shape
 from singlecellexperiment import SingleCellExperiment
 from .SpatialImage import SpatialImage
 
-from .utils import flatten_list
+from ._imgutils import retrieve_rows_by_id
 from ._validators import (
     _validate_sample_image_ids,
     _validate_spatial_coords,
@@ -87,7 +87,7 @@ class SpatialExperiment(SingleCellExperiment):
                 a column named `sample_id`. Additionally, every `sample_id`
                 present in `img_data` must also be included in the
                 `sample_id` column of `column_data`.
-                
+
                 If `sample_id` is not present, a column with this name
                 will be created and filled with the default value `sample01`.
 
@@ -193,7 +193,9 @@ class SpatialExperiment(SingleCellExperiment):
         if validate:
             _validate_img_data(img_data=img_data)
             _validate_column_data(column_data=column_data, img_data=img_data)
-            _validate_spatial_coords(spatial_coords=spatial_coords, column_data=column_data)
+            _validate_spatial_coords(
+                spatial_coords=spatial_coords, column_data=column_data
+            )
 
     #########################
     ######>> Copying <<######
@@ -599,7 +601,33 @@ class SpatialExperiment(SingleCellExperiment):
     #####>> scale_factors <<######
     ##############################
 
-    # TODO: implement getters and setters
+    def get_scale_factors(
+        self,
+        sample_id: Union[str, True, None] = None,
+        image_id: Union[str, True, None] = None,
+    ) -> List[float]:
+        """Return scale factor(s) of image(s) based on the provided sample and image ids.
+            See :py:meth:`~get_img` for more details on the behavior for various
+            combinations of `sample_id` and `image_id` values.
+
+        Args:
+            sample_id:
+                - `sample_id=True`: Matches all samples.
+                - `sample_id=None`: Matches the first sample.
+                - `sample_id="<str>"`: Matches a sample by its id.
+
+            image_id:
+                - `image_id=True`: Matches all images for the specified sample(s).
+                - `image_id=None`: Matches the first image for the sample(s).
+                - `image_id="<str>"`: Matches image(s) by its(their) id.
+
+        Returns:
+            The scale factor(s) of the specified image(s).
+        """
+        _validate_id(sample_id)
+        _validate_id(image_id)
+
+        return self._img_data
 
     ################################
     ###>> OVERRIDE column_data <<###
@@ -609,7 +637,7 @@ class SpatialExperiment(SingleCellExperiment):
         self,
         cols: Optional[biocframe.BiocFrame],
         replace_column_names: bool = False,
-        in_place: bool = False
+        in_place: bool = False,
     ) -> "SpatialExperiment":
         """Override: Set sample data.
 
@@ -653,14 +681,16 @@ class SpatialExperiment(SingleCellExperiment):
     def get_slice(
         self,
         rows: Optional[Union[str, int, bool, Sequence]],
-        columns: Optional[Union[str, int, bool, Sequence]]
+        columns: Optional[Union[str, int, bool, Sequence]],
     ) -> "SpatialExperiment":
         """Alias for :py:attr:`~__getitem__`."""
 
         spe = super().get_slice(rows=rows, columns=columns)
 
         slicer = self._generic_slice(rows=rows, columns=columns)
-        do_slice_cols = not (isinstance(slicer.col_indices, slice) and slicer.col_indices == slice(None))
+        do_slice_cols = not (
+            isinstance(slicer.col_indices, slice) and slicer.col_indices == slice(None)
+        )
 
         new_spatial_coords = None
 
@@ -668,7 +698,9 @@ class SpatialExperiment(SingleCellExperiment):
             new_spatial_coords = self.spatial_coords[slicer.col_indices, :]
 
         column_sample_ids = set(self.column_data["sample_id"])
-        mask = [sample_id in column_sample_ids for sample_id in self.img_data["sample_id"]]
+        mask = [
+            sample_id in column_sample_ids for sample_id in self.img_data["sample_id"]
+        ]
 
         new_img_data = self.img_data[mask]
 
@@ -687,7 +719,7 @@ class SpatialExperiment(SingleCellExperiment):
             row_pairs=spe.row_pairs,
             column_pairs=spe.column_pairs,
             spatial_coords=new_spatial_coords,
-            img_data=new_img_data
+            img_data=new_img_data,
         )
 
     ################################
@@ -703,12 +735,12 @@ class SpatialExperiment(SingleCellExperiment):
         Retrieve spatial images based on the provided sample and image ids.
 
         Args:
-            sample_id: The sample id.
+            sample_id:
                 - `sample_id=True`: Matches all samples.
                 - `sample_id=None`: Matches the first sample.
                 - `sample_id="<str>"`: Matches a sample by its id.
 
-            image_id: The image id.
+            image_id:
                 - `image_id=True`: Matches all images for the specified sample(s).
                 - `image_id=None`: Matches the first image for the sample(s).
                 - `image_id="<str>"`: Matches image(s) by its(their) id.
@@ -744,54 +776,14 @@ class SpatialExperiment(SingleCellExperiment):
         if self._img_data is None:
             return None
 
-        if sample_id is True:
-            if image_id is True:
-                return flatten_list(self._img_data["data"])
+        img_data_subset = retrieve_rows_by_id(
+            img_data=self.img_data, sample_id=sample_id, image_id=image_id
+        )
 
-            unique_sample_ids = list(set(self._img_data["sample_id"]))
-            sample_id_groups = self._img_data.split("sample_id")
-            imgs = []
-            if image_id is None:
-                # get the first image for all samples
-                for sample_id in unique_sample_ids:
-                    row = sample_id_groups[sample_id].get_row(0)
-                    img = row["data"]
-                    imgs.append(row)
-            else:
-                # get images with `image_id` for all samples
-                for sample_id in unique_sample_ids:
-                    bframe = sample_id_groups[sample_id]
-                    img = bframe[bframe["image_id"] == image_id]["data"]
-                    imgs.append(img)
+        if img_data_subset.shape[0] == 1:
+            return img_data_subset["data"][0]
 
-                return imgs
-
-        if sample_id is None:
-            if image_id is True:
-                # get all images for the first sample
-                first_sample_id = self._img_data["sample_id"][0]
-                imgs = flatten_list(
-                    self._img_data[self._img_data["sample_id"] == first_sample_id][
-                        "data"
-                    ]
-                )
-                return imgs
-
-            if image_id is None:
-                # get the first image entry
-                return self._img_data["data"][0]
-            else:
-                return self._img_data[self._img_data["image_id"] == image_id]["data"][0]
-
-        # `sample_id` is a string
-        subset = self._img_data[self._img_data["sample_id"] == sample_id]
-        if image_id is True:
-            return flatten_list(subset["data"])
-
-        if image_id is None:
-            return subset["data"][0]
-
-        return subset[subset["image_id"] == image_id]["data"]
+        return img_data_subset["data"]
 
     def add_img(
         self,
@@ -800,7 +792,7 @@ class SpatialExperiment(SingleCellExperiment):
         sample_id: Union[str, True, None],
         image_id: Union[str, True, None],
         load: bool = True,
-        in_place: bool = False
+        in_place: bool = False,
     ) -> "SpatialExperiment":
         """
         Add a new image entry.
