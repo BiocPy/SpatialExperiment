@@ -6,7 +6,29 @@ def retrieve_rows_by_id(
     img_data: biocframe.BiocFrame,
     sample_id: Union[str, True, None] = None,
     image_id: Union[str, True, None] = None,
-) -> biocframe.BiocFrame:
+) -> Union[biocframe.BiocFrame, None]:
+    """
+    Retrieve rows from `img_data` based on specified `sample_id` and `image_id`.
+
+    Args:
+        img_data: The data from which to retrieve rows.
+        sample_id:
+            - `sample_id=True`: Matches all samples.
+            - `sample_id=None`: Matches the first sample.
+            - `sample_id="<str>"`: Matches a sample by its id.
+
+        image_id:
+            - `image_id=True`: Matches all images for the specified sample(s).
+            - `image_id=None`: Matches the first image for the sample(s).
+            - `image_id="<str>"`: Matches image(s) by its(their) id.
+
+    Returns:
+        The filtered `img_data` based on the specified ids, or None if `img_data` is `None`.
+    """
+
+    if img_data is None:
+        return None
+
     if sample_id is True:
         if image_id is True:
             return img_data
@@ -16,7 +38,6 @@ def retrieve_rows_by_id(
             sample_id_groups = img_data.split("sample_id")
             subset = None
 
-            # get the first entry for all samples
             for sample_id in unique_sample_ids:
                 row = sample_id_groups[sample_id][0, :]
                 if subset is None:
@@ -36,11 +57,9 @@ def retrieve_rows_by_id(
         ]
 
         if image_id is True:
-            # get all entries for the first sample
             subset = first_sample
 
         elif image_id is None:
-            # get the first entry
             subset = first_sample[0, :]
         else:
             subset = first_sample[

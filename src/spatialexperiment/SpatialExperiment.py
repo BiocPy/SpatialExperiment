@@ -627,7 +627,15 @@ class SpatialExperiment(SingleCellExperiment):
         _validate_id(sample_id)
         _validate_id(image_id)
 
-        return self._img_data
+        img_data_subset = retrieve_rows_by_id(
+            img_data=self.img_data, sample_id=sample_id, image_id=image_id
+        )
+
+        if img_data_subset.shape[0] == 1:
+            return img_data_subset["scale_factor"][0]
+
+        return img_data_subset["scale_factor"]
+
 
     ################################
     ###>> OVERRIDE column_data <<###
@@ -772,9 +780,6 @@ class SpatialExperiment(SingleCellExperiment):
         """
         _validate_id(sample_id)
         _validate_id(image_id)
-
-        if self._img_data is None:
-            return None
 
         img_data_subset = retrieve_rows_by_id(
             img_data=self.img_data, sample_id=sample_id, image_id=image_id
