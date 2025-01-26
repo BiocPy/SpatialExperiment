@@ -341,8 +341,6 @@ class SpatialExperiment(SingleCellExperiment):
         output += f"column_data columns({len(self._cols.column_names)}): {ut.print_truncated_list(self._cols.column_names)}\n"
         output += f"column_names({0 if self._column_names is None else len(self._column_names)}): {' ' if self._column_names is None else ut.print_truncated_list(self._column_names)}\n"
 
-        # TODO: append spatial_coords and img_data info
-
         output += f"main_experiment_name: {' ' if self._main_experiment_name is None else self._main_experiment_name}\n"
         output += f"reduced_dims({len(self.reduced_dim_names)}): {ut.print_truncated_list(self.reduced_dim_names)}\n"
         output += f"alternative_experiments({len(self.alternative_experiment_names)}): {ut.print_truncated_list(self.alternative_experiment_names)}\n"
@@ -350,6 +348,9 @@ class SpatialExperiment(SingleCellExperiment):
         output += f"column_pairs({len(self.column_pair_names)}): {ut.print_truncated_list(self.column_pair_names)}\n"
 
         output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+
+        output += f"spatial_coords columns({len(self.spatial_coords_names)}): {ut.print_truncated_list(self.spatial_coords_names)}\n"
+        output += f"img_data columns({len(self._img_data.column_names)}): {ut.print_truncated_list(self._img_data.column_names)}"
 
         return output
 
