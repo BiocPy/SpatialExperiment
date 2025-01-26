@@ -1,3 +1,4 @@
+import warnings
 import biocframe
 import biocutils as ut
 
@@ -33,10 +34,10 @@ def _validate_column_data(column_data, img_data):
 
     img_data_sample_ids = set(img_data["sample_id"])
     column_data_sample_ids = set(column_data["sample_id"])
-
     if img_data_sample_ids != column_data_sample_ids:
-        raise ValueError(
-            "'sample_id's in 'img_data' do not match with 'sample_id's in 'column_data'."
+        warnings.warn(
+            "Not all 'sample_id's in 'column_data' correspond to an entry in 'img_data'",
+            UserWarning
         )
 
 
@@ -74,7 +75,7 @@ def _validate_spatial_coords(spatial_coords, column_data):
         raise ValueError("'spatial_coords' do not contain coordinates for all cells.")
 
 
-def _validate_img_data(img_data):
+def _validate_img_data(img_data, column_data):
     if img_data is None:
         return
 
@@ -88,3 +89,9 @@ def _validate_img_data(img_data):
     if not all(column in img_data.columns for column in required_columns):
         missing = list(set(required_columns) - set(img_data.columns))
         raise ValueError(f"'img_data' is missing required columns: {missing}")
+
+    img_data_sample_ids = set(img_data["sample_id"])
+    column_data_sample_ids = set(column_data["sample_id"])
+
+    if not img_data_sample_ids <= column_data_sample_ids:
+        raise ValueError("All 'sample_id's in 'img_data' must be present in 'column_data['sample_id']'")

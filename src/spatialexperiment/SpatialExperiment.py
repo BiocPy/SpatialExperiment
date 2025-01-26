@@ -6,7 +6,7 @@ import biocframe
 import biocutils as ut
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 from summarizedexperiment._frameutils import _sanitize_frame
-from summarizedexperiment.BaseSE import _guess_assay_shape
+# from summarizedexperiment.BaseSE import _guess_assay_shape
 from singlecellexperiment import SingleCellExperiment
 from .SpatialImage import SpatialImage
 
@@ -84,9 +84,7 @@ class SpatialExperiment(SingleCellExperiment):
                 Sample data, must be the same length as the number of
                 columns of the matrices in assays. For instances of the
                 ``SpatialExperiment`` class, the sample data must include
-                a column named `sample_id`. Additionally, every `sample_id`
-                present in `img_data` must also be included in the
-                `sample_id` column of `column_data`.
+                a column named `sample_id`. If any 'sample_id' in the sample data is not present in the 'sample_id's of 'img_data', a warning will be issued.
 
                 If `sample_id` is not present, a column with this name
                 will be created and filled with the default value `sample01`.
@@ -149,6 +147,8 @@ class SpatialExperiment(SingleCellExperiment):
                     - **data** (SpatialImage): The image itself, represented as a SpatialImage object.
                     - **scale_factor** (float): A numerical value that indicates the scaling factor applied to the image.
 
+                All 'sample_id's in 'img_data' must be present in the 'sample_id's of 'column_data'.
+
                 Image data are coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
 
@@ -171,27 +171,28 @@ class SpatialExperiment(SingleCellExperiment):
             validate=validate,
         )
 
-        shape = _guess_assay_shape(
-            assays=assays if assays is not None else {},
-            rows=row_data,
-            cols=column_data,
-            row_names=row_names,
-            col_names=column_names,
-        )
+        # shape = _guess_assay_shape(
+        #     assays=assays if assays is not None else {},
+        #     rows=row_data,
+        #     cols=column_data,
+        #     row_names=row_names,
+        #     col_names=column_names,
+        # )
 
-        if column_data is None:
-            column_data = biocframe.BiocFrame({"sample_id": ["sample01"] * shape[1]})
+        column_data = _sanitize_frame(column_data, num_rows=self.shape[1])
 
-        column_data = _sanitize_frame(column_data, num_rows=shape[1])
-        spatial_coords = _sanitize_frame(spatial_coords, num_rows=shape[1])
+        if not column_data.has_column("sample_id"):
+            column_data["sample_id"] = ["sample01"] * self.shape[1]  # hard code default sample_id as "sample01"
+
+        spatial_coords = _sanitize_frame(spatial_coords, num_rows=self.shape[1])
         img_data = _sanitize_frame(img_data, num_rows=0)
 
         self._img_data = img_data
-        self._column_data = column_data
+        self._cols = column_data
         self._spatial_coords = spatial_coords
 
         if validate:
-            _validate_img_data(img_data=img_data)
+            _validate_img_data(img_data=img_data, column_data=column_data)
             _validate_column_data(column_data=column_data, img_data=img_data)
             _validate_spatial_coords(
                 spatial_coords=spatial_coords, column_data=column_data
@@ -557,7 +558,7 @@ class SpatialExperiment(SingleCellExperiment):
         """
         img_data = _sanitize_frame(img_data, num_rows=0)
 
-        _validate_img_data(img_data)
+        _validate_img_data(img_data, self.column_data)
 
         output = self._define_output(in_place)
         output._img_data = img_data
@@ -651,16 +652,11 @@ class SpatialExperiment(SingleCellExperiment):
 
         Args:
             cols:
-                New sample data. If `cols` contains a column
-                named `sample_id`s, a check is performed to ensure
-                there is a one-to-one mapping between the
-                `sample_id`s in `cols` and `self.img_data`.
-                If `sample_id` is not present, the original `sample_id`s
-                are retained.
+                New sample data. If 'cols' contains a column
+                named 'sample_id's, a check is performed to ensure
+                that all 'sample_id's in the 'img_data' are present. If any 'sample_id' in the 'cols' is not present in the 'sample_id's of 'img_data', a warning will be issued.
 
-                If `cols` is None, an empty
-                :py:class:`~biocframe.BiocFrame.BiocFrame`
-                object is created.
+                If 'sample_id' is not present or 'cols' is None, the original 'sample_id's are retained.
 
             in_place:
                 Whether to modify the ``SpatialExperiment`` in place. Defaults to False.

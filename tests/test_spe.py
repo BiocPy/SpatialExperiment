@@ -73,10 +73,26 @@ def test_SPE_empty_constructor():
     assert len(spe.spatial_coords_names) == 0
     assert isinstance(spe.spatial_coords, BiocFrame)
     assert spe.spatial_coords.shape == (spe.shape[1], 0)
+    assert "sample_id" in spe.column_names  # `column_names` is empty when `column_data`s has 0 rows but `column_names` is not empty
+    assert spe.column_data.shape == (spe.shape[1], 0)
 
-def test_spatial_coords_numeric_matrix():
-    spe = SpatialExperiment(assays={"counts": counts}, spatial_coords=spatial_coords)
+def test_default_sample_id_in_col_data():
+    spe = SpatialExperiment(
+        assays={"counts": counts},
+        row_data=row_data,
+        column_data=col_data,
+        spatial_coords=spatial_coords,
+    )
 
+    assert isinstance(spe, SpatialExperiment)
+    assert isinstance(spe.img_data, BiocFrame)
     assert isinstance(spe.spatial_coords, BiocFrame)
+
+    assert spe.shape == (nrows, ncols)
+    assert spe.img_data == img_data
     assert spe.spatial_coords == spatial_coords
     assert spe.spatial_coords_names == spatial_coords.column_names.as_list()
+    assert "sample_id" in spe.column_names
+    assert set(spe.column_data["sample_id"]) == {"sample01"}
+
+# TODO: write tests for when the sample_ids in img_data are not present in column_data
