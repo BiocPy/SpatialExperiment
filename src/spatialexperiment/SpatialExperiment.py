@@ -171,14 +171,6 @@ class SpatialExperiment(SingleCellExperiment):
             validate=validate,
         )
 
-        # shape = _guess_assay_shape(
-        #     assays=assays if assays is not None else {},
-        #     rows=row_data,
-        #     cols=column_data,
-        #     row_names=row_names,
-        #     col_names=column_names,
-        # )
-
         column_data = _sanitize_frame(column_data, num_rows=self.shape[1])
 
         if not column_data.has_column("sample_id"):
@@ -678,6 +670,7 @@ class SpatialExperiment(SingleCellExperiment):
             return output.set_column_names(cols.row_names, in_place=in_place)
 
         return output
+
 
     ################################
     #########>> slicers <<##########
