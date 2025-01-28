@@ -609,8 +609,8 @@ class SpatialExperiment(SingleCellExperiment):
 
     def get_scale_factors(
         self,
-        sample_id: Union[str, True, None] = None,
-        image_id: Union[str, True, None] = None,
+        sample_id: Union[str, bool, None] = None,
+        image_id: Union[str, bool, None] = None,
     ) -> List[float]:
         """Return scale factor(s) of image(s) based on the provided sample and image ids.
             See :py:meth:`~get_img` for more details on the behavior for various
@@ -737,8 +737,8 @@ class SpatialExperiment(SingleCellExperiment):
 
     def get_img(
         self,
-        sample_id: Union[str, True, None] = None,
-        image_id: Union[str, True, None] = None,
+        sample_id: Union[str, bool, None] = None,
+        image_id: Union[str, bool, None] = None,
     ) -> Union[SpatialImage, List[SpatialImage]]:
         """
         Retrieve spatial images based on the provided sample and image ids.
@@ -798,8 +798,8 @@ class SpatialExperiment(SingleCellExperiment):
         self,
         image_source: str,
         scale_factor: float,
-        sample_id: Union[str, True, None],
-        image_id: Union[str, True, None],
+        sample_id: Union[str, bool, None],
+        image_id: Union[str, bool, None],
         load: bool = True,
         in_place: bool = False,
     ) -> "SpatialExperiment":
@@ -856,15 +856,15 @@ class SpatialExperiment(SingleCellExperiment):
     # TODO: implement rmv_img()
     def rmv_img(
         self,
-        sample_id: Union[str, True, None] = None,
-        image_id: Union[str, True, None] = None,
+        sample_id: Union[str, bool, None] = None,
+        image_id: Union[str, bool, None] = None,
     ) -> "SpatialExperiment":
         raise NotImplementedError()
 
     def img_source(
         self,
-        sample_id: Union[str, True, None] = None,
-        image_id: Union[str, True, None] = None,
+        sample_id: Union[str, bool, None] = None,
+        image_id: Union[str, bool, None] = None,
         path=False,
     ):
         raise NotImplementedError(

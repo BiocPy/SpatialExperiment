@@ -4,8 +4,8 @@ import biocframe
 
 def retrieve_rows_by_id(
     img_data: biocframe.BiocFrame,
-    sample_id: Union[str, True, None] = None,
-    image_id: Union[str, True, None] = None,
+    sample_id: Union[str, bool, None] = None,
+    image_id: Union[str, bool, None] = None,
 ) -> Union[biocframe.BiocFrame, None]:
     """
     Retrieve rows from `img_data` based on specified `sample_id` and `image_id`.
