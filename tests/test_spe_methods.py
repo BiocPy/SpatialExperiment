@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+import pytest
 import numpy as np
 import biocutils as ut
 from spatialexperiment import SpatialExperiment
@@ -23,6 +24,9 @@ def test_spatial_coords_numpy():
     assert isinstance(tspe, SpatialExperiment)
     assert isinstance(tspe.spatial_coords, np.ndarray)
     assert len(tspe.spatial_coords_names) == 0
+
+    with pytest.warns(UserWarning):
+        tspe.spatial_coordinates_names = ["x", "y"]
 
 
 def test_set_spatial_coords_numpy(spe):

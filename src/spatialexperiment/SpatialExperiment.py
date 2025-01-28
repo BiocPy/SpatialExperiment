@@ -476,9 +476,9 @@ class SpatialExperiment(SingleCellExperiment):
                 f"The spatial coordinates object is of type {type(self._spatial_coords).__name__} which does not support setting column names.",
                 UserWarning,
             )
+            new_spatial_coords = self._spatial_coords
         else:
             _validate_spatial_coords_names(spatial_coords_names, self._spatial_coords)
-
             new_spatial_coords = self._spatial_coords.set_column_names(spatial_coords_names)
 
         output = self._define_output(in_place)
