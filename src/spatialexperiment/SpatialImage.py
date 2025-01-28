@@ -1,7 +1,13 @@
 import os
+
 from PIL import Image
 
+__author__ = "keviny2"
+__copyright__ = "keviny2"
+__license__ = "MIT"
 
+
+# TODO: add documentation, __repr__, __str__
 class SpatialImage:
     def __init__(self, x):
         if isinstance(x, SpatialImage):

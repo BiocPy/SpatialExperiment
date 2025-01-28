@@ -1,5 +1,6 @@
 import warnings
-import biocframe
+
+from biocframe import BiocFrame
 import biocutils as ut
 
 __author__ = "keviny2"
@@ -12,16 +13,14 @@ def _validate_spatial_coords_names(spatial_coords_names, spatial_coords):
         raise TypeError("'spatial_coords_names' is not a list of strings")
 
     if len(spatial_coords_names) != spatial_coords.shape[1]:
-        raise ValueError(
-            f"Expected {spatial_coords.shape[1]} names. Got {len(spatial_coords_names)} names."
-        )
+        raise ValueError(f"Expected {spatial_coords.shape[1]} names. Got {len(spatial_coords_names)} names.")
 
 
 def _validate_column_data(column_data):
     if column_data is None:
         raise ValueError("'column_data' must have a column named 'sample_id'.")
 
-    if not isinstance(column_data, biocframe.BiocFrame):
+    if not isinstance(column_data, BiocFrame):
         raise TypeError("'column_data' must be a BiocFrame object.")
 
     if "sample_id" not in column_data.columns:
@@ -38,15 +37,13 @@ def _validate_sample_image_ids(img_data, new_sample_id, new_image_id):
     if img_data is None:
         return
 
-    if not isinstance(img_data, biocframe.BiocFrame):
+    if not isinstance(img_data, BiocFrame):
         raise TypeError("`img_data` is not a BiocFrame object.")
 
     for row in img_data:
         data = row[1]
         if data["sample_id"] == new_sample_id and data["image_id"] == new_image_id:
-            raise ValueError(
-                f"Image with Sample ID: {new_sample_id} and Image ID: {new_image_id} already exists"
-            )
+            raise ValueError(f"Image with Sample ID: {new_sample_id} and Image ID: {new_image_id} already exists")
 
     # TODO: check if 'new_sample_id' is present in column_data['sample_id']
 
@@ -55,7 +52,7 @@ def _validate_spatial_coords(spatial_coords, column_data):
     if spatial_coords is None:
         return
 
-    if not isinstance(spatial_coords, biocframe.BiocFrame):
+    if not isinstance(spatial_coords, BiocFrame):
         raise TypeError("'spatial_coords' must be a BiocFrame object.")
 
     if column_data.shape[0] != spatial_coords.shape[0]:
@@ -66,7 +63,7 @@ def _validate_img_data(img_data):
     if img_data is None:
         return
 
-    if not isinstance(img_data, biocframe.BiocFrame):
+    if not isinstance(img_data, BiocFrame):
         raise TypeError("'img_data' must be a BiocFrame object.")
 
     if img_data.shape[0] == 0:
@@ -87,9 +84,7 @@ def _validate_sample_ids(column_data, img_data):
     column_data_sample_ids = set(column_data["sample_id"])
 
     if not img_data_sample_ids <= column_data_sample_ids:
-        raise ValueError(
-            "All 'sample_id's in 'img_data' must be present in 'column_data['sample_id']"
-        )
+        raise ValueError("All 'sample_id's in 'img_data' must be present in 'column_data['sample_id']")
 
     if img_data_sample_ids != column_data_sample_ids:
         warnings.warn(
