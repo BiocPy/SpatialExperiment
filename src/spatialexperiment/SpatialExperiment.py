@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Optional, Sequence, Union
 from warnings import warn
 
+import numpy as np
 import biocutils as ut
 from biocframe import BiocFrame
 from PIL import Image
@@ -50,7 +51,7 @@ class SpatialExperiment(SingleCellExperiment):
         alternative_experiment_check_dim_names: bool = True,
         row_pairs: Optional[Any] = None,
         column_pairs: Optional[Any] = None,
-        spatial_coords: Optional[BiocFrame] = None,
+        spatial_coords: Optional[Union[BiocFrame, np.ndarray]] = None,
         img_data: Optional[BiocFrame] = None,
         validate: bool = True,
     ) -> None:
@@ -139,13 +140,15 @@ class SpatialExperiment(SingleCellExperiment):
                 Defaults to None.
 
             spatial_coords:
-                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`. Typical column names might include:
+                Optional :py:class:`~np.ndarray` or :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`.
+                
+                If `spatial_coords` is a :py:class:`~biocframe.BiocFrame.BiocFrame`, typical column names might include:
 
                     - **['x', 'y']**: For simple 2D coordinates.
                     - **['pxl_col_in_fullres', 'pxl_row_in_fullres']**: For pixel-based coordinates in full-resolution images.
 
-                Spatial coordinates are coerced to a
-                :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
+                If spatial coordinates is a :py:class:`~pd.DataFrame` or `None`, it is coerced to a
+                :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to `None`.
 
             img_data:
                 Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data, structured with the following columns:
@@ -357,7 +360,7 @@ class SpatialExperiment(SingleCellExperiment):
     #####>> spatial_coords <<#####
     ##############################
 
-    def get_spatial_coordinates(self) -> BiocFrame:
+    def get_spatial_coordinates(self) -> Union[BiocFrame, np.ndarray]:
         """Access spatial coordinates.
 
         Returns:
@@ -370,21 +373,23 @@ class SpatialExperiment(SingleCellExperiment):
         return self.get_spatial_coordinates()
 
     def set_spatial_coordinates(
-        self, spatial_coords: Optional[BiocFrame], in_place: bool = False
+        self, spatial_coords: Optional[Union[BiocFrame, np.ndarray]], in_place: bool = False
     ) -> "SpatialExperiment":
         """Set new spatial coordinates.
 
         Args:
             spatial_coords:
-                :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`. Typical column names might include:
+                Optional :py:class:`~np.ndarray` or :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`.
+                
+                If `spatial_coords` is a :py:class:`~biocframe.BiocFrame.BiocFrame`, typical column names might include:
 
                     - **['x', 'y']**: For simple 2D coordinates.
                     - **['pxl_col_in_fullres', 'pxl_row_in_fullres']**: For pixel-based coordinates in full-resolution images.
 
                 To remove coordinate information, set `spatial_coords=None`.
 
-                Spatial coordinates are coerced to a
-                :py:class:`~biocframe.BiocFrame.BiocFrame`.
+                If spatial coordinates is a :py:class:`~pd.DataFrame` or `None`, it is coerced to a
+                :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to `None`.
 
             in_place:
                 Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
@@ -400,7 +405,7 @@ class SpatialExperiment(SingleCellExperiment):
         output._spatial_coords = spatial_coords
         return output
 
-    def set_spatial_coords(self, spatial_coords: BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+    def set_spatial_coords(self, spatial_coords: Optional[Union[BiocFrame, np.ndarray]], in_place: bool = False) -> "SpatialExperiment":
         """Alias for :py:meth:`~set_spatial_coordinates`."""
         return self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=in_place)
 
@@ -410,7 +415,7 @@ class SpatialExperiment(SingleCellExperiment):
         return self.get_spatial_coordinates()
 
     @spatial_coords.setter
-    def spatial_coords(self, spatial_coords: BiocFrame):
+    def spatial_coords(self, spatial_coords: Optional[Union[BiocFrame, np.ndarray]]):
         """Alias for :py:meth:`~set_spatial_coordinates`."""
         warn(
             "Setting property 'spatial_coords' is an in-place operation, use 'set_spatial_coordinates' instead.",
@@ -424,7 +429,7 @@ class SpatialExperiment(SingleCellExperiment):
         return self.get_spatial_coordinates()
 
     @spatial_coordinates.setter
-    def spatial_coordinates(self, spatial_coords: BiocFrame):
+    def spatial_coordinates(self, spatial_coords: Optional[Union[BiocFrame, np.ndarray]]):
         """Alias for :py:meth:`~set_spatial_coordinates`."""
         warn(
             "Setting property 'spatial_coords' is an in-place operation, use 'set_spatial_coordinates' instead.",
@@ -442,6 +447,9 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             The defined names of the spatial coordinates.
         """
+        if not hasattr(self._spatial_coords, "columns"):
+            return []
+
         return self._spatial_coords.columns.as_list()
 
     def get_spatial_coords_names(self) -> List[str]:
@@ -463,13 +471,18 @@ class SpatialExperiment(SingleCellExperiment):
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _validate_spatial_coords_names(spatial_coords_names, self.spatial_coordinates)
-
-        old_spatial_coordinates = self.get_spatial_coordinates()
-        new_spatial_coordinates = old_spatial_coordinates.set_column_names(spatial_coords_names)
+        if not hasattr(self._spatial_coords, "set_column_names"):
+            warn(
+                f"The spatial coordinates object is of type {type(self._spatial_coords).__name__} which does not support setting column names.",
+                UserWarning,
+            )
+            new_spatial_coords = self._spatial_coords
+        else:
+            _validate_spatial_coords_names(spatial_coords_names, self._spatial_coords)
+            new_spatial_coords = self._spatial_coords.set_column_names(spatial_coords_names)
 
         output = self._define_output(in_place)
-        output._spatial_coords = new_spatial_coordinates
+        output._spatial_coords = new_spatial_coords
         return output
 
     def set_spatial_coords_names(self, spatial_coords_names: List[str], in_place: bool = False) -> "SpatialExperiment":
