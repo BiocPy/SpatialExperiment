@@ -1,0 +1,29 @@
+spatialexperiment package
+=========================
+
+Submodules
+----------
+
+spatialexperiment.SpatialExperiment module
+------------------------------------------
+
+.. automodule:: spatialexperiment.SpatialExperiment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+spatialexperiment.SpatialImage module
+-------------------------------------
+
+.. automodule:: spatialexperiment.SpatialImage
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spatialexperiment
+   :members:
+   :undoc-members:
+   :show-inheritance:
