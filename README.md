@@ -5,7 +5,9 @@
 
 A Python package for storing and analyzing spatial-omics experimental data. `SpatialExperiment` extends [SingleCellExperiment](https://github.com/biocpy/singlecellexperiment) with dedicated slots for image data and spatial coordinates, making it ideal for spatial transcriptomics and other spatially-resolved omics data.
 
-**Status**: This package is in active development.
+> [!NOTE]
+>
+> This package is in **active development**.
 
 ## Install
 
