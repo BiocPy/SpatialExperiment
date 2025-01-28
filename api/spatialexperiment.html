@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="spatialexperiment" href="modules.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment package - SpatialExperiment 0.0.1 documentation</title>
+        <title>spatialexperiment package - SpatialExperiment 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">SpatialExperiment 0.0.1 documentation</div></a>
+      <a href="../index.html"><div class="brand">SpatialExperiment 0.0.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -191,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.1 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -345,15 +345,16 @@ parameter in the R implementation.</p>
 <li><p><strong>column_pairs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – <p>Column pairings/relationships between cells.</p>
 <p>Defaults to None.</p>
 </p></li>
-<li><p><strong>spatial_coords</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>]</span>) – <p>Optional <a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a> containing columns of spatial coordinates. Must be the same length as <cite>column_data</cite>. Typical column names might include:</p>
+<li><p><strong>spatial_coords</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – <p>Optional <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> or <a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a> containing columns of spatial coordinates. Must be the same length as <cite>column_data</cite>.</p>
+<p>If <cite>spatial_coords</cite> is a <a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>, typical column names might include:</p>
 <blockquote>
 <div><ul>
 <li><p><strong>[‘x’, ‘y’]</strong>: For simple 2D coordinates.</p></li>
 <li><p><strong>[‘pxl_col_in_fullres’, ‘pxl_row_in_fullres’]</strong>: For pixel-based coordinates in full-resolution images.</p></li>
 </ul>
 </div></blockquote>
-<p>Spatial coordinates are coerced to a
-<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>. Defaults to None.</p>
+<p>If spatial coordinates is a <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code> or <cite>None</cite>, it is coerced to a
+<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>. Defaults to <cite>None</cite>.</p>
 </p></li>
 <li><p><strong>img_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>]</span>) – <dl class="simple">
 <dt>Optional <a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a> containing the image data, structured with the following columns:</dt><dd><ul>
@@ -570,7 +571,7 @@ combinations of <cite>sample_id</cite> and <cite>image_id</cite> values.</p>
 <dd><p>Access spatial coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">BiocFrame</span></code> containing columns of spatial coordinates.</p>
@@ -729,7 +730,8 @@ that all ‘sample_id’s in the ‘img_data’ are present. If any ‘sample_id
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>spatial_coords</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>]</span>) – <p><a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a> containing columns of spatial coordinates. Must be the same length as <cite>column_data</cite>. Typical column names might include:</p>
+<li><p><strong>spatial_coords</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – <p>Optional <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> or <a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a> containing columns of spatial coordinates. Must be the same length as <cite>column_data</cite>.</p>
+<p>If <cite>spatial_coords</cite> is a <a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>, typical column names might include:</p>
 <blockquote>
 <div><ul>
 <li><p><strong>[‘x’, ‘y’]</strong>: For simple 2D coordinates.</p></li>
@@ -737,8 +739,8 @@ that all ‘sample_id’s in the ‘img_data’ are present. If any ‘sample_id
 </ul>
 </div></blockquote>
 <p>To remove coordinate information, set <cite>spatial_coords=None</cite>.</p>
-<p>Spatial coordinates are coerced to a
-<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>.</p>
+<p>If spatial coordinates is a <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code> or <cite>None</cite>, it is coerced to a
+<a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a>. Defaults to <cite>None</cite>.</p>
 </p></li>
 <li><p><strong>in_place</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to modify the <code class="docutils literal notranslate"><span class="pre">SpatialExperiment</span></code> in place. Defaults to False.</p></li>
 </ul>
@@ -967,7 +969,7 @@ that all ‘sample_id’s in the ‘img_data’ are present. If any ‘sample_id
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=d45e8c67"></script>
+</div><script src="../_static/documentation_options.js?v=e3a6060d"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

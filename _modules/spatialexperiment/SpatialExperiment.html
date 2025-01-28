@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment.SpatialExperiment - SpatialExperiment 0.0.1 documentation</title>
+        <title>spatialexperiment.SpatialExperiment - SpatialExperiment 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.1 documentation</div></a>
+      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.1 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -246,6 +246,7 @@
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">biocutils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ut</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">biocframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">BiocFrame</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
@@ -299,7 +300,7 @@
         <span class="n">alternative_experiment_check_dim_names</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">row_pairs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">column_pairs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">img_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -388,13 +389,15 @@
 <span class="sd">                Defaults to None.</span>
 
 <span class="sd">            spatial_coords:</span>
-<span class="sd">                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`. Typical column names might include:</span>
+<span class="sd">                Optional :py:class:`~np.ndarray` or :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`.</span>
+<span class="sd">                </span>
+<span class="sd">                If `spatial_coords` is a :py:class:`~biocframe.BiocFrame.BiocFrame`, typical column names might include:</span>
 
 <span class="sd">                    - **[&#39;x&#39;, &#39;y&#39;]**: For simple 2D coordinates.</span>
 <span class="sd">                    - **[&#39;pxl_col_in_fullres&#39;, &#39;pxl_row_in_fullres&#39;]**: For pixel-based coordinates in full-resolution images.</span>
 
-<span class="sd">                Spatial coordinates are coerced to a</span>
-<span class="sd">                :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.</span>
+<span class="sd">                If spatial coordinates is a :py:class:`~pd.DataFrame` or `None`, it is coerced to a</span>
+<span class="sd">                :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to `None`.</span>
 
 <span class="sd">            img_data:</span>
 <span class="sd">                Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data, structured with the following columns:</span>
@@ -621,7 +624,7 @@
 
 <div class="viewcode-block" id="SpatialExperiment.get_spatial_coordinates">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_spatial_coordinates">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_spatial_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BiocFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_spatial_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Access spatial coordinates.</span>
 
 <span class="sd">        Returns:</span>
@@ -640,21 +643,23 @@
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coordinates">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coordinates">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coordinates</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set new spatial coordinates.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            spatial_coords:</span>
-<span class="sd">                :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`. Typical column names might include:</span>
+<span class="sd">                Optional :py:class:`~np.ndarray` or :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`.</span>
+<span class="sd">                </span>
+<span class="sd">                If `spatial_coords` is a :py:class:`~biocframe.BiocFrame.BiocFrame`, typical column names might include:</span>
 
 <span class="sd">                    - **[&#39;x&#39;, &#39;y&#39;]**: For simple 2D coordinates.</span>
 <span class="sd">                    - **[&#39;pxl_col_in_fullres&#39;, &#39;pxl_row_in_fullres&#39;]**: For pixel-based coordinates in full-resolution images.</span>
 
 <span class="sd">                To remove coordinate information, set `spatial_coords=None`.</span>
 
-<span class="sd">                Spatial coordinates are coerced to a</span>
-<span class="sd">                :py:class:`~biocframe.BiocFrame.BiocFrame`.</span>
+<span class="sd">                If spatial coordinates is a :py:class:`~pd.DataFrame` or `None`, it is coerced to a</span>
+<span class="sd">                :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to `None`.</span>
 
 <span class="sd">            in_place:</span>
 <span class="sd">                Whether to modify the ``SpatialExperiment`` in place. Defaults to False.</span>
@@ -673,7 +678,7 @@
 
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coords">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coords">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">BiocFrame</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_spatial_coordinates`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates</span><span class="p">(</span><span class="n">spatial_coords</span><span class="o">=</span><span class="n">spatial_coords</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span></div>
 
@@ -684,7 +689,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spatial_coordinates</span><span class="p">()</span>
 
     <span class="nd">@spatial_coords</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">spatial_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">BiocFrame</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spatial_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_spatial_coordinates`.&quot;&quot;&quot;</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Setting property &#39;spatial_coords&#39; is an in-place operation, use &#39;set_spatial_coordinates&#39; instead.&quot;</span><span class="p">,</span>
@@ -698,7 +703,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spatial_coordinates</span><span class="p">()</span>
 
     <span class="nd">@spatial_coordinates</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">spatial_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">BiocFrame</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spatial_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_spatial_coordinates`.&quot;&quot;&quot;</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Setting property &#39;spatial_coords&#39; is an in-place operation, use &#39;set_spatial_coordinates&#39; instead.&quot;</span><span class="p">,</span>
@@ -718,6 +723,9 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            The defined names of the spatial coordinates.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span></div>
 
 
@@ -745,13 +753,18 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_validate_spatial_coords_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_coordinates</span><span class="p">)</span>
-
-        <span class="n">old_spatial_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spatial_coordinates</span><span class="p">()</span>
-        <span class="n">new_spatial_coordinates</span> <span class="o">=</span> <span class="n">old_spatial_coordinates</span><span class="o">.</span><span class="n">set_column_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="p">,</span> <span class="s2">&quot;set_column_names&quot;</span><span class="p">):</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The spatial coordinates object is of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> which does not support setting column names.&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">new_spatial_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_validate_spatial_coords_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="p">)</span>
+            <span class="n">new_spatial_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="o">.</span><span class="n">set_column_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="p">)</span>
 
         <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_output</span><span class="p">(</span><span class="n">in_place</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">_spatial_coords</span> <span class="o">=</span> <span class="n">new_spatial_coordinates</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">_spatial_coords</span> <span class="o">=</span> <span class="n">new_spatial_coords</span>
         <span class="k">return</span> <span class="n">output</span></div>
 
 
@@ -1207,7 +1220,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+</div><script src="../../_static/documentation_options.js?v=e3a6060d"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
