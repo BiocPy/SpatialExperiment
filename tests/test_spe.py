@@ -7,16 +7,16 @@ __license__ = "MIT"
 
 
 def test_SPE_empty_constructor():
-    spe = SpatialExperiment()
+    tspe = SpatialExperiment()
 
-    assert isinstance(spe, SpatialExperiment)
+    assert isinstance(tspe, SpatialExperiment)
 
-    assert isinstance(spe.img_data, BiocFrame)
-    assert spe.img_data.shape[0] == 0
+    assert isinstance(tspe.img_data, BiocFrame)
+    assert tspe.img_data.shape[0] == 0
 
-    assert len(spe.spatial_coords_names) == 0
-    assert isinstance(spe.spatial_coords, BiocFrame)
-    assert spe.spatial_coords.shape == (spe.shape[1], 0)
+    assert len(tspe.spatial_coords_names) == 0
+    assert isinstance(tspe.spatial_coords, BiocFrame)
+    assert tspe.spatial_coords.shape == (tspe.shape[1], 0)
 
-    assert "sample_id" in spe.column_data.columns.as_list()
-    assert spe.column_data.shape == (spe.shape[1], 1)
+    assert "sample_id" in tspe.column_data.columns.as_list()
+    assert tspe.column_data.shape == (tspe.shape[1], 1)

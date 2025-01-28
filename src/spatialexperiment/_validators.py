@@ -17,28 +17,15 @@ def _validate_spatial_coords_names(spatial_coords_names, spatial_coords):
         )
 
 
-def _validate_column_data(column_data, img_data):
-    error_message = "'column_data' must have a column named 'sample_id'."
-
+def _validate_column_data(column_data):
     if column_data is None:
-        raise ValueError(error_message)
+        raise ValueError("'column_data' must have a column named 'sample_id'.")
 
     if not isinstance(column_data, biocframe.BiocFrame):
         raise TypeError("'column_data' must be a BiocFrame object.")
 
     if "sample_id" not in column_data.columns:
-        raise ValueError(error_message)
-
-    if column_data.shape[0] == 0 or img_data.shape[0] == 0:
-        return
-
-    img_data_sample_ids = set(img_data["sample_id"])
-    column_data_sample_ids = set(column_data["sample_id"])
-    if img_data_sample_ids != column_data_sample_ids:
-        warnings.warn(
-            "Not all 'sample_id's in 'column_data' correspond to an entry in 'img_data'",
-            UserWarning
-        )
+        raise ValueError("'column_data' must have a column named 'sample_id'.")
 
 
 def _validate_id(id):
@@ -75,7 +62,7 @@ def _validate_spatial_coords(spatial_coords, column_data):
         raise ValueError("'spatial_coords' do not contain coordinates for all cells.")
 
 
-def _validate_img_data(img_data, column_data):
+def _validate_img_data(img_data):
     if img_data is None:
         return
 
@@ -90,8 +77,22 @@ def _validate_img_data(img_data, column_data):
         missing = list(set(required_columns) - set(img_data.columns))
         raise ValueError(f"'img_data' is missing required columns: {missing}")
 
+
+def _validate_sample_ids(column_data, img_data):
+    """Ensure consistency of sample_id between img_data and column_data."""
+    if img_data is None or img_data.shape[0] == 0:
+        return
+
     img_data_sample_ids = set(img_data["sample_id"])
     column_data_sample_ids = set(column_data["sample_id"])
 
     if not img_data_sample_ids <= column_data_sample_ids:
-        raise ValueError("All 'sample_id's in 'img_data' must be present in 'column_data['sample_id']'")
+        raise ValueError(
+            "All 'sample_id's in 'img_data' must be present in 'column_data['sample_id']"
+        )
+
+    if img_data_sample_ids != column_data_sample_ids:
+        warnings.warn(
+            "Not all 'sample_id's in 'column_data' correspond to an entry in 'img_data'",
+            UserWarning,
+        )

@@ -6,7 +6,6 @@ import biocframe
 import biocutils as ut
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 from summarizedexperiment._frameutils import _sanitize_frame
-# from summarizedexperiment.BaseSE import _guess_assay_shape
 from singlecellexperiment import SingleCellExperiment
 from .SpatialImage import SpatialImage
 
@@ -15,6 +14,7 @@ from ._validators import (
     _validate_sample_image_ids,
     _validate_spatial_coords,
     _validate_img_data,
+    _validate_sample_ids,
     _validate_id,
     _validate_column_data,
     _validate_spatial_coords_names,
@@ -47,9 +47,9 @@ class SpatialExperiment(SingleCellExperiment):
         reduced_dims: Optional[Dict[str, Any]] = None,
         main_experiment_name: Optional[str] = None,
         alternative_experiments: Optional[Dict[str, Any]] = None,
+        alternative_experiment_check_dim_names: bool = True,
         row_pairs: Optional[Any] = None,
         column_pairs: Optional[Any] = None,
-        # ============== SpatialExperiment arguments ===============
         spatial_coords: Optional[biocframe.BiocFrame] = None,
         img_data: Optional[biocframe.BiocFrame] = None,
         validate: bool = True,
@@ -121,6 +121,13 @@ class SpatialExperiment(SingleCellExperiment):
                 (e.g., sc-atac, crispr) and values as subclasses of
                 :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
+            alternative_experiment_check_dim_names:
+                Whether to check if the column names of the alternative experiment match the column names
+                of the main experiment. This is the equivalent to the ``withDimnames``
+                parameter in the R implementation.
+
+                Defaults to True.
+
             row_pairs:
                 Row pairings/relationships between features.
 
@@ -168,13 +175,16 @@ class SpatialExperiment(SingleCellExperiment):
             alternative_experiments=alternative_experiments,
             row_pairs=row_pairs,
             column_pairs=column_pairs,
+            alternative_experiment_check_dim_names=alternative_experiment_check_dim_names,
             validate=validate,
         )
 
         column_data = _sanitize_frame(column_data, num_rows=self.shape[1])
 
         if not column_data.has_column("sample_id"):
-            column_data["sample_id"] = ["sample01"] * self.shape[1]  # hard code default sample_id as "sample01"
+            column_data["sample_id"] = ["sample01"] * self.shape[
+                1
+            ]  # hard code default sample_id as "sample01"
 
         spatial_coords = _sanitize_frame(spatial_coords, num_rows=self.shape[1])
         img_data = _sanitize_frame(img_data, num_rows=0)
@@ -184,8 +194,9 @@ class SpatialExperiment(SingleCellExperiment):
         self._spatial_coords = spatial_coords
 
         if validate:
-            _validate_img_data(img_data=img_data, column_data=column_data)
-            _validate_column_data(column_data=column_data, img_data=img_data)
+            _validate_column_data(column_data=column_data)
+            _validate_img_data(img_data=img_data)
+            _validate_sample_ids(column_data=column_data, img_data=img_data)
             _validate_spatial_coords(
                 spatial_coords=spatial_coords, column_data=column_data
             )
@@ -551,7 +562,8 @@ class SpatialExperiment(SingleCellExperiment):
         """
         img_data = _sanitize_frame(img_data, num_rows=0)
 
-        _validate_img_data(img_data, self.column_data)
+        _validate_img_data(img_data)
+        _validate_sample_ids(self.column_data, img_data)
 
         output = self._define_output(in_place)
         output._img_data = img_data
@@ -630,7 +642,6 @@ class SpatialExperiment(SingleCellExperiment):
 
         return img_data_subset["scale_factor"]
 
-
     ################################
     ###>> OVERRIDE column_data <<###
     ################################
@@ -661,7 +672,8 @@ class SpatialExperiment(SingleCellExperiment):
         if "sample_id" not in cols.columns:
             cols["sample_id"] = self.column_data["sample_id"]
 
-        _validate_column_data(column_data=cols, img_data=self.img_data)
+        _validate_column_data(column_data=cols)
+        _validate_sample_ids(column_data=cols, img_data=self.img_data)
 
         output = self._define_output(in_place)
         output._cols = cols
@@ -670,7 +682,6 @@ class SpatialExperiment(SingleCellExperiment):
             return output.set_column_names(cols.row_names, in_place=in_place)
 
         return output
-
 
     ################################
     #########>> slicers <<##########
@@ -695,12 +706,12 @@ class SpatialExperiment(SingleCellExperiment):
         if do_slice_cols:
             new_spatial_coords = self.spatial_coords[slicer.col_indices, :]
 
-        column_sample_ids = set(self.column_data["sample_id"])
+        column_sample_ids = set(spe.column_data["sample_id"])
         mask = [
             sample_id in column_sample_ids for sample_id in self.img_data["sample_id"]
         ]
 
-        new_img_data = self.img_data[mask]
+        new_img_data = self.img_data[mask,]
 
         current_class_const = type(self)
         return current_class_const(
@@ -744,7 +755,7 @@ class SpatialExperiment(SingleCellExperiment):
                 - `image_id="<str>"`: Matches image(s) by its(their) id.
 
         Returns:
-            One or more `SpatialImage` objects.
+            Zero, one, or more `SpatialImage` objects.
 
         Behavior:
             - sample_id = True, image_id = True:
@@ -774,6 +785,9 @@ class SpatialExperiment(SingleCellExperiment):
         img_data_subset = retrieve_rows_by_id(
             img_data=self.img_data, sample_id=sample_id, image_id=image_id
         )
+
+        if img_data_subset is None:
+            return []
 
         if img_data_subset.shape[0] == 1:
             return img_data_subset["data"][0]
@@ -827,10 +841,10 @@ class SpatialExperiment(SingleCellExperiment):
 
         new_row = biocframe.BiocFrame(
             {
-                "sample_id": sample_id,
-                "image_id": image_id,
-                "data": spi,
-                "scale_factor": scale_factor,
+                "sample_id": [sample_id],
+                "image_id": [image_id],
+                "data": [spi],
+                "scale_factor": [scale_factor],
             }
         )
         new_img_data = self._img_data.combine_rows(new_row)
@@ -839,6 +853,7 @@ class SpatialExperiment(SingleCellExperiment):
         output._img_data = new_img_data
         return output
 
+    # TODO: implement rmv_img()
     def rmv_img(
         self,
         sample_id: Union[str, True, None] = None,
