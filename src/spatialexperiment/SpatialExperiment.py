@@ -21,7 +21,7 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from .SpatialImage import SpatialImage, VirtualSpatialImage, _validate_url
+from .SpatialImage import construct_spatial_image_class, VirtualSpatialImage
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -816,13 +816,13 @@ class SpatialExperiment(SingleCellExperiment):
 
         if isinstance(image_source, (str, Path)):
             is_url = urlparse(str(image_source)).scheme in ("http", "https", "ftp")
-            spi = SpatialImage(image_source, is_url=is_url)
+            spi = construct_spatial_image_class(image_source, is_url=is_url)
 
             if load:
                 img = spi.img_raster()
-                spi = SpatialImage(img, is_url=False)
+                spi = construct_spatial_image_class(img, is_url=False)
         else:
-            spi = SpatialImage(image_source, is_url=False)
+            spi = construct_spatial_image_class(image_source, is_url=False)
 
         new_row = BiocFrame(
             {

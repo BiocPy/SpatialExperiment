@@ -507,7 +507,7 @@ class RemoteSpatialImage(VirtualSpatialImage):
         return self._url
 
 
-def SpatialImage(x: Union[str, Image.Image, np.ndarray], is_url: Optional[bool] = None) -> VirtualSpatialImage:
+def construct_spatial_image_class(x: Union[str, Image.Image, np.ndarray], is_url: Optional[bool] = None) -> VirtualSpatialImage:
     """Factory function to create appropriate SpatialImage object."""
     if isinstance(x, VirtualSpatialImage):
         return x

@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from biocframe import BiocFrame
-from spatialexperiment import SpatialExperiment, SpatialImage
+from spatialexperiment import SpatialExperiment, construct_spatial_image_class
 from random import random
 
 
@@ -53,9 +53,9 @@ def spe():
             "sample_id": ["sample_1", "sample_1", "sample_2"],
             "image_id": ["aurora", "dice", "desert"],
             "data": [
-                SpatialImage("tests/images/sample_image1.jpg"),
-                SpatialImage("tests/images/sample_image2.png"),
-                SpatialImage("tests/images/sample_image3.jpg"),
+                construct_spatial_image_class("tests/images/sample_image1.jpg"),
+                construct_spatial_image_class("tests/images/sample_image2.png"),
+                construct_spatial_image_class("tests/images/sample_image3.jpg"),
             ],
             "scale_factor": [1, 1, 1],
         }
