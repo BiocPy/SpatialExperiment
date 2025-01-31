@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="spatialexperiment" href="modules.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment package - SpatialExperiment 0.0.2 documentation</title>
+        <title>spatialexperiment package - SpatialExperiment 0.0.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">SpatialExperiment 0.0.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">SpatialExperiment 0.0.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -191,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.2 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.3 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -360,7 +360,7 @@ parameter in the R implementation.</p>
 <dt>Optional <a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a> containing the image data, structured with the following columns:</dt><dd><ul>
 <li><p><strong>sample_id</strong> (str): A string identifier for the sample to which an image corresponds.</p></li>
 <li><p><strong>image_id</strong> (str): A unique string identifier for each image within each sample.</p></li>
-<li><p><strong>data</strong> (SpatialImage): The image itself, represented as a SpatialImage object.</p></li>
+<li><p><strong>data</strong> (VirtualSpatialImage): The image itself, represented as a <cite>VirtualSpatialImage</cite> object or one of its subclasses.</p></li>
 <li><p><strong>scale_factor</strong> (float): A numerical value that indicates the scaling factor applied to the image.</p></li>
 </ul>
 </dd>
@@ -395,7 +395,7 @@ parameter in the R implementation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>image_source</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The file path to the image.</p></li>
+<li><p><strong>image_source</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]</span>) – The file path to the image.</p></li>
 <li><p><strong>scale_factor</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – The scaling factor associated with the image.</p></li>
 <li><p><strong>sample_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – The sample id of the image.</p></li>
 <li><p><strong>image_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span>) – The image id of the image.</p></li>
@@ -461,10 +461,10 @@ Defaults to False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#spatialexperiment.SpatialImage.SpatialImage" title="spatialexperiment.SpatialImage.SpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpatialImage</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="#spatialexperiment.SpatialImage.SpatialImage" title="spatialexperiment.SpatialImage.SpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpatialImage</span></code></a>]]</span></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage" title="spatialexperiment.SpatialImage.VirtualSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage" title="spatialexperiment.SpatialImage.VirtualSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code></a>]]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Zero, one, or more <cite>SpatialImage</cite> objects.</p>
+<dd class="field-odd"><p>Zero, one, or more <cite>VirtualSpatialImage</cite> objects.</p>
 </dd>
 </dl>
 <dl class="simple">
@@ -692,7 +692,7 @@ that all ‘sample_id’s in the ‘img_data’ are present. If any ‘sample_id
 <dt><a class="reference external" href="https://biocpy.github.io/BiocFrame/api/biocframe.html#biocframe.BiocFrame.BiocFrame" title="(in BiocFrame v0.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BiocFrame</span></code></a> containing the image data, structured with the following columns:</dt><dd><ul>
 <li><p><strong>sample_id</strong> (str): A string identifier for the sample to which an image corresponds.</p></li>
 <li><p><strong>image_id</strong> (str): A unique string identifier for each image within each sample.</p></li>
-<li><p><strong>data</strong> (SpatialImage): The image itself, represented as a SpatialImage object.</p></li>
+<li><p><strong>data</strong> (VirtualSpatialImage): The image itself, represented as a <cite>VirtualSpatialImage</cite> object or one of its subclasses.</p></li>
 <li><p><strong>scale_factor</strong> (float): A numerical value that indicates the scaling factor applied to the image.</p></li>
 </ul>
 </dd>
@@ -831,26 +831,497 @@ that all ‘sample_id’s in the ‘img_data’ are present. If any ‘sample_id
 <section id="module-spatialexperiment.SpatialImage">
 <span id="spatialexperiment-spatialimage-module"></span><h2>spatialexperiment.SpatialImage module<a class="headerlink" href="#module-spatialexperiment.SpatialImage" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.SpatialImage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spatialexperiment.SpatialImage.</span></span><span class="sig-name descname"><span class="pre">SpatialImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#SpatialImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.SpatialImage" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.SpatialImage.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#SpatialImage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.SpatialImage.__init__" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spatialexperiment.SpatialImage.</span></span><span class="sig-name descname"><span class="pre">LoadedSpatialImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage" title="spatialexperiment.SpatialImage.VirtualSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code></a></p>
+<p>Class for images loaded into memory.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.__abstractmethods__">
+<span class="sig-name descname"><span class="pre">__abstractmethods__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({})</span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__abstractmethods__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.SpatialImage.get_image">
-<span class="sig-name descname"><span class="pre">get_image</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#SpatialImage.get_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.SpatialImage.get_image" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the image, loading it if necessary.</p>
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.__copy__">
+<span class="sig-name descname"><span class="pre">__copy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage.__copy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__copy__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A shallow copy of the current <code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.SpatialImage.load_image">
-<span class="sig-name descname"><span class="pre">load_image</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#SpatialImage.load_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.SpatialImage.load_image" title="Link to this definition">¶</a></dt>
-<dd><p>Load the image from the stored path into memory.</p>
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.__deepcopy__">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_nil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage.__deepcopy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__deepcopy__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A deep copy of the current <code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – Image represented as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>.</p></li>
+<li><p><strong>metadata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</span>) – Additional image metadata. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__repr__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__copy__" title="spatialexperiment.SpatialImage.LoadedSpatialImage.__copy__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__copy__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.get_image">
+<span class="sig-name descname"><span class="pre">get_image</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage.get_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.get_image" title="Link to this definition">¶</a></dt>
+<dd><p>Get the image as a PIL Image object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.image">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Image</span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.image" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.get_image" title="spatialexperiment.SpatialImage.LoadedSpatialImage.get_image"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_image()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.img_raster">
+<span class="sig-name descname"><span class="pre">img_raster</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage.img_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.img_raster" title="Link to this definition">¶</a></dt>
+<dd><p>Get the image as a PIL Image object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.LoadedSpatialImage.set_image">
+<span class="sig-name descname"><span class="pre">set_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#LoadedSpatialImage.set_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.set_image" title="Link to this definition">¶</a></dt>
+<dd><p>Set new image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – Image represented as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>.</p></li>
+<li><p><strong>in_place</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to modify the <code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage</span></code> in place. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage" title="spatialexperiment.SpatialImage.LoadedSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadedSpatialImage</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spatialexperiment.SpatialImage.</span></span><span class="sig-name descname"><span class="pre">RemoteSpatialImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage" title="spatialexperiment.SpatialImage.VirtualSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code></a></p>
+<p>Class for remotely hosted images.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.__abstractmethods__">
+<span class="sig-name descname"><span class="pre">__abstractmethods__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({})</span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__abstractmethods__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.__copy__">
+<span class="sig-name descname"><span class="pre">__copy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.__copy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__copy__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A shallow copy of the current <code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.__deepcopy__">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_nil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.__deepcopy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__deepcopy__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A deep copy of the current <code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – URL to the image file.</p></li>
+<li><p><strong>metadata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</span>) – Additional image metadata. Defaults to None.</p></li>
+<li><p><strong>validate</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to validate if the URL is valid. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__repr__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__copy__" title="spatialexperiment.SpatialImage.RemoteSpatialImage.__copy__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__copy__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.get_url">
+<span class="sig-name descname"><span class="pre">get_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.get_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.get_url" title="Link to this definition">¶</a></dt>
+<dd><p>Get the url to the image file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.img_raster">
+<span class="sig-name descname"><span class="pre">img_raster</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.img_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.img_raster" title="Link to this definition">¶</a></dt>
+<dd><p>Download (if needed) and load the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.img_source">
+<span class="sig-name descname"><span class="pre">img_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.img_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.img_source" title="Link to this definition">¶</a></dt>
+<dd><p>Get the source URL or cached path of the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.set_url">
+<span class="sig-name descname"><span class="pre">set_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#RemoteSpatialImage.set_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.set_url" title="Link to this definition">¶</a></dt>
+<dd><p>Update the url to the image file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – New URL for this image.</p></li>
+<li><p><strong>in_place</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to modify the <code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage</span></code> in place.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage" title="spatialexperiment.SpatialImage.RemoteSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">RemoteSpatialImage</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A modified <code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage</span></code> object, either as a copy of the original
+or as a reference to the (in-place-modified) original.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.RemoteSpatialImage.url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">Path</span></a></em><a class="headerlink" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.url" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.get_url" title="spatialexperiment.SpatialImage.RemoteSpatialImage.get_url"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_url()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spatialexperiment.SpatialImage.</span></span><span class="sig-name descname"><span class="pre">StoredSpatialImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage" title="spatialexperiment.SpatialImage.VirtualSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code></a></p>
+<p>Class for images stored on local filesystem.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.__abstractmethods__">
+<span class="sig-name descname"><span class="pre">__abstractmethods__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({})</span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__abstractmethods__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.__copy__">
+<span class="sig-name descname"><span class="pre">__copy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.__copy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__copy__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A shallow copy of the current <code class="docutils literal notranslate"><span class="pre">StoredSpatialImage</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.__deepcopy__">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_nil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.__deepcopy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__deepcopy__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A deep copy of the current <code class="docutils literal notranslate"><span class="pre">StoredSpatialImage</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]</span>) – Path to the image file.</p></li>
+<li><p><strong>metadata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</span>) – Additional image metadata. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__repr__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__copy__" title="spatialexperiment.SpatialImage.StoredSpatialImage.__copy__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__copy__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.get_path">
+<span class="sig-name descname"><span class="pre">get_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.get_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.get_path" title="Link to this definition">¶</a></dt>
+<dd><p>Get the path to the image file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.img_raster">
+<span class="sig-name descname"><span class="pre">img_raster</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.img_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.img_raster" title="Link to this definition">¶</a></dt>
+<dd><p>Load and cache the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.img_source">
+<span class="sig-name descname"><span class="pre">img_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.img_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.img_source" title="Link to this definition">¶</a></dt>
+<dd><p>Get the source path of the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">Path</span></a></em><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.path" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.get_path" title="spatialexperiment.SpatialImage.StoredSpatialImage.get_path"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_path()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.StoredSpatialImage.set_path">
+<span class="sig-name descname"><span class="pre">set_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#StoredSpatialImage.set_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.StoredSpatialImage.set_path" title="Link to this definition">¶</a></dt>
+<dd><p>Update the path to the image file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]</span>) – New path for this image.</p></li>
+<li><p><strong>in_place</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to modify the <code class="docutils literal notranslate"><span class="pre">StoredSpatialImage</span></code> in place.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage" title="spatialexperiment.SpatialImage.StoredSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">StoredSpatialImage</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A modified <code class="docutils literal notranslate"><span class="pre">StoredSpatialImage</span></code> object, either as a copy of the original
+or as a reference to the (in-place-modified) original.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spatialexperiment.SpatialImage.</span></span><span class="sig-name descname"><span class="pre">VirtualSpatialImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#VirtualSpatialImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/abc.html#abc.ABC" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
+<p>Base class for spatial images.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.__abstractmethods__">
+<span class="sig-name descname"><span class="pre">__abstractmethods__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({'img_raster'})</span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.__abstractmethods__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#VirtualSpatialImage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.dimensions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.dimensions" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.get_dimensions" title="spatialexperiment.SpatialImage.VirtualSpatialImage.get_dimensions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_dimensions()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.get_dimensions">
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#VirtualSpatialImage.get_dimensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.get_dimensions" title="Link to this definition">¶</a></dt>
+<dd><p>Get image dimensions (width, height).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Tuple" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.get_metadata">
+<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#VirtualSpatialImage.get_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.get_metadata" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary of metadata for this object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.img_raster">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">img_raster</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#VirtualSpatialImage.img_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.img_raster" title="Link to this definition">¶</a></dt>
+<dd><p>Get the image as a PIL Image object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></em><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.get_metadata" title="spatialexperiment.SpatialImage.VirtualSpatialImage.get_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">get_metadata</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.mirror_img">
+<span class="sig-name descname"><span class="pre">mirror_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'h'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#VirtualSpatialImage.mirror_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.mirror_img" title="Link to this definition">¶</a></dt>
+<dd><p>Mirror image horizontally or vertically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage" title="spatialexperiment.SpatialImage.LoadedSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadedSpatialImage</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.rotate_img">
+<span class="sig-name descname"><span class="pre">rotate_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degrees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#VirtualSpatialImage.rotate_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.rotate_img" title="Link to this definition">¶</a></dt>
+<dd><p>Rotate image by specified degrees clockwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage" title="spatialexperiment.SpatialImage.LoadedSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadedSpatialImage</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.VirtualSpatialImage.set_metadata">
+<span class="sig-name descname"><span class="pre">set_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#VirtualSpatialImage.set_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.set_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Set additional metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metadata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span>) – New metadata for this object.</p></li>
+<li><p><strong>in_place</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to modify the <code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code> in place.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage" title="spatialexperiment.SpatialImage.VirtualSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A modified <code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code> object, either as a copy of the original
+or as a reference to the (in-place-modified) original.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spatialexperiment.SpatialImage.construct_spatial_image_class">
+<span class="sig-prename descclassname"><span class="pre">spatialexperiment.SpatialImage.</span></span><span class="sig-name descname"><span class="pre">construct_spatial_image_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialImage.html#construct_spatial_image_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialImage.construct_spatial_image_class" title="Link to this definition">¶</a></dt>
+<dd><p>Factory function to create appropriate SpatialImage object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage" title="spatialexperiment.SpatialImage.VirtualSpatialImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -949,12 +1420,64 @@ that all ‘sample_id’s in the ‘img_data’ are present. If any ‘sample_id
 </ul>
 </li>
 <li><a class="reference internal" href="#module-spatialexperiment.SpatialImage">spatialexperiment.SpatialImage module</a><ul>
-<li><a class="reference internal" href="#spatialexperiment.SpatialImage.SpatialImage"><code class="docutils literal notranslate"><span class="pre">SpatialImage</span></code></a><ul>
-<li><a class="reference internal" href="#spatialexperiment.SpatialImage.SpatialImage.__init__"><code class="docutils literal notranslate"><span class="pre">SpatialImage.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#spatialexperiment.SpatialImage.SpatialImage.get_image"><code class="docutils literal notranslate"><span class="pre">SpatialImage.get_image()</span></code></a></li>
-<li><a class="reference internal" href="#spatialexperiment.SpatialImage.SpatialImage.load_image"><code class="docutils literal notranslate"><span class="pre">SpatialImage.load_image()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage</span></code></a><ul>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__abstractmethods__"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.__abstractmethods__</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__copy__"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.__copy__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__deepcopy__"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.__deepcopy__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__init__"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.__repr__"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.copy"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.copy()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.get_image"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.get_image()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.image"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.image</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.img_raster"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.img_raster()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.LoadedSpatialImage.set_image"><code class="docutils literal notranslate"><span class="pre">LoadedSpatialImage.set_image()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage</span></code></a><ul>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__abstractmethods__"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.__abstractmethods__</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__annotations__"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__copy__"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.__copy__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__deepcopy__"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.__deepcopy__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__init__"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.__repr__"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.copy"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.copy()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.get_url"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.get_url()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.img_raster"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.img_raster()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.img_source"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.img_source()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.set_url"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.set_url()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.RemoteSpatialImage.url"><code class="docutils literal notranslate"><span class="pre">RemoteSpatialImage.url</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage</span></code></a><ul>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__abstractmethods__"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.__abstractmethods__</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__annotations__"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__copy__"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.__copy__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__deepcopy__"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.__deepcopy__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__init__"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.__repr__"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.copy"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.copy()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.get_path"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.get_path()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.img_raster"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.img_raster()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.img_source"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.img_source()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.path"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.path</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.StoredSpatialImage.set_path"><code class="docutils literal notranslate"><span class="pre">StoredSpatialImage.set_path()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage</span></code></a><ul>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.__abstractmethods__"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.__abstractmethods__</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.__annotations__"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.__init__"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.dimensions"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.dimensions</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.get_dimensions"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.get_dimensions()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.get_metadata"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.get_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.img_raster"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.img_raster()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.metadata"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.metadata</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.mirror_img"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.mirror_img()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.rotate_img"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.rotate_img()</span></code></a></li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.VirtualSpatialImage.set_metadata"><code class="docutils literal notranslate"><span class="pre">VirtualSpatialImage.set_metadata()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#spatialexperiment.SpatialImage.construct_spatial_image_class"><code class="docutils literal notranslate"><span class="pre">construct_spatial_image_class()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-spatialexperiment">Module contents</a></li>
@@ -969,7 +1492,7 @@ that all ‘sample_id’s in the ‘img_data’ are present. If any ‘sample_id
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=e3a6060d"></script>
+</div><script src="../_static/documentation_options.js?v=47de8214"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
