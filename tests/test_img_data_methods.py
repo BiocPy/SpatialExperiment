@@ -1,6 +1,7 @@
 import pytest
 from copy import deepcopy
-from spatialexperiment import SpatialImage
+from spatialexperiment import construct_spatial_image_class
+from spatialexperiment.SpatialImage import VirtualSpatialImage
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -23,7 +24,7 @@ def test_get_img_both_null(spe):
     res = spe.get_img(sample_id=None, image_id=None)
     image = spe.img_data["data"][0]
 
-    assert isinstance(res, SpatialImage)
+    assert isinstance(res, VirtualSpatialImage)
     assert res == image
 
 
@@ -47,7 +48,7 @@ def test_get_img_specific_image(spe):
     res = spe.get_img(sample_id=True, image_id="desert")
     images = spe.img_data["data"][2]
 
-    assert isinstance(res, SpatialImage)
+    assert isinstance(res, VirtualSpatialImage)
     assert res == images
 
 
