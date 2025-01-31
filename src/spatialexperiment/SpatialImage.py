@@ -1,4 +1,3 @@
-import os
 import shutil
 import tempfile
 from abc import ABC, abstractmethod
@@ -17,7 +16,7 @@ __copyright__ = "jkanche"
 __license__ = "MIT"
 
 
-# keeping the same name as the R classes
+# Keeping the same names as the R classes
 class VirtualSpatialImage(ABC):
     """Base class for spatial images."""
 

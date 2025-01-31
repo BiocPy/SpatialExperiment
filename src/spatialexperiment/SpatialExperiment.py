@@ -1,8 +1,10 @@
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Union
+from urllib.parse import urlparse
 from warnings import warn
 
-import numpy as np
 import biocutils as ut
+import numpy as np
 from biocframe import BiocFrame
 from PIL import Image
 from singlecellexperiment import SingleCellExperiment
@@ -19,7 +21,7 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from .SpatialImage import SpatialImage
+from .SpatialImage import SpatialImage, VirtualSpatialImage, _validate_url
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -141,7 +143,7 @@ class SpatialExperiment(SingleCellExperiment):
 
             spatial_coords:
                 Optional :py:class:`~np.ndarray` or :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`.
-                
+
                 If `spatial_coords` is a :py:class:`~biocframe.BiocFrame.BiocFrame`, typical column names might include:
 
                     - **['x', 'y']**: For simple 2D coordinates.
@@ -154,7 +156,7 @@ class SpatialExperiment(SingleCellExperiment):
                 Optional :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data, structured with the following columns:
                     - **sample_id** (str): A string identifier for the sample to which an image corresponds.
                     - **image_id** (str): A unique string identifier for each image within each sample.
-                    - **data** (SpatialImage): The image itself, represented as a SpatialImage object.
+                    - **data** (VirtualSpatialImage): The image itself, represented as a `VirtualSpatialImage` object or one of its subclasses.
                     - **scale_factor** (float): A numerical value that indicates the scaling factor applied to the image.
 
                 All 'sample_id's in 'img_data' must be present in the 'sample_id's of 'column_data'.
@@ -380,7 +382,7 @@ class SpatialExperiment(SingleCellExperiment):
         Args:
             spatial_coords:
                 Optional :py:class:`~np.ndarray` or :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`.
-                
+
                 If `spatial_coords` is a :py:class:`~biocframe.BiocFrame.BiocFrame`, typical column names might include:
 
                     - **['x', 'y']**: For simple 2D coordinates.
@@ -405,7 +407,9 @@ class SpatialExperiment(SingleCellExperiment):
         output._spatial_coords = spatial_coords
         return output
 
-    def set_spatial_coords(self, spatial_coords: Optional[Union[BiocFrame, np.ndarray]], in_place: bool = False) -> "SpatialExperiment":
+    def set_spatial_coords(
+        self, spatial_coords: Optional[Union[BiocFrame, np.ndarray]], in_place: bool = False
+    ) -> "SpatialExperiment":
         """Alias for :py:meth:`~set_spatial_coordinates`."""
         return self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=in_place)
 
@@ -541,7 +545,7 @@ class SpatialExperiment(SingleCellExperiment):
                 :py:class:`~biocframe.BiocFrame.BiocFrame` containing the image data, structured with the following columns:
                     - **sample_id** (str): A string identifier for the sample to which an image corresponds.
                     - **image_id** (str): A unique string identifier for each image within each sample.
-                    - **data** (SpatialImage): The image itself, represented as a SpatialImage object.
+                    - **data** (VirtualSpatialImage): The image itself, represented as a `VirtualSpatialImage` object or one of its subclasses.
                     - **scale_factor** (float): A numerical value that indicates the scaling factor applied to the image.
 
                 Image data are coerced to a
@@ -715,7 +719,7 @@ class SpatialExperiment(SingleCellExperiment):
 
     def get_img(
         self, sample_id: Union[str, bool, None] = None, image_id: Union[str, bool, None] = None
-    ) -> Union[SpatialImage, List[SpatialImage]]:
+    ) -> Union[VirtualSpatialImage, List[VirtualSpatialImage]]:
         """
         Retrieve spatial images based on the provided sample and image ids.
 
@@ -731,7 +735,7 @@ class SpatialExperiment(SingleCellExperiment):
                 - `image_id="<str>"`: Matches image(s) by its(their) id.
 
         Returns:
-            Zero, one, or more `SpatialImage` objects.
+            Zero, one, or more `VirtualSpatialImage` objects.
 
         Behavior:
             - sample_id = True, image_id = True:
@@ -770,7 +774,7 @@ class SpatialExperiment(SingleCellExperiment):
 
     def add_img(
         self,
-        image_source: str,
+        image_source: Union[Image.Image, np.ndarray, str, Path],
         scale_factor: float,
         sample_id: Union[str, bool, None],
         image_id: Union[str, bool, None],
@@ -810,11 +814,15 @@ class SpatialExperiment(SingleCellExperiment):
         """
         _validate_sample_image_ids(img_data=self._img_data, new_sample_id=sample_id, new_image_id=image_id)
 
-        if load:
-            img = Image.open(image_source)
-            spi = SpatialImage(img)
+        if isinstance(image_source, (str, Path)):
+            is_url = urlparse(str(image_source)).scheme in ("http", "https", "ftp")
+            spi = SpatialImage(image_source, is_url=is_url)
+
+            if load:
+                img = spi.img_raster()
+                spi = SpatialImage(img, is_url=False)
         else:
-            spi = SpatialImage(image_source)
+            spi = SpatialImage(image_source, is_url=False)
 
         new_row = BiocFrame(
             {
