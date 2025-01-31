@@ -7,6 +7,7 @@ from typing import Optional, Tuple, Union
 from urllib.parse import urlparse
 from warnings import warn
 
+import biocutils as ut
 import numpy as np
 import requests
 from PIL import Image
@@ -185,6 +186,34 @@ class LoadedSpatialImage(VirtualSpatialImage):
         """Alias for :py:meth:`~__copy__`."""
         return self.__copy__()
 
+    ##########################
+    ######>> Printing <<######
+    ##########################
+
+    def __repr__(self) -> str:
+        """
+        Returns:
+            A string representation.
+        """
+        output = f"{type(self).__name__}"
+        output += ", image=" + self._image.__repr__()
+        if len(self._metadata) > 0:
+            output += ", metadata=" + ut.print_truncated_dict(self._metadata)
+        output += ")"
+
+        return output
+
+    def __str__(self) -> str:
+        """
+        Returns:
+            A pretty-printed string containing the contents of this object.
+        """
+        output = f"class: {type(self).__name__}\n"
+        output += f"image: ({self._image})\n"
+        output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+
+        return output
+
     ############################
     ######>> img props <<#######
     ############################
@@ -299,6 +328,34 @@ class StoredSpatialImage(VirtualSpatialImage):
     def copy(self):
         """Alias for :py:meth:`~__copy__`."""
         return self.__copy__()
+
+    ##########################
+    ######>> Printing <<######
+    ##########################
+
+    def __repr__(self) -> str:
+        """
+        Returns:
+            A string representation.
+        """
+        output = f"{type(self).__name__}"
+        output += ", path=" + self._path
+        if len(self._metadata) > 0:
+            output += ", metadata=" + ut.print_truncated_dict(self._metadata)
+        output += ")"
+
+        return output
+
+    def __str__(self) -> str:
+        """
+        Returns:
+            A pretty-printed string containing the contents of this object.
+        """
+        output = f"class: {type(self).__name__}\n"
+        output += f"path: ({self._path})\n"
+        output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+
+        return output
 
     #############################
     ######>> path props <<#######
@@ -432,6 +489,34 @@ class RemoteSpatialImage(VirtualSpatialImage):
         """Alias for :py:meth:`~__copy__`."""
         return self.__copy__()
 
+    ##########################
+    ######>> Printing <<######
+    ##########################
+
+    def __repr__(self) -> str:
+        """
+        Returns:
+            A string representation.
+        """
+        output = f"{type(self).__name__}"
+        output += ", url=" + self._url
+        if len(self._metadata) > 0:
+            output += ", metadata=" + ut.print_truncated_dict(self._metadata)
+        output += ")"
+
+        return output
+
+    def __str__(self) -> str:
+        """
+        Returns:
+            A pretty-printed string containing the contents of this object.
+        """
+        output = f"class: {type(self).__name__}\n"
+        output += f"url: ({self._url})\n"
+        output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+
+        return output
+
     ############################
     ######>> url props <<#######
     ############################
@@ -507,7 +592,9 @@ class RemoteSpatialImage(VirtualSpatialImage):
         return self._url
 
 
-def construct_spatial_image_class(x: Union[str, Image.Image, np.ndarray], is_url: Optional[bool] = None) -> VirtualSpatialImage:
+def construct_spatial_image_class(
+    x: Union[str, Image.Image, np.ndarray], is_url: Optional[bool] = None
+) -> VirtualSpatialImage:
     """Factory function to create appropriate SpatialImage object."""
     if isinstance(x, VirtualSpatialImage):
         return x
