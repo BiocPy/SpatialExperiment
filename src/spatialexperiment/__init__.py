@@ -16,4 +16,4 @@ finally:
     del version, PackageNotFoundError
 
 from .SpatialExperiment import SpatialExperiment
-from .SpatialImage import construct_spatial_image_class, RemoteSpatialImage, StoredSpatialImage, LoadedSpatialImage
+from .SpatialImage import construct_spatial_image_class, RemoteSpatialImage, StoredSpatialImage, LoadedSpatialImage, VirtualSpatialImage
