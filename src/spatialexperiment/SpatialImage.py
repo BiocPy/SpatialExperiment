@@ -339,7 +339,7 @@ class StoredSpatialImage(VirtualSpatialImage):
             A string representation.
         """
         output = f"{type(self).__name__}"
-        output += ", path=" + self._path
+        output += ", path=" + str(self._path)
         if len(self._metadata) > 0:
             output += ", metadata=" + ut.print_truncated_dict(self._metadata)
         output += ")"
@@ -352,7 +352,7 @@ class StoredSpatialImage(VirtualSpatialImage):
             A pretty-printed string containing the contents of this object.
         """
         output = f"class: {type(self).__name__}\n"
-        output += f"path: ({self._path})\n"
+        output += f"path: ({str(self._path)})\n"
         output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
         return output
