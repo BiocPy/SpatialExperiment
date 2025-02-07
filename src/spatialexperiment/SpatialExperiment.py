@@ -862,5 +862,39 @@ class SpatialExperiment(SingleCellExperiment):
         raise NotImplementedError()
 
     ################################
+    ####>> SpatialData interop <<###
+    ################################
+
+    @classmethod
+    def from_spatialdata(cls, input: "spatialdata.SpatialData") -> "SpatialExperiment":
+        """Create a ``SpatialExperiment`` from :py:class:`~spatialdata.SpatialData`.
+
+         Args:
+            input:
+                Input data.
+
+        Returns:
+            A ``SpatialExperiment`` object.
+        """
+        from spatialdata import SpatialData
+        from xarray import DataArray, DataTree
+        from ._sdatautils import build_img_data
+
+        if not isinstance(input, SpatialData):
+            raise TypeError("Input must be a `SpatialData` object.")
+
+        images = input.images
+        for name, image in images.items():
+            if isinstance(image, DataArray):
+                img_data = BiocFrame({
+                    "sample_id": name,
+                    "image_id": image.name,
+                    "data": np.array(image),
+                    "scale_factor": image.attrs.get("scale_factor", None)
+                })
+            elif isinstance(image, DataTree):
+                img_data = build_img_data(image, name)
+
+    ################################
     #######>> combine ops <<########
     ################################
