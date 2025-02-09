@@ -23,10 +23,10 @@ def _sanitize_geomertries(geometries):
     return geometries
 
 
-def _sanitize_spatial_graphs(spatial_graph):
+def _sanitize_spatial_graphs(spatial_graph, sample_ids):
     """Sanitize spatial graphs."""
     if spatial_graph is None:
-        return BiocFrame({}, number_of_rows=3, row_names=["row", "col", "annot"])
+        return BiocFrame({}, number_of_rows=3, row_names=["row", "col", "annot"], column_names=sample_ids)
 
     if hasattr(spatial_graph, "dtypes"):
         return BiocFrame.from_pandas(spatial_graph)
@@ -279,7 +279,9 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         self._col_geometries = _sanitize_geomertries(col_geometries)
         self._row_geometries = _sanitize_geomertries(row_geometries)
         self._annot_geometries = _sanitize_geomertries(annot_geometries)
-        self._spatial_graphs = _sanitize_spatial_graphs(spatial_graphs)
+        self._spatial_graphs = _sanitize_spatial_graphs(
+            spatial_graphs, list(set(self.get_column_data().get_column("sample_id")))
+        )
         self._unit = unit
 
         if validate:
@@ -525,10 +527,11 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         Returns:
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _validate_geometries(geometries, "col_geometries")
+        _geoms = _sanitize_geomertries(geometries=geometries)
+        _validate_geometries(_geoms, "col_geometries")
 
         output = self._define_output(in_place)
-        output._col_geometries = geometries
+        output._col_geometries = _geoms
         return output
 
     def set_row_geometries(
@@ -546,10 +549,11 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         Returns:
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _validate_geometries(geometries, "row_geometries")
+        _geoms = _sanitize_geomertries(geometries=geometries)
+        _validate_geometries(_geoms, "row_geometries")
 
         output = self._define_output(in_place)
-        output._row_geometries = geometries
+        output._row_geometries = _geoms
         return output
 
     def set_annot_geometries(
@@ -567,12 +571,13 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         Returns:
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
+        _geoms = _sanitize_geomertries(geometries=geometries)
 
-        _validate_geometries(geometries, "annot_geometries")
-        _validate_annotgeometries(geometries, self.get_column_data())
+        _validate_geometries(_geoms, "annot_geometries")
+        _validate_annotgeometries(_geoms, self.get_column_data())
 
         output = self._define_output(in_place)
-        output._annot_geometries = geometries
+        output._annot_geometries = _geoms
         return output
 
     @property
@@ -640,12 +645,12 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         Returns:
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-
-        _validate_graph_structure(graphs)
-        _validate_graph_sample_id(graphs, self.get_column_data())
+        _graphs = _sanitize_spatial_graphs(graphs, list(set(self.get_column_data().get_column("sample_id"))))
+        _validate_graph_structure(_graphs)
+        _validate_graph_sample_id(_graphs, self.get_column_data())
 
         output = self._define_output(in_place)
-        output._spatial_graphs = graphs
+        output._spatial_graphs = _graphs
         return output
 
     @property
