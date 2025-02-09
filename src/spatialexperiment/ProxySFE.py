@@ -26,7 +26,10 @@ def _sanitize_geomertries(geometries):
 def _sanitize_spatial_graphs(spatial_graph, sample_ids):
     """Sanitize spatial graphs."""
     if spatial_graph is None:
-        return BiocFrame({}, number_of_rows=3, row_names=["row", "col", "annot"], column_names=sample_ids)
+        obj = {}
+        for x in sample_ids:
+            obj[x] = [None] * 3
+        return BiocFrame(obj, number_of_rows=3, row_names=["row", "col", "annot"])
 
     if hasattr(spatial_graph, "dtypes"):
         return BiocFrame.from_pandas(spatial_graph)
