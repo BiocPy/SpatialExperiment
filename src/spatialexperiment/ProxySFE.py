@@ -18,7 +18,7 @@ __license__ = "MIT"
 def _sanitize_geomertries(geometries):
     """Sanitize geometry objects."""
     if geometries is None:
-        return gpd.GeoDataFrame({})
+        return {}
 
     return geometries
 
