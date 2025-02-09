@@ -15,9 +15,28 @@ __copyright__ = "jkanche"
 __license__ = "MIT"
 
 
+def _sanitize_geomertries(geometries):
+    """Sanitize geometry objects."""
+    if geometries is None:
+        return gpd.GeoDataFrame({})
+
+    return geometries
+
+
+def _sanitize_spatial_graphs(spatial_graph):
+    """Sanitize spatial graphs."""
+    if spatial_graph is None:
+        return BiocFrame({}, number_of_rows=3, row_names=["row", "col", "annot"])
+
+    if hasattr(spatial_graph, "dtypes"):
+        return BiocFrame.from_pandas(spatial_graph)
+
+    return spatial_graph
+
+
 def _validate_geometries(geometries: Dict[str, gpd.GeoDataFrame], prop_name: str):
     """Validate geometry objects."""
-    if geometries is None:
+    if geometries is None or len(geometries) == 0:
         return
 
     for i, geom in enumerate(geometries.values()):
@@ -27,7 +46,7 @@ def _validate_geometries(geometries: Dict[str, gpd.GeoDataFrame], prop_name: str
 
 def _validate_annotgeometries(geometries, column_data):
     """Validate annotation geometries."""
-    if geometries is None:
+    if geometries is None or len(geometries) == 0:
         return
 
     sample_ids = column_data.get("sample_id")
@@ -48,11 +67,8 @@ def _validate_annotgeometries(geometries, column_data):
 
 def _validate_graph_sample_id(spatial_graphs, column_data):
     """Validate graph sample IDs match column data."""
-    if spatial_graphs is None:
-        return
-
     col_sample_ids = set(column_data.get_column("sample_id"))
-    graph_sample_ids = set(spatial_graphs.columns)
+    graph_sample_ids = set(spatial_graphs.get_column_names())
 
     missing = graph_sample_ids - col_sample_ids
     if missing:
@@ -260,10 +276,10 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         )
 
         # Initialize geometries
-        self._col_geometries = col_geometries or {}
-        self._row_geometries = row_geometries or {}
-        self._annot_geometries = annot_geometries or {}
-        self._spatial_graphs = spatial_graphs
+        self._col_geometries = _sanitize_geomertries(col_geometries)
+        self._row_geometries = _sanitize_geomertries(row_geometries)
+        self._annot_geometries = _sanitize_geomertries(annot_geometries)
+        self._spatial_graphs = _sanitize_spatial_graphs(spatial_graphs)
         self._unit = unit
 
         if validate:
