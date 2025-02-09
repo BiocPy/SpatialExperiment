@@ -5,16 +5,17 @@ import biocutils as ut
 import geopandas as gpd
 import numpy as np
 from biocframe import BiocFrame
+from summarizedexperiment._frameutils import _sanitize_frame
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 
-from .SpatialExperiment import SpatialExperiment
+from .SpatialExperiment import SpatialExperiment, _validate_column_data, _validate_sample_ids
 
 __author__ = "jkanche"
 __copyright__ = "jkanche"
 __license__ = "MIT"
 
 
-def _check_geometries(geometries: Dict[str, gpd.GeoDataFrame], prop_name: str):
+def _validate_geometries(geometries: Dict[str, gpd.GeoDataFrame], prop_name: str):
     """Validate geometry objects."""
     if geometries is None:
         return
@@ -24,28 +25,28 @@ def _check_geometries(geometries: Dict[str, gpd.GeoDataFrame], prop_name: str):
             raise TypeError(f"Item {i} in {prop_name} is {type(geom).__name__} " f"rather than `GeoDataFrame`.\n")
 
 
-def _check_annotgeometries(geometries, column_data):
+def _validate_annotgeometries(geometries, column_data):
     """Validate annotation geometries."""
     if geometries is None:
         return
 
     sample_ids = column_data.get("sample_id")
     if sample_ids is None:
-        raise ValueError("No sample_id column in column_data")
+        raise ValueError("No 'sample_id' column in 'column_data'")
 
     for i, geom in enumerate(geometries.values()):
         if "sample_id" not in geom.columns:
-            raise ValueError(f"Item {i} of 'annotGeometries' does not have column 'sample_id'.\n")
+            raise ValueError(f"Item {i} of 'annot_geometries' does not have column 'sample_id'.\n")
         else:
             samples_seen = geom["sample_id"].unique()
             missing = [s for s in samples_seen if s not in sample_ids]
             if len(missing) > 0:
                 raise ValueError(
-                    f"Samples {', '.join(missing)} in item {i} of " f"annotGeometries are absent from colData.\n"
+                    f"Samples {', '.join(missing)} in item {i} of " f"annot_geometries are absent from 'column_data'.\n"
                 )
 
 
-def _check_graph_sample_id(spatial_graphs, column_data):
+def _validate_graph_sample_id(spatial_graphs, column_data):
     """Validate graph sample IDs match column data."""
     if spatial_graphs is None:
         return
@@ -55,10 +56,10 @@ def _check_graph_sample_id(spatial_graphs, column_data):
 
     missing = graph_sample_ids - col_sample_ids
     if missing:
-        raise ValueError(f"Samples {', '.join(missing)} are in the graphs but not colData.\n")
+        raise ValueError(f"Samples {', '.join(missing)} are in the graphs but not 'column_data'.\n")
 
 
-def _check_graph_structure(spatial_graphs):
+def _validate_graph_structure(spatial_graphs):
     """Validate spatial graph structure."""
     if spatial_graphs is None:
         return
@@ -69,7 +70,7 @@ def _check_graph_structure(spatial_graphs):
             "and whose rows are margins (rows, columns, annotation).\n"
         )
     elif not set(spatial_graphs.get_row_names()) == {"row", "col", "annot"}:
-        raise ValueError("Row names of spatialGraphs must be 'row', 'col', and 'annot'.\n")
+        raise ValueError("Row names of 'spatial_graphs' must be 'row', 'col', and 'annot'.\n")
 
 
 class ProxySpatialFeatureExperiment(SpatialExperiment):
@@ -135,7 +136,8 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
                 Sample data, must be the same length as the number of
                 columns of the matrices in assays. For instances of the
                 ``SpatialExperiment`` class, the sample data must include
-                a column named `sample_id`. If any 'sample_id' in the sample data is not present in the 'sample_id's of 'img_data', a warning will be issued.
+                a column named `sample_id`. If any 'sample_id' in the sample data is not
+                present in the 'sample_id's of 'img_data', a warning will be issued.
 
                 If `sample_id` is not present, a column with this name
                 will be created and filled with the default value `sample01`.
@@ -190,12 +192,15 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
                 Defaults to None.
 
             spatial_coords:
-                Optional :py:class:`~np.ndarray` or :py:class:`~biocframe.BiocFrame.BiocFrame` containing columns of spatial coordinates. Must be the same length as `column_data`.
+                Optional :py:class:`~np.ndarray` or :py:class:`~biocframe.BiocFrame.BiocFrame`
+                containing columns of spatial coordinates. Must be the same length as `column_data`.
 
-                If `spatial_coords` is a :py:class:`~biocframe.BiocFrame.BiocFrame`, typical column names might include:
+                If `spatial_coords` is a :py:class:`~biocframe.BiocFrame.BiocFrame`, typical
+                column names might include:
 
                     - **['x', 'y']**: For simple 2D coordinates.
-                    - **['pxl_col_in_fullres', 'pxl_row_in_fullres']**: For pixel-based coordinates in full-resolution images.
+                    - **['pxl_col_in_fullres', 'pxl_row_in_fullres']**: For pixel-based
+                    coordinates in full-resolution images.
 
                 If spatial coordinates is a :py:class:`~pd.DataFrame` or `None`, it is coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to `None`.
@@ -268,16 +273,16 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         """Validate the object."""
 
         # Check geometries
-        _check_geometries(self._col_geometries, "col_geometries")
-        _check_geometries(self._row_geometries, "row_geometries")
-        _check_geometries(self._annot_geometries, "annot_geometries")
+        _validate_geometries(self._col_geometries, "col_geometries")
+        _validate_geometries(self._row_geometries, "row_geometries")
+        _validate_geometries(self._annot_geometries, "annot_geometries")
 
         # Check annotation geometries sample IDs
-        _check_annotgeometries(self._annot_geometries, self.get_column_data())
+        _validate_annotgeometries(self._annot_geometries, self.get_column_data())
 
         # Check graph structure and sample IDs
-        _check_graph_structure(self._spatial_graphs)
-        _check_graph_sample_id(self._spatial_graphs, self.get_column_data())
+        _validate_graph_structure(self._spatial_graphs)
+        _validate_graph_sample_id(self._spatial_graphs, self.get_column_data())
 
     #########################
     ######>> Copying <<######
@@ -504,7 +509,7 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         Returns:
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _check_geometries(geometries, "col_geometries")
+        _validate_geometries(geometries, "col_geometries")
 
         output = self._define_output(in_place)
         output._col_geometries = geometries
@@ -525,7 +530,7 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         Returns:
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _check_geometries(geometries, "row_geometries")
+        _validate_geometries(geometries, "row_geometries")
 
         output = self._define_output(in_place)
         output._row_geometries = geometries
@@ -547,8 +552,8 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
 
-        _check_geometries(geometries, "annot_geometries")
-        _check_annotgeometries(geometries, self.get_column_data())
+        _validate_geometries(geometries, "annot_geometries")
+        _validate_annotgeometries(geometries, self.get_column_data())
 
         output = self._define_output(in_place)
         output._annot_geometries = geometries
@@ -620,8 +625,8 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
 
-        _check_graph_structure(graphs)
-        _check_graph_sample_id(graphs, self.get_column_data())
+        _validate_graph_structure(graphs)
+        _validate_graph_sample_id(graphs, self.get_column_data())
 
         output = self._define_output(in_place)
         output._spatial_graphs = graphs
@@ -725,3 +730,44 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
             spatial_graphs=new_graphs,
             unit=self.unit,
         )
+
+    ################################
+    ###>> OVERRIDE column_data <<###
+    ################################
+
+    def set_column_data(
+        self, cols: Optional[BiocFrame], replace_column_names: bool = False, in_place: bool = False
+    ) -> "ProxySpatialFeatureExperiment":
+        """Override: Set sample data.
+
+        Args:
+            cols:
+                New sample data. If 'cols' contains a column named 'sample_id's, a check
+                is performed to ensure that all 'sample_id's in the 'img_data' are present.
+                If any 'sample_id' in the 'cols' is not present in the 'sample_id's of 'img_data',
+                a warning will be issued.
+
+                If 'sample_id' is not present or 'cols' is None, the original 'sample_id's are retained.
+
+            in_place:
+                Whether to modify the ``ProxySpatialFeatureExperiment`` in place. Defaults to False.
+
+        Returns:
+            A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
+        """
+        cols = _sanitize_frame(cols, num_rows=self.shape[1])
+        if "sample_id" not in cols.columns:
+            cols["sample_id"] = self.column_data["sample_id"]
+
+        _validate_column_data(column_data=cols)
+        _validate_sample_ids(column_data=cols, img_data=self.img_data)
+        _validate_annotgeometries(self._annot_geometries, column_data=cols)
+        _validate_graph_sample_id(self._spatial_graphs, column_data=cols)
+
+        output = self._define_output(in_place)
+        output._cols = cols
+
+        if replace_column_names:
+            return output.set_column_names(cols.row_names, in_place=in_place)
+
+        return output
