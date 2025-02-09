@@ -749,6 +749,10 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
 
                 If 'sample_id' is not present or 'cols' is None, the original 'sample_id's are retained.
 
+            replace_column_names:
+                Whether to replace experiment's column_names with the names from the
+                new object. Defaults to False.
+
             in_place:
                 Whether to modify the ``ProxySpatialFeatureExperiment`` in place. Defaults to False.
 

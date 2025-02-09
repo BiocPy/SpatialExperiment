@@ -21,7 +21,7 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from .SpatialImage import construct_spatial_image_class, VirtualSpatialImage
+from .SpatialImage import VirtualSpatialImage, construct_spatial_image_class
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -649,6 +649,10 @@ class SpatialExperiment(SingleCellExperiment):
                 that all 'sample_id's in the 'img_data' are present. If any 'sample_id' in the 'cols' is not present in the 'sample_id's of 'img_data', a warning will be issued.
 
                 If 'sample_id' is not present or 'cols' is None, the original 'sample_id's are retained.
+
+            replace_column_names:
+                Whether to replace experiment's column_names with the names from the
+                new object. Defaults to False.
 
             in_place:
                 Whether to modify the ``SpatialExperiment`` in place. Defaults to False.
