@@ -56,6 +56,7 @@ class SpatialExperiment(SingleCellExperiment):
         spatial_coords: Optional[Union[BiocFrame, np.ndarray]] = None,
         img_data: Optional[BiocFrame] = None,
         validate: bool = True,
+        **kwargs,
     ) -> None:
         """Initialize a spatial experiment.
 
@@ -182,6 +183,7 @@ class SpatialExperiment(SingleCellExperiment):
             column_pairs=column_pairs,
             alternative_experiment_check_dim_names=alternative_experiment_check_dim_names,
             validate=validate,
+            **kwargs,
         )
 
         column_data = _sanitize_frame(column_data, num_rows=self.shape[1])
