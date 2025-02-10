@@ -402,17 +402,11 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         output = output[:-1]
         output += f", unit='{self.unit}'"
 
-        col_geoms = len(self._col_geometries)
-        row_geoms = len(self._row_geometries)
-        annot_geoms = len(self._annot_geometries)
+        output += ", col_geometries=" + ut.print_truncated_dict(self._col_geometries)
+        output += ", row_geometries=" + ut.print_truncated_dict(self._row_geometries)
+        output += ", annot_geometries=" + ut.print_truncated_dict(self._annot_geometries)
 
-        if col_geoms:
-            output += f", col_geometries={col_geoms}"
-        if row_geoms:
-            output += f", row_geometries={row_geoms}"
-        if annot_geoms:
-            output += f", annot_geometries={annot_geoms}"
-
+        output += ", spatial_graphs=" + self._spatial_graphs.__repr__()
         output += ")"
         return output
 
@@ -430,30 +424,19 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
             output += "\nGeometries:\n"
 
             if col_geoms:
-                geom_types = [f"{k} ({v.geometry.geom_type[0]})" for k, v in col_geoms.items()]
-                output += f"col_geometries: {', '.join(geom_types)}\n"
+                output += f"col_geometries({str(len(col_geoms))}): {ut.print_truncated_list(list(col_geoms.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
             if row_geoms:
-                geom_types = [f"{k} ({v.geometry.geom_type[0]})" for k, v in row_geoms.items()]
-                output += f"row_geometries: {', '.join(geom_types)}\n"
+                output += f"row_geometries({str(len(row_geoms))}): {ut.print_truncated_list(list(row_geoms.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
             if annot_geoms:
-                geom_types = [f"{k} ({v.geometry.geom_type[0]})" for k, v in annot_geoms.items()]
-                output += f"annot_geometries: {', '.join(geom_types)}\n"
+                output += f"annot_geometries({str(len(annot_geoms))}): {ut.print_truncated_list(list(annot_geoms.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
         # Add graphs info
         graphs = self._spatial_graphs
         if graphs is not None:
             output += "\nGraphs:"
-            for col in graphs.columns:
-                output += f"\n{col}: "
-                parts = []
-                for row in graphs.row_names:
-                    if graphs[row, col]:
-                        graph_names = list(graphs[row, col].keys())
-                        if graph_names:
-                            parts.append(f"{row}: {', '.join(graph_names)}")
-                output += "; ".join(parts)
+            output += f"spatial_graphs columns({len(self._spatial_graphs.column_names)}): {ut.print_truncated_list(self._spatial_graphs.column_names)}\n"
 
         return output
 
