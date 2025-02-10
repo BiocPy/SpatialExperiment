@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.0.5
+
+- Implementing a placeholder `SpatialFeatureExperiment` class. This version only implements the data structure to hold various geometries but none of the methods except for slicing.
+
 ## Version 0.0.3 - 0.0.4
 
 - Streamlining the `SpatialImage` class implementations.

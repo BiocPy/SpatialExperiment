@@ -1,5 +1,6 @@
 from biocframe import BiocFrame
 from spatialexperiment import SpatialExperiment
+import numpy as np
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -20,3 +21,11 @@ def test_SPE_empty_constructor():
 
     assert "sample_id" in tspe.column_data.columns.as_list()
     assert tspe.column_data.shape == (tspe.shape[1], 1)
+
+def test_spe_basic():
+    nrows = 200
+    ncols = 500
+    counts = np.random.rand(nrows, ncols)
+    tspe = SpatialExperiment(assays={"spots": counts})
+
+    assert isinstance(tspe, SpatialExperiment)
