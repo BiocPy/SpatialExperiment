@@ -1,6 +1,6 @@
 import numpy as np
 from biocframe import BiocFrame
-from xarray import DataArray, DataTree, Dataset, Variable
+from xarray import DataArray, DataTree, Variable
 
 from .SpatialImage import construct_spatial_image_class
 
@@ -41,7 +41,7 @@ def process_dataset_images(dt: DataTree, root_name: str) -> BiocFrame:
                 "scale_factor": [scale_factor]
             }
         )
-        img_data.combine_rows(img_row)
+        img_data = img_data.combine_rows(img_row)
 
     return img_data        
 
@@ -70,6 +70,6 @@ def build_img_data(dt: DataTree, root_name: str):
 
     for key, child in dt.children.items():
         child_img_data = build_img_data(child, root_name)
-        parent_img_data.combine_rows(child_img_data)
+        parent_img_data = parent_img_data.combine_rows(child_img_data)
 
     return parent_img_data

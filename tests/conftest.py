@@ -1,8 +1,11 @@
 import pytest
+from random import random
 import numpy as np
 from biocframe import BiocFrame
+import anndata as ad
+import spatialdata as sd
 from spatialexperiment import SpatialExperiment, construct_spatial_image_class
-from random import random
+from spatialdata.models import Image2DModel, PointsModel
 
 
 @pytest.fixture
@@ -70,3 +73,40 @@ def spe():
     )
 
     return spe_instance
+
+
+@pytest.fixture
+def sdata():
+    img = np.random.randint(0, 256, size=(50, 50, 3), dtype=np.uint8)
+    img = Image2DModel.parse(data=img)
+    img.name = "image01"
+    img.attrs['scale_factor'] = 1
+
+    num_cols = 25
+    x_coords = np.random.uniform(low=0.0, high=100.0, size=num_cols)
+    y_coords = np.random.uniform(low=0.0, high=100.0, size=num_cols)
+    stacked_coords = np.column_stack((x_coords, y_coords))
+    points = PointsModel.parse(stacked_coords)
+
+    n_vars = 10
+    X = np.random.random((num_cols, n_vars))
+    adata = ad.AnnData(X=X)
+
+    sdata = sd.SpatialData(
+        images={"sample01": img},
+        points={"coords": points},
+        tables=adata
+    )
+
+    return sdata
+
+
+@pytest.fixture
+def sdata_tree():
+    img_1 = np.random.randint(0, 256, size=(50, 50, 3), dtype=np.uint8)
+    img_1 = Image2DModel.parse(data=img_1)
+    img_1.name = "image01"
+    
+    img_2 = np.random.randint(0, 256, size=(50, 50, 3), dtype=np.uint8)
+    img_2 = Image2DModel.parse(data=img_2)
+    img_2.name = "image02"

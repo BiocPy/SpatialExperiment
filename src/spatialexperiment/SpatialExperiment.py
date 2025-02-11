@@ -869,7 +869,11 @@ class SpatialExperiment(SingleCellExperiment):
     def from_spatialdata(cls, input: "spatialdata.SpatialData", points_key: str = "") -> "SpatialExperiment":
         """Create a ``SpatialExperiment`` from :py:class:`~spatialdata.SpatialData`.
 
-        **NOTE**: This is a lossy conversion. The resulting ``SpatialExperiment`` only preserves a subset of data from the incoming `SpatialData` object.
+        When building ``SpatialExperiment``'s `img_data`, if the image is stored as a :py:class:`~xarray.DataArray`, the corresponding key will be used as the `sample_id`, `DataArray.name` will be used for the `image_id`, and `DataArray.attrs['scale_factor']` for the `scale_factor`.
+        
+        For when the images are stored as a :py:class:`~xarray.DataTree`, see :py:func:`~spatialdata._sdatautils.build_img_data` for details.
+
+        **NOTE**: This is a lossy conversion. The resulting ``SpatialExperiment`` only preserves a subset of the data from the incoming `SpatialData` object.
 
          Args:
             input:
@@ -895,7 +899,7 @@ class SpatialExperiment(SingleCellExperiment):
             points_elem = next(iter(points.values()))
 
         adata = input.table
-        if adata.shape[1] != len(points_elem):
+        if adata.shape[0] != len(points_elem):
             raise ValueError("Table and Points must have the same number of observations.")
         
         sce = super().from_anndata(adata)
@@ -913,7 +917,7 @@ class SpatialExperiment(SingleCellExperiment):
             coords_cols = []
 
         if coords_cols:
-            spatial_coords = points_cols[coords_cols].compute()
+            spatial_coords = points_elem[coords_cols].compute()
             spatial_coords = BiocFrame.from_pandas(spatial_coords)
 
         # build image data
@@ -928,24 +932,26 @@ class SpatialExperiment(SingleCellExperiment):
         )
         for name, image in images.items():
             if isinstance(image, DataArray):
+                curr_img = construct_spatial_image_class(np.array(image))
+                curr_scale_factor = [image.attrs["scale_factor"]] if "scale_factor" in image.attrs else [np.nan]
                 curr_img_data = BiocFrame({
-                    "sample_id": name,
-                    "image_id": image.name,
-                    "data": np.array(image),
-                    "scale_factor": image.attrs.get("scale_factor", None)
+                    "sample_id": [name],
+                    "image_id": [image.name],
+                    "data": [curr_img],
+                    "scale_factor": curr_scale_factor
                 })
             elif isinstance(image, DataTree):
                 curr_img_data = build_img_data(image, name)
             else:
                 raise TypeError(f"Cannot build image data from {type(image)}")
 
-            img_data.combine_rows(curr_img_data)
+            img_data = img_data.combine_rows(curr_img_data)
 
         return cls(
             assays=sce.assays,
             row_ranges=sce.row_ranges,
-            row_data=sce.rows,
-            column_data=sce.cols,
+            row_data=sce.row_data,
+            column_data=sce.col_data,
             row_names=sce.row_names,
             column_names=sce.column_names,
             metadata=sce.metadata,
