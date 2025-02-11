@@ -868,5 +868,108 @@ class SpatialExperiment(SingleCellExperiment):
         raise NotImplementedError()
 
     ################################
+    ####>> SpatialData interop <<###
+    ################################
+
+    @classmethod
+    def from_spatialdata(cls, input: "spatialdata.SpatialData", points_key: str = "") -> "SpatialExperiment":
+        """Create a ``SpatialExperiment`` from :py:class:`~spatialdata.SpatialData`.
+
+        When building ``SpatialExperiment``'s `img_data`, if the image is stored as a :py:class:`~xarray.DataArray`, the corresponding key will be used as the `sample_id`, `DataArray.name` will be used for the `image_id`, and `DataArray.attrs['scale_factor']` for the `scale_factor`.
+        
+        For when the images are stored as a :py:class:`~xarray.DataTree`, see :py:func:`~spatialdata._sdatautils.build_img_data` for details.
+
+        **NOTE**: This is a lossy conversion. The resulting ``SpatialExperiment`` only preserves a subset of the data from the incoming `SpatialData` object.
+
+         Args:
+            input:
+                Input data.
+            points_key:
+                The key corresponding to the DataFrame that should be used for constructing spatial coordinates. Defaults to the first entry.
+
+        Returns:
+            A ``SpatialExperiment`` object.
+        """
+        from spatialdata import SpatialData
+        from xarray import DataArray, DataTree
+        from ._sdatautils import build_img_data
+
+        if not isinstance(input, SpatialData):
+            raise TypeError("Input must be a `SpatialData` object.")
+
+        # validate that the incoming SpatialData can be converted to a SpatialExperiment
+        points = input.points
+        if points_key:
+            points_elem = points[points_key]
+        else:
+            points_elem = next(iter(points.values()))
+
+        adata = input.table
+        if adata.shape[0] != len(points_elem):
+            raise ValueError("Table and Points must have the same number of observations.")
+        
+        sce = super().from_anndata(adata)
+
+        # build spatial coordinates
+        coords_2d = {'x', 'y'}
+        coords_3d = {'x', 'y', 'z'}
+
+        points_cols = set(points_elem.columns)
+        if coords_3d.issubset(points_cols):
+            coords_cols = list(coords_3d)
+        elif coords_2d.issubset(points_cols):
+            coords_cols = list(coords_2d)
+        else:
+            coords_cols = []
+
+        if coords_cols:
+            spatial_coords = points_elem[coords_cols].compute()
+            spatial_coords = BiocFrame.from_pandas(spatial_coords)
+
+        # build image data
+        images = input.images
+        img_data = BiocFrame(
+            {
+                "sample_id": [],
+                "image_id": [],
+                "data": [],
+                "scale_factor": []
+            }
+        )
+        for name, image in images.items():
+            if isinstance(image, DataArray):
+                curr_img = construct_spatial_image_class(np.array(image))
+                curr_scale_factor = [image.attrs["scale_factor"]] if "scale_factor" in image.attrs else [np.nan]
+                curr_img_data = BiocFrame({
+                    "sample_id": [name],
+                    "image_id": [image.name],
+                    "data": [curr_img],
+                    "scale_factor": curr_scale_factor
+                })
+            elif isinstance(image, DataTree):
+                curr_img_data = build_img_data(image, name)
+            else:
+                raise TypeError(f"Cannot build image data from {type(image)}")
+
+            img_data = img_data.combine_rows(curr_img_data)
+
+        return cls(
+            assays=sce.assays,
+            row_ranges=sce.row_ranges,
+            row_data=sce.row_data,
+            column_data=sce.col_data,
+            row_names=sce.row_names,
+            column_names=sce.column_names,
+            metadata=sce.metadata,
+            reduced_dims=sce.reduced_dims,
+            main_experiment_name=sce.main_experiment_name,
+            alternative_experiments=sce.alternative_experiments,
+            row_pairs=sce.row_pairs,
+            column_pairs=sce.column_pairs,
+            spatial_coords=spatial_coords,
+            img_data=img_data
+        )
+
+    ################################
     #######>> combine ops <<########
     ################################
