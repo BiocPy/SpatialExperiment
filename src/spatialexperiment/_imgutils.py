@@ -1,10 +1,41 @@
 from typing import Union
 
+import os
 from biocframe import BiocFrame
+from .SpatialImage import construct_spatial_image_class
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
 __license__ = "MIT"
+
+
+def get_img_data(
+    img: Union[str, os.PathLike],
+    scale_factor: str,
+    sample_id: str,
+    image_id: str,
+) -> BiocFrame:
+    """
+    Construct an image data dataframe.
+
+    Args:
+        img: A path or url to the image file.
+        scale_factor (str): The scale factor associated with the image.
+        sample_id (str): A unique identifier for the sample to which the image belongs.
+        image_id (str): A unique identifier for the image itself.
+
+    Returns:
+        The image data.
+    """
+    spi = construct_spatial_image_class(img)
+    return BiocFrame(
+        {
+            "sample_id": [sample_id],
+            "image_id": [image_id],
+            "data": [spi],
+            "scale_factor": [scale_factor]
+        }
+    )
 
 
 def retrieve_rows_by_id(
