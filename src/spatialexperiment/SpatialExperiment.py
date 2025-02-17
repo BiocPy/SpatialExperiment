@@ -870,3 +870,48 @@ class SpatialExperiment(SingleCellExperiment):
     ################################
     #######>> combine ops <<########
     ################################
+
+    def relaxed_combine_columns(self, *other) -> "SpatialExperiment":
+        """Wrapper around :py:func:`~relaxed_combine_columns`."""
+        return relaxed_combine_columns(self, *other)
+
+    def combine_columns(self, *other) -> "SpatialExperiment":
+        """Wrapper around :py:func:`~combine_columns`."""
+        return combine_columns(self, *other)
+
+
+################################
+#######>> combine ops <<########
+################################
+
+@ut.combine_columns.register(SpatialExperiment)
+def combine_columns(*x: SpatialExperiment) -> SpatialExperiment:
+    """Combine multiple ``SpatialExperiment`` objects by column.
+
+    All assays must contain the same assay names. If you need a
+    flexible combine operation, checkout :py:func:`~relaxed_combine_columns`.
+
+    Returns:
+        A combined ``SpatialExperiment``.
+    """
+
+
+@ut.relaxed_combine_columns.register(SpatialExperiment)
+def relaxed_combine_columns(
+    *x: SpatialExperiment,
+) -> SpatialExperiment:
+    """A relaxed version of the :py:func:`~biocutils.combine_rows.combine_columns` method for
+    :py:class:`~SpatialExperiment` objects.  Whereas ``combine_columns`` expects that all objects have the same rows,
+    ``relaxed_combine_columns`` allows for different rows. Absent columns in any object are filled in with appropriate
+    placeholder values before combining.
+
+    Args:
+        x:
+            One or more ``SpatialExperiment`` objects, possibly with differences in the
+            number and identity of their rows.
+
+    Returns:
+        A ``SpatialExperiment`` that combines all ``experiments`` along their columns and contains
+        the union of all rows. Rows absent in any ``x`` are filled in
+        with placeholders consisting of Nones or masked NumPy values.
+    """
