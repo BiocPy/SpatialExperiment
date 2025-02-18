@@ -3,13 +3,22 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 from urllib.parse import urlparse
 from warnings import warn
 
-import biocutils as ut
 import numpy as np
-from biocframe import BiocFrame
 from PIL import Image
-from singlecellexperiment import SingleCellExperiment
+
+from biocframe import BiocFrame
+import biocutils as ut
+from summarizedexperiment._combineutils import (
+    check_assays_are_equal,
+    merge_assays,
+    merge_se_colnames
+)
 from summarizedexperiment._frameutils import _sanitize_frame
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
+from singlecellexperiment import SingleCellExperiment
+from singlecellexperiment._combineutils import (
+    merge_generic,
+)
 
 from ._imgutils import retrieve_rows_by_id
 from ._validators import (
@@ -21,7 +30,8 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from .SpatialImage import VirtualSpatialImage, construct_spatial_image_class
+from ._combineutils import merge_spe_cols
+from .SpatialImage import construct_spatial_image_class, VirtualSpatialImage
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -894,6 +904,52 @@ def combine_columns(*x: SpatialExperiment) -> SpatialExperiment:
     Returns:
         A combined ``SpatialExperiment``.
     """
+    warn(
+        "'row_pairs' and 'column_pairs' are currently ignored during this operation.",
+        UserWarning,
+    )
+
+    first = x[0]
+    _all_assays = [y.assays for y in x]
+    check_assays_are_equal(_all_assays)
+    _new_assays = merge_assays(_all_assays, by="column")
+
+    _all_cols = [y._cols for y in x]
+    _new_cols = merge_spe_cols(_all_cols)
+    _new_col_names = merge_se_colnames(x)
+
+    _new_rdim = None
+    try:
+        _new_rdim = merge_generic(x, by="row", attr="reduced_dims")
+    except Exception as e:
+        warn(
+            f"Cannot combine 'reduced_dimensions' across experiments, {str(e)}",
+            UserWarning,
+        )
+
+    _new_alt_expt = None
+    try:
+        _new_alt_expt = merge_generic(x, by="column", attr="alternative_experiments")
+    except Exception as e:
+        warn(
+            f"Cannot combine 'alternative_experiments' across experiments, {str(e)}",
+            UserWarning,
+        )
+
+    current_class_const = type(first)
+    return current_class_const(
+        assays=_new_assays,
+        row_ranges=first._row_ranges,
+        row_data=first._rows,
+        column_data=_new_cols,
+        row_names=first._row_names,
+        column_names=_new_col_names,
+        metadata=first._metadata,
+        reduced_dims=_new_rdim,
+        main_experiment_name=first._main_experiment_name,
+        alternative_experiments=_new_alt_expt,
+    )
+
 
 
 @ut.relaxed_combine_columns.register(SpatialExperiment)
