@@ -14,8 +14,8 @@ def test_duplicate_sample_ids(spe):
     with pytest.warns(UserWarning):
         combined = ut.combine_columns(spe, spe)
 
-    assert len(combined.column_data["sample_id"].unique()) == 2 * len(
-        spe.column_data["sample_id"].unique()
+    assert len(set(combined.column_data["sample_id"])) == 2 * len(
+        set(spe.column_data["sample_id"])
     )
     assert combined.shape[0] == spe.shape[0]
     assert combined.shape[1] == 2 * spe.shape[1]
