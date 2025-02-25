@@ -30,7 +30,7 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from ._combineutils import merge_spe_cols, merge_spe_spatial_coords
+from ._combineutils import merge_spe_cols_and_img_data, merge_spe_spatial_coords
 from .SpatialImage import construct_spatial_image_class, VirtualSpatialImage
 
 __author__ = "keviny2"
@@ -914,8 +914,6 @@ def combine_columns(*x: SpatialExperiment) -> SpatialExperiment:
     check_assays_are_equal(_all_assays)
     _new_assays = merge_assays(_all_assays, by="column")
 
-    _all_cols = [y._cols for y in x]
-    _new_cols = merge_spe_cols(_all_cols)
     _new_col_names = merge_se_colnames(x)
 
     _new_rdim = None
@@ -939,8 +937,7 @@ def combine_columns(*x: SpatialExperiment) -> SpatialExperiment:
     _all_spatial_coords = [y._spatial_coords for y in x]
     _new_spatial_coords = merge_spe_spatial_coords(_all_spatial_coords)
 
-    _all_img_data = [y._img_data for y in x]
-    _new_img_data = ut.combine_rows(*_all_img_data)
+    _new_cols, _new_img_data = merge_spe_cols_and_img_data(x)
 
     current_class_const = type(first)
     return current_class_const(
