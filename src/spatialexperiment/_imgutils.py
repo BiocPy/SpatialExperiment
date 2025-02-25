@@ -8,7 +8,9 @@ __license__ = "MIT"
 
 
 def retrieve_rows_by_id(
-    img_data: BiocFrame, sample_id: Union[str, bool, None] = None, image_id: Union[str, bool, None] = None
+    img_data: BiocFrame,
+    sample_id: Union[str, bool, None] = None,
+    image_id: Union[str, bool, None] = None,
 ) -> Union[BiocFrame, None]:
     """
     Retrieve rows from `img_data` based on specified `sample_id` and `image_id`.
@@ -51,11 +53,15 @@ def retrieve_rows_by_id(
                 else:
                     subset = subset.combine_rows(row)
         else:
-            subset = img_data[[_image_id == image_id for _image_id in img_data["image_id"]], :]
+            subset = img_data[
+                [_image_id == image_id for _image_id in img_data["image_id"]], :
+            ]
 
     elif sample_id is None:
         first_sample_id = img_data["sample_id"][0]
-        first_sample = img_data[[_sample_id == first_sample_id for _sample_id in img_data["sample_id"]], :]
+        first_sample = img_data[
+            [_sample_id == first_sample_id for _sample_id in img_data["sample_id"]], :
+        ]
 
         if image_id is True:
             subset = first_sample
@@ -63,10 +69,14 @@ def retrieve_rows_by_id(
         elif image_id is None:
             subset = first_sample[0, :]
         else:
-            subset = first_sample[[_image_id == image_id for _image_id in img_data["image_id"]], :]
+            subset = first_sample[
+                [_image_id == image_id for _image_id in img_data["image_id"]], :
+            ]
 
     else:
-        selected_sample = img_data[[_sample_id == sample_id for _sample_id in img_data["sample_id"]], :]
+        selected_sample = img_data[
+            [_sample_id == sample_id for _sample_id in img_data["sample_id"]], :
+        ]
 
         if selected_sample.shape[0] == 0:
             subset = selected_sample
@@ -75,6 +85,8 @@ def retrieve_rows_by_id(
         elif image_id is None:
             subset = selected_sample[0, :]
         else:
-            subset = selected_sample[[_image_id == image_id for _image_id in selected_sample["image_id"]]]
+            subset = selected_sample[
+                [_image_id == image_id for _image_id in selected_sample["image_id"]]
+            ]
 
     return subset

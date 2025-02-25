@@ -22,6 +22,7 @@ def test_SPE_empty_constructor():
     assert "sample_id" in tspe.column_data.columns.as_list()
     assert tspe.column_data.shape == (tspe.shape[1], 1)
 
+
 def test_spe_basic():
     nrows = 200
     ncols = 500

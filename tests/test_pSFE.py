@@ -9,6 +9,7 @@ __author__ = "jkanche"
 __copyright__ = "jkanche"
 __license__ = "MIT"
 
+
 def test_init_basic():
     nrows = 200
     ncols = 500
@@ -17,10 +18,12 @@ def test_init_basic():
 
     assert isinstance(tspe, ProxySpatialFeatureExperiment)
 
+
 def test_init_empty():
     tspe = ProxySpatialFeatureExperiment()
 
     assert isinstance(tspe, ProxySpatialFeatureExperiment)
+
 
 def test_init_with_col_geoms():
     nrows = 200
@@ -33,7 +36,9 @@ def test_init_with_col_geoms():
         ]
     )
 
-    colgeoms = {"polygons" : gpd.GeoDataFrame({"geometry": polys})}
-    tspe = ProxySpatialFeatureExperiment(assays={"spots": counts}, col_geometries=colgeoms)
+    colgeoms = {"polygons": gpd.GeoDataFrame({"geometry": polys})}
+    tspe = ProxySpatialFeatureExperiment(
+        assays={"spots": counts}, col_geometries=colgeoms
+    )
 
     assert isinstance(tspe, ProxySpatialFeatureExperiment)

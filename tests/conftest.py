@@ -43,17 +43,9 @@ def spe():
         }
     )
 
-    row_names = BiocFrame(
-        {
-            "row_names": range(nrows)
-        }
-    )
+    row_names = BiocFrame({"row_names": range(nrows)})
 
-    column_names = BiocFrame(
-        {
-            "column_names": range(ncols)
-        }
-    )
+    column_names = BiocFrame({"column_names": range(ncols)})
 
     x_coords = np.random.uniform(low=0.0, high=100.0, size=ncols)
     y_coords = np.random.uniform(low=0.0, high=100.0, size=ncols)

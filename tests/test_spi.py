@@ -1,7 +1,12 @@
 import pytest
 from PIL import Image
 from spatialexperiment import construct_spatial_image_class
-from spatialexperiment.SpatialImage import VirtualSpatialImage, StoredSpatialImage, LoadedSpatialImage, RemoteSpatialImage
+from spatialexperiment.SpatialImage import (
+    VirtualSpatialImage,
+    StoredSpatialImage,
+    LoadedSpatialImage,
+    RemoteSpatialImage,
+)
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -18,7 +23,9 @@ def test_spi_constructor_path():
 
 
 def test_spi_constructor_spi():
-    spi_1 = construct_spatial_image_class("tests/images/sample_image1.jpg", is_url=False)
+    spi_1 = construct_spatial_image_class(
+        "tests/images/sample_image1.jpg", is_url=False
+    )
     spi_2 = construct_spatial_image_class(spi_1, is_url=False)
 
     assert issubclass(type(spi_2), VirtualSpatialImage)
@@ -49,9 +56,14 @@ def test_invalid_input():
     with pytest.raises(Exception):
         construct_spatial_image_class(5, is_url=False)
 
+
 def test_spi_equality():
-    spi_path_1 = construct_spatial_image_class("tests/images/sample_image1.jpg", is_url=False)
-    spi_path_2 = construct_spatial_image_class("tests/images/sample_image1.jpg", is_url=False)
+    spi_path_1 = construct_spatial_image_class(
+        "tests/images/sample_image1.jpg", is_url=False
+    )
+    spi_path_2 = construct_spatial_image_class(
+        "tests/images/sample_image1.jpg", is_url=False
+    )
 
     assert spi_path_1 == spi_path_2
 

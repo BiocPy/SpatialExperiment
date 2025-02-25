@@ -9,36 +9,38 @@ import biocutils as ut
 from spatialexperiment import SpatialExperiment
 
 
-def _append_sample_indices(bframes: List[BiocFrame]) -> List[BiocFrame]:
+def _append_indices_to_samples(bframes: List[BiocFrame]) -> List[BiocFrame]:
     """Append indices to sample IDs for a list of `BiocFrames`.
-    
+
     For each `BiocFrame`, appends an index to all sample IDs to ensure uniqueness
     across multiple frames.
-    
+
     Args:
         List of `BiocFrame` objects containing sample IDs.
-    
+
     Returns:
         List of `BiocFrame`s with modified sample IDs.
     """
     modified_bframes = []
     for i, bframe in enumerate(bframes, start=1):
         bframe_copy = deepcopy(bframe)
-        bframe_copy["sample_id"] = [f"{sample_id}_{i}" for sample_id in bframe_copy["sample_id"]]
+        bframe_copy["sample_id"] = [
+            f"{sample_id}_{i}" for sample_id in bframe_copy["sample_id"]
+        ]
         modified_bframes.append(bframe_copy)
     return modified_bframes
 
 
-def merge_spe_cols_and_img_data(x: List[SpatialExperiment]) -> Tuple[BiocFrame, BiocFrame]:
+def merge_spatial_frames(x: List[SpatialExperiment]) -> Tuple[BiocFrame, BiocFrame]:
     """Merge column data and image data from multiple ``SpatialExperiment`` objects.
-    
+
     If duplicate sample IDs exist across objects, appends indices to make them unique.
     Sample IDs in column data determine the uniqueness check as they are the superset
     of IDs in image data.
-    
+
     Args:
         x: List of ``SpatialExperiment`` objects
-    
+
     Returns:
         A tuple with the merged column data and image data.
     """
@@ -46,35 +48,37 @@ def merge_spe_cols_and_img_data(x: List[SpatialExperiment]) -> Tuple[BiocFrame, 
     img_datas = [y._img_data for y in x]
 
     expected_unique = sum([len(set(_cols["sample_id"])) for _cols in cols])
-    all_sample_ids = list(itertools.chain.from_iterable(_cols["sample_id"] for _cols in cols))
+    all_sample_ids = list(
+        itertools.chain.from_iterable(_cols["sample_id"] for _cols in cols)
+    )
 
     if len(set(all_sample_ids)) < expected_unique:
         warn(
             "'sample_id's are duplicated across 'SpatialExperiment' objects to 'combine_columns'; appending sample indices."
         )
-        modified_columns = _append_sample_indices(cols)
-        modified_img_data = _append_sample_indices(img_datas)
+        modified_columns = _append_indices_to_samples(cols)
+        modified_img_data = _append_indices_to_samples(img_datas)
     else:
         modified_columns = cols
         modified_img_data = img_datas
 
-    _new_cols = ut.combine_rows(*modified_columns) 
+    _new_cols = ut.combine_rows(*modified_columns)
     _new_img_data = ut.combine_rows(*modified_img_data)
     return _new_cols, _new_img_data
 
 
-def merge_spe_spatial_coords(spatial_coords: List[BiocFrame]) -> BiocFrame:
+def merge_spatial_coordinates(spatial_coords: List[BiocFrame]) -> BiocFrame:
     """Merge spatial coordinates from multiple frames.
-    
+
     Args:
         spatial_coords: List of `BiocFrame`s containing spatial coordinates.
-    
+
     Returns:
         A merged BiocFrame containing all spatial coordinates.
-        
+
     Raises:
         ValueError: If spatial coordinates have different numbers of columns.
-        
+
     Warns:
         If dimension names are not consistent across all `BiocFrame`s.
     """
@@ -84,9 +88,7 @@ def merge_spe_spatial_coords(spatial_coords: List[BiocFrame]) -> BiocFrame:
 
     first_columns = spatial_coords[0].columns
     if not all(coords.columns == first_columns for coords in spatial_coords):
-        warn(
-            "Not all 'spatial_coords' have the same dimension names."
-        )
+        warn("Not all 'spatial_coords' have the same dimension names.")
 
     _new_spatial_coords = ut.combine_rows(*spatial_coords)
     return _new_spatial_coords

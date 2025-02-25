@@ -33,7 +33,11 @@ def construct_spatial_coords_from_names(
 
     current_column_data = _sanitize_frame(column_data, num_rows=column_data.shape[1])
 
-    missing_names = [name for name in spatial_coords_names if name not in current_column_data.column_names]
+    missing_names = [
+        name
+        for name in spatial_coords_names
+        if name not in current_column_data.column_names
+    ]
     if missing_names:
         raise ValueError(
             f"The following names in `spatial_coords_names` are missing from `column_data`: {missing_names}"
@@ -44,7 +48,11 @@ def construct_spatial_coords_from_names(
     column_data_subset = deepcopy(
         current_column_data[
             :,
-            [col for col in current_column_data.column_names if col not in spatial_coords_names],
+            [
+                col
+                for col in current_column_data.column_names
+                if col not in spatial_coords_names
+            ],
         ]
     )
 
@@ -52,7 +60,11 @@ def construct_spatial_coords_from_names(
 
 
 def construct_img_data(
-    sample_id: str, image_id: str, image_sources: List[str], scale_factors: List[float], load_image: bool = False
+    sample_id: str,
+    image_id: str,
+    image_sources: List[str],
+    scale_factors: List[float],
+    load_image: bool = False,
 ) -> BiocFrame:
     """Construct the image data for a `SpatialExperiment`.
 
@@ -77,7 +89,9 @@ def construct_img_data(
         A `BiocFrame` representing the image data for a `SpatialExperiment`.
     """
     if not len(image_id) == len(image_sources) == len(scale_factors):
-        raise ValueError("'image_id', 'image_sources' and 'scale_factors' are not the same length.")
+        raise ValueError(
+            "'image_id', 'image_sources' and 'scale_factors' are not the same length."
+        )
 
     spis = []
     for image_source in image_sources:

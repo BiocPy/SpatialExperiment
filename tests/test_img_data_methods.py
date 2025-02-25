@@ -1,6 +1,5 @@
 import pytest
 from copy import deepcopy
-from spatialexperiment import construct_spatial_image_class
 from spatialexperiment.SpatialImage import VirtualSpatialImage
 
 __author__ = "keviny2"
