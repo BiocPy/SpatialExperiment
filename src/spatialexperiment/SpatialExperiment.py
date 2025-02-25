@@ -30,7 +30,7 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from ._combineutils import merge_spe_cols
+from ._combineutils import merge_spe_cols, merge_spe_spatial_coords
 from .SpatialImage import construct_spatial_image_class, VirtualSpatialImage
 
 __author__ = "keviny2"
@@ -936,6 +936,12 @@ def combine_columns(*x: SpatialExperiment) -> SpatialExperiment:
             UserWarning,
         )
 
+    _all_spatial_coords = [y._spatial_coords for y in x]
+    _new_spatial_coords = merge_spe_spatial_coords(_all_spatial_coords)
+
+    _all_img_data = [y._img_data for y in x]
+    _new_img_data = ut.combine_rows(*_all_img_data)
+
     current_class_const = type(first)
     return current_class_const(
         assays=_new_assays,
@@ -948,6 +954,8 @@ def combine_columns(*x: SpatialExperiment) -> SpatialExperiment:
         reduced_dims=_new_rdim,
         main_experiment_name=first._main_experiment_name,
         alternative_experiments=_new_alt_expt,
+        spatial_coords=_new_spatial_coords,
+        img_data=_new_img_data
     )
 
 
