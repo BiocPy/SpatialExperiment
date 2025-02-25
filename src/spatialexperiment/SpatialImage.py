@@ -10,10 +10,10 @@ from warnings import warn
 import biocutils as ut
 import numpy as np
 import requests
-from PIL import Image
+from PIL import Image, ImageChops
 
-__author__ = "jkanche"
-__copyright__ = "jkanche"
+__author__ = "jkanche, keviny2"
+__copyright__ = "jkanche, keviny2"
 __license__ = "MIT"
 
 
@@ -23,6 +23,21 @@ class VirtualSpatialImage(ABC):
 
     def __init__(self, metadata: Optional[dict] = None):
         self._metadata = metadata if metadata is not None else {}
+
+    #########################
+    ######>> Equality <<#####
+    #########################
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, type(self)):
+            return False
+
+        return self.metadata == other.metadata
+
+    def __hash__(self):
+        # Note: This exists primarily to support lru_cache.
+        # Generally, these classes are mutable and shouldn't be used as dict keys or in sets.
+        return hash(frozenset(self._metadata.items()))
 
     ###########################
     ######>> metadata <<#######
@@ -150,6 +165,18 @@ class LoadedSpatialImage(VirtualSpatialImage):
             return self
         else:
             return self.__copy__()
+
+    #########################
+    ######>> Equality <<#####
+    #########################
+
+    def __eq__(self, other) -> bool:
+        diff = ImageChops.difference(self.image, other.image)
+
+        return super().__eq__(other) and not diff.getbbox()
+
+    def __hash__(self):
+        return hash((super().__hash__(), self._image.tobytes()))
 
     #########################
     ######>> Copying <<######
@@ -293,6 +320,16 @@ class StoredSpatialImage(VirtualSpatialImage):
             return self
         else:
             return self.__copy__()
+
+    #########################
+    ######>> Equality <<#####
+    #########################
+
+    def __eq__(self, other):
+        return super().__eq__(other) and self.path == other.path
+
+    def __hash__(self):
+        return hash((super().__hash__(), str(self._path)))
 
     #########################
     ######>> Copying <<######
@@ -453,6 +490,16 @@ class RemoteSpatialImage(VirtualSpatialImage):
             return self
         else:
             return self.__copy__()
+
+    #########################
+    ######>> Equality <<#####
+    #########################
+    
+    def __eq__(self, other) -> bool:
+        return super().__eq__(other) and self.url == other.url
+
+    def __hash__(self):
+        return hash((super().__hash__(), self._url))
 
     #########################
     ######>> Copying <<######

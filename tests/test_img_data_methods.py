@@ -60,7 +60,7 @@ def test_add_img(spe):
         image_id="unsplash",
     )
 
-    tspe.img_data.shape[0] == spe.img_data.shape[0] + 1
+    assert tspe.img_data.shape[0] == spe.img_data.shape[0] + 1
 
 
 def test_add_img_already_exists(spe):
