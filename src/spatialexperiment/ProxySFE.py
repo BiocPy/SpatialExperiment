@@ -8,7 +8,11 @@ from biocframe import BiocFrame
 from summarizedexperiment._frameutils import _sanitize_frame
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
 
-from .SpatialExperiment import SpatialExperiment, _validate_column_data, _validate_sample_ids
+from .SpatialExperiment import (
+    SpatialExperiment,
+    _validate_column_data,
+    _validate_sample_ids,
+)
 
 __author__ = "jkanche"
 __copyright__ = "jkanche"
@@ -44,7 +48,10 @@ def _validate_geometries(geometries: Dict[str, gpd.GeoDataFrame], prop_name: str
 
     for i, geom in enumerate(geometries.values()):
         if not isinstance(geom, gpd.GeoDataFrame):
-            raise TypeError(f"Item {i} in {prop_name} is {type(geom).__name__} " f"rather than `GeoDataFrame`.\n")
+            raise TypeError(
+                f"Item {i} in {prop_name} is {type(geom).__name__} "
+                f"rather than `GeoDataFrame`.\n"
+            )
 
 
 def _validate_annotgeometries(geometries, column_data):
@@ -58,13 +65,16 @@ def _validate_annotgeometries(geometries, column_data):
 
     for i, geom in enumerate(geometries.values()):
         if "sample_id" not in geom.columns:
-            raise ValueError(f"Item {i} of 'annot_geometries' does not have column 'sample_id'.\n")
+            raise ValueError(
+                f"Item {i} of 'annot_geometries' does not have column 'sample_id'.\n"
+            )
         else:
             samples_seen = geom["sample_id"].unique()
             missing = [s for s in samples_seen if s not in sample_ids]
             if len(missing) > 0:
                 raise ValueError(
-                    f"Samples {', '.join(missing)} in item {i} of " f"annot_geometries are absent from 'column_data'.\n"
+                    f"Samples {', '.join(missing)} in item {i} of "
+                    f"annot_geometries are absent from 'column_data'.\n"
                 )
 
 
@@ -75,7 +85,9 @@ def _validate_graph_sample_id(spatial_graphs, column_data):
 
     missing = graph_sample_ids - col_sample_ids
     if missing:
-        raise ValueError(f"Samples {', '.join(missing)} are in the graphs but not 'column_data'.\n")
+        raise ValueError(
+            f"Samples {', '.join(missing)} are in the graphs but not 'column_data'.\n"
+        )
 
 
 def _validate_graph_structure(spatial_graphs):
@@ -89,7 +101,9 @@ def _validate_graph_structure(spatial_graphs):
             "and whose rows are margins (rows, columns, annotation).\n"
         )
     elif not set(spatial_graphs.get_row_names()) == {"row", "col", "annot"}:
-        raise ValueError("Row names of 'spatial_graphs' must be 'row', 'col', and 'annot'.\n")
+        raise ValueError(
+            "Row names of 'spatial_graphs' must be 'row', 'col', and 'annot'.\n"
+        )
 
 
 class ProxySpatialFeatureExperiment(SpatialExperiment):
@@ -404,7 +418,9 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
 
         output += ", col_geometries=" + ut.print_truncated_dict(self._col_geometries)
         output += ", row_geometries=" + ut.print_truncated_dict(self._row_geometries)
-        output += ", annot_geometries=" + ut.print_truncated_dict(self._annot_geometries)
+        output += ", annot_geometries=" + ut.print_truncated_dict(
+            self._annot_geometries
+        )
 
         output += ", spatial_graphs=" + self._spatial_graphs.__repr__()
         output += ")"
@@ -448,7 +464,9 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         """Get the coordinate unit."""
         return self._unit
 
-    def set_unit(self, unit: str, in_place: bool = False) -> "ProxySpatialFeatureExperiment":
+    def set_unit(
+        self, unit: str, in_place: bool = False
+    ) -> "ProxySpatialFeatureExperiment":
         """Set the coordinate unit.
 
         Args:
@@ -631,7 +649,9 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         Returns:
             A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
-        _graphs = _sanitize_spatial_graphs(graphs, list(set(self.get_column_data().get_column("sample_id"))))
+        _graphs = _sanitize_spatial_graphs(
+            graphs, list(set(self.get_column_data().get_column("sample_id")))
+        )
         _validate_graph_structure(_graphs)
         _validate_graph_sample_id(_graphs, self.get_column_data())
 
@@ -658,7 +678,9 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
     ################################
 
     def get_slice(
-        self, rows: Optional[Union[str, int, bool, List]] = None, columns: Optional[Union[str, int, bool, List]] = None
+        self,
+        rows: Optional[Union[str, int, bool, List]] = None,
+        columns: Optional[Union[str, int, bool, List]] = None,
     ) -> "ProxySpatialFeatureExperiment":
         """Get a slice of the experiment.
 
@@ -675,7 +697,9 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
         sfe = super().get_slice(rows=rows, columns=columns)
 
         slicer = self._generic_slice(rows=rows, columns=columns)
-        do_slice_cols = not (isinstance(slicer.col_indices, slice) and slicer.col_indices == slice(None))
+        do_slice_cols = not (
+            isinstance(slicer.col_indices, slice) and slicer.col_indices == slice(None)
+        )
 
         # Update geometries and graphs
         if do_slice_cols:
@@ -698,7 +722,9 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
             new_graphs = None
             if self.spatial_graphs is not None:
                 # Keep only columns for remaining samples
-                cols_to_keep = [c for c in self.spatial_graphs.columns if c in column_sample_ids]
+                cols_to_keep = [
+                    c for c in self.spatial_graphs.columns if c in column_sample_ids
+                ]
                 if cols_to_keep:
                     new_graphs = self.spatial_graphs[cols_to_keep]
 
@@ -743,7 +769,10 @@ class ProxySpatialFeatureExperiment(SpatialExperiment):
     ################################
 
     def set_column_data(
-        self, cols: Optional[BiocFrame], replace_column_names: bool = False, in_place: bool = False
+        self,
+        cols: Optional[BiocFrame],
+        replace_column_names: bool = False,
+        in_place: bool = False,
     ) -> "ProxySpatialFeatureExperiment":
         """Override: Set sample data.
 

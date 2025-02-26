@@ -18,6 +18,7 @@ x_coords = np.random.uniform(low=0.0, high=100.0, size=ncols)
 y_coords = np.random.uniform(low=0.0, high=100.0, size=ncols)
 spatial_coords = np.column_stack((x_coords, y_coords))
 
+
 def test_spatial_coords_numpy():
     tspe = SpatialExperiment(assays={"counts": counts}, spatial_coords=spatial_coords)
 
