@@ -1,7 +1,9 @@
 from copy import deepcopy
 
 import pytest
+import numpy as np
 import biocutils as ut
+from spatialexperiment import SpatialExperiment
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -64,7 +66,32 @@ def test_combine_columns(spe):
     assert (spatial_coords1.to_pandas() == spe1.spatial_coords.to_pandas()).all().all()
     assert (spatial_coords2.to_pandas() == spe2.spatial_coords.to_pandas()).all().all()
 
-# TODO: write a test for relaxed_combine_columns
+
+def test_relaxed_combine_columns(spe):
+    nrows, ncols = spe.shape
+    spe2 = spe.set_assays(
+        {
+            "counts": np.random.poisson(lam=10, size=(nrows, ncols)),
+            "normalized": np.random.normal(size=(nrows, ncols))
+        },
+        in_place=False
+    )
+
+    with pytest.raises(Exception):
+        combined = ut.combine_columns(spe, spe2)
+    
+    combined = ut.relaxed_combine_columns(spe, spe2)
+    assert combined is not None
+    assert isinstance(combined, SpatialExperiment)
+    assert combined.shape[1] == spe.shape[1] + spe2.shape[1]
+    assert combined.shape[0] == spe.shape[0]
+
+    combined2 = spe.relaxed_combine_columns(spe2)
+    assert combined2 is not None
+    assert isinstance(combined2, SpatialExperiment)
+    assert combined2.shape[1] == spe.shape[1] + spe2.shape[1]
+    assert combined2.shape[0] == spe.shape[0]
+
 
 def test_duplicate_sample_ids(spe):
     with pytest.warns(UserWarning):
