@@ -1,6 +1,5 @@
 import pytest
 from copy import deepcopy
-from spatialexperiment import construct_spatial_image_class
 from spatialexperiment.SpatialImage import VirtualSpatialImage
 
 __author__ = "keviny2"
@@ -60,7 +59,7 @@ def test_add_img(spe):
         image_id="unsplash",
     )
 
-    tspe.img_data.shape[0] == spe.img_data.shape[0] + 1
+    assert tspe.img_data.shape[0] == spe.img_data.shape[0] + 1
 
 
 def test_add_img_already_exists(spe):

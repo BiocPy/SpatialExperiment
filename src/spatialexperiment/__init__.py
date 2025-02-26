@@ -15,5 +15,12 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
+from .ProxySFE import ProxySpatialFeatureExperiment
 from .SpatialExperiment import SpatialExperiment
-from .SpatialImage import construct_spatial_image_class, RemoteSpatialImage, StoredSpatialImage, LoadedSpatialImage
+from .SpatialImage import (
+    LoadedSpatialImage,
+    RemoteSpatialImage,
+    StoredSpatialImage,
+    VirtualSpatialImage,
+    construct_spatial_image_class,
+)

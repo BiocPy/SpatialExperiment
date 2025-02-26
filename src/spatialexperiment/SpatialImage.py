@@ -10,10 +10,10 @@ from warnings import warn
 import biocutils as ut
 import numpy as np
 import requests
-from PIL import Image
+from PIL import Image, ImageChops
 
-__author__ = "jkanche"
-__copyright__ = "jkanche"
+__author__ = "jkanche, keviny2"
+__copyright__ = "jkanche, keviny2"
 __license__ = "MIT"
 
 
@@ -23,6 +23,21 @@ class VirtualSpatialImage(ABC):
 
     def __init__(self, metadata: Optional[dict] = None):
         self._metadata = metadata if metadata is not None else {}
+
+    #########################
+    ######>> Equality <<#####
+    #########################
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, type(self)):
+            return False
+
+        return self.metadata == other.metadata
+
+    def __hash__(self):
+        # Note: This exists primarily to support lru_cache.
+        # Generally, these classes are mutable and shouldn't be used as dict keys or in sets.
+        return hash(frozenset(self._metadata.items()))
 
     ###########################
     ######>> metadata <<#######
@@ -35,7 +50,9 @@ class VirtualSpatialImage(ABC):
         """
         return self._metadata
 
-    def set_metadata(self, metadata: dict, in_place: bool = False) -> "VirtualSpatialImage":
+    def set_metadata(
+        self, metadata: dict, in_place: bool = False
+    ) -> "VirtualSpatialImage":
         """Set additional metadata.
 
         Args:
@@ -50,7 +67,9 @@ class VirtualSpatialImage(ABC):
             or as a reference to the (in-place-modified) original.
         """
         if not isinstance(metadata, dict):
-            raise TypeError(f"`metadata` must be a dictionary, provided {type(metadata)}.")
+            raise TypeError(
+                f"`metadata` must be a dictionary, provided {type(metadata)}."
+            )
         output = self._define_output(in_place)
         output._metadata = metadata
         return output
@@ -131,7 +150,9 @@ def _sanitize_loaded_image(image):
 class LoadedSpatialImage(VirtualSpatialImage):
     """Class for images loaded into memory."""
 
-    def __init__(self, image: Union[Image.Image, np.ndarray], metadata: Optional[dict] = None):
+    def __init__(
+        self, image: Union[Image.Image, np.ndarray], metadata: Optional[dict] = None
+    ):
         """Initialize the object.
 
         Args:
@@ -150,6 +171,18 @@ class LoadedSpatialImage(VirtualSpatialImage):
             return self
         else:
             return self.__copy__()
+
+    #########################
+    ######>> Equality <<#####
+    #########################
+
+    def __eq__(self, other) -> bool:
+        diff = ImageChops.difference(self.image, other.image)
+
+        return super().__eq__(other) and not diff.getbbox()
+
+    def __hash__(self):
+        return hash((super().__hash__(), self._image.tobytes()))
 
     #########################
     ######>> Copying <<######
@@ -223,7 +256,9 @@ class LoadedSpatialImage(VirtualSpatialImage):
 
         return self._image
 
-    def set_image(self, image: Union[Image.Image, np.ndarray], in_place: bool = False) -> "LoadedSpatialImage":
+    def set_image(
+        self, image: Union[Image.Image, np.ndarray], in_place: bool = False
+    ) -> "LoadedSpatialImage":
         """Set new image.
 
         Args:
@@ -295,6 +330,16 @@ class StoredSpatialImage(VirtualSpatialImage):
             return self.__copy__()
 
     #########################
+    ######>> Equality <<#####
+    #########################
+
+    def __eq__(self, other):
+        return super().__eq__(other) and self.path == other.path
+
+    def __hash__(self):
+        return hash((super().__hash__(), str(self._path)))
+
+    #########################
     ######>> Copying <<######
     #########################
 
@@ -339,7 +384,7 @@ class StoredSpatialImage(VirtualSpatialImage):
             A string representation.
         """
         output = f"{type(self).__name__}"
-        output += ", path=" + self._path
+        output += ", path=" + str(self._path)
         if len(self._metadata) > 0:
             output += ", metadata=" + ut.print_truncated_dict(self._metadata)
         output += ")"
@@ -352,7 +397,7 @@ class StoredSpatialImage(VirtualSpatialImage):
             A pretty-printed string containing the contents of this object.
         """
         output = f"class: {type(self).__name__}\n"
-        output += f"path: ({self._path})\n"
+        output += f"path: ({str(self._path)})\n"
         output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
         return output
@@ -365,7 +410,9 @@ class StoredSpatialImage(VirtualSpatialImage):
         """Get the path to the image file."""
         return self._path
 
-    def set_path(self, path: Union[str, Path], in_place: bool = False) -> "StoredSpatialImage":
+    def set_path(
+        self, path: Union[str, Path], in_place: bool = False
+    ) -> "StoredSpatialImage":
         """Update the path to the image file.
 
         Args:
@@ -426,7 +473,9 @@ def _validate_url(url):
 class RemoteSpatialImage(VirtualSpatialImage):
     """Class for remotely hosted images."""
 
-    def __init__(self, url: str, metadata: Optional[dict] = None, validate: bool = True):
+    def __init__(
+        self, url: str, metadata: Optional[dict] = None, validate: bool = True
+    ):
         """Initialize the object.
 
         Args:
@@ -453,6 +502,16 @@ class RemoteSpatialImage(VirtualSpatialImage):
             return self
         else:
             return self.__copy__()
+
+    #########################
+    ######>> Equality <<#####
+    #########################
+
+    def __eq__(self, other) -> bool:
+        return super().__eq__(other) and self.url == other.url
+
+    def __hash__(self):
+        return hash((super().__hash__(), self._url))
 
     #########################
     ######>> Copying <<######
