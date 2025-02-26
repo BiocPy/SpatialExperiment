@@ -16,7 +16,7 @@ def _append_indices_to_samples(bframes: List[BiocFrame]) -> List[BiocFrame]:
     across multiple frames.
 
     Args:
-        List of `BiocFrame` objects containing sample IDs.
+        bframes: List of `BiocFrame` objects containing sample IDs.
 
     Returns:
         List of `BiocFrame`s with modified sample IDs.
@@ -31,7 +31,7 @@ def _append_indices_to_samples(bframes: List[BiocFrame]) -> List[BiocFrame]:
     return modified_bframes
 
 
-def merge_spatial_frames(x: List[SpatialExperiment]) -> Tuple[BiocFrame, BiocFrame]:
+def merge_spatial_frames(x: List[SpatialExperiment], relaxed: bool = False) -> Tuple[BiocFrame, BiocFrame]:
     """Merge column data and image data from multiple ``SpatialExperiment`` objects.
 
     If duplicate sample IDs exist across objects, appends indices to make them unique.
@@ -40,6 +40,9 @@ def merge_spatial_frames(x: List[SpatialExperiment]) -> Tuple[BiocFrame, BiocFra
 
     Args:
         x: List of ``SpatialExperiment`` objects
+        relaxed: If `True`, allows frames with different columns to be combined. 
+            Absent columns in any frame are filled with appropriate placeholder values.
+            Defaults to `False`.
 
     Returns:
         A tuple with the merged column data and image data.
@@ -62,16 +65,23 @@ def merge_spatial_frames(x: List[SpatialExperiment]) -> Tuple[BiocFrame, BiocFra
         modified_columns = cols
         modified_img_data = img_datas
 
-    _new_cols = ut.combine_rows(*modified_columns)
-    _new_img_data = ut.combine_rows(*modified_img_data)
+    if relaxed:
+        _new_cols = ut.relaxed_combine_rows(*modified_columns)
+        _new_img_data = ut.relaxed_combine_rows(*modified_img_data)
+    else:
+        _new_cols = ut.combine_rows(*modified_columns)
+        _new_img_data = ut.combine_rows(*modified_img_data)
     return _new_cols, _new_img_data
 
 
-def merge_spatial_coordinates(spatial_coords: List[BiocFrame]) -> BiocFrame:
+def merge_spatial_coordinates(spatial_coords: List[BiocFrame], relaxed: bool = False) -> BiocFrame:
     """Merge spatial coordinates from multiple frames.
 
     Args:
         spatial_coords: List of `BiocFrame`s containing spatial coordinates.
+        relaxed: If `True`, allows frames with different columns to be combined. 
+            Absent columns in any frame are filled with appropriate placeholder values.
+            Defaults to `False`.
 
     Returns:
         A merged BiocFrame containing all spatial coordinates.
@@ -90,5 +100,8 @@ def merge_spatial_coordinates(spatial_coords: List[BiocFrame]) -> BiocFrame:
     if not all(coords.columns == first_columns for coords in spatial_coords):
         warn("Not all 'spatial_coords' have the same dimension names.")
 
-    _new_spatial_coords = ut.combine_rows(*spatial_coords)
+    if relaxed:
+        _new_spatial_coords = ut.relaxed_combine_rows(*spatial_coords)
+    else:
+        _new_spatial_coords = ut.combine_rows(*spatial_coords)
     return _new_spatial_coords

@@ -64,6 +64,7 @@ def test_combine_columns(spe):
     assert (spatial_coords1.to_pandas() == spe1.spatial_coords.to_pandas()).all().all()
     assert (spatial_coords2.to_pandas() == spe2.spatial_coords.to_pandas()).all().all()
 
+# TODO: write a test for relaxed_combine_columns
 
 def test_duplicate_sample_ids(spe):
     with pytest.warns(UserWarning):
