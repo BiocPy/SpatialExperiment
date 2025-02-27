@@ -238,7 +238,7 @@ def read_tenx_visium(
     ]
 
     if all(missing_files):
-        raise FileNotFoundError(f"No matching files found for 'images={imgs}'")
+        raise FileNotFoundError(f"No matching files found for 'images={images}'")
 
     elif any(missing_files):
         print(

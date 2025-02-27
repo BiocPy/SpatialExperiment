@@ -72,14 +72,14 @@ def test_relaxed_combine_columns(spe):
     spe2 = spe.set_assays(
         {
             "counts": np.random.poisson(lam=10, size=(nrows, ncols)),
-            "normalized": np.random.normal(size=(nrows, ncols))
+            "normalized": np.random.normal(size=(nrows, ncols)),
         },
-        in_place=False
+        in_place=False,
     )
 
     with pytest.raises(Exception):
         combined = ut.combine_columns(spe, spe2)
-    
+
     combined = ut.relaxed_combine_columns(spe, spe2)
     assert combined is not None
     assert isinstance(combined, SpatialExperiment)
