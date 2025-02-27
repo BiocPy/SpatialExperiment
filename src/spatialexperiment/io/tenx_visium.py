@@ -7,14 +7,14 @@ import json
 import pandas as pd
 
 from biocframe import BiocFrame
-from biocutils import is_list_of_type
+import biocutils as ut
 from singlecellexperiment import read_tenx_mtx
-from spatialexperiment import SpatialExperiment
-from ._imgutils import get_img_data
-from ._initutils import construct_spatial_coords_from_names
+from ..SpatialExperiment import SpatialExperiment
+from .._imgutils import get_img_data
+from .._initutils import construct_spatial_coords_from_names
 
 
-def read_tissue_positions(tissue_positions_paths):
+def read_tissue_positions(tissue_positions_path):
     column_names = [
         "barcode",
         "in_tissue",
@@ -24,23 +24,15 @@ def read_tissue_positions(tissue_positions_paths):
         "pxl_col_in_fullres",
     ]
 
-    tissue_positions_combined = []
-    for i, tissue_positions_path in enumerate(tissue_positions_paths):
-        has_header = "list" not in os.path.basename(tissue_positions_path)
+    has_header = "list" not in os.path.basename(tissue_positions_path)
 
-        tissue_positions = pd.read_csv(
-            tissue_positions_path, header=0 if has_header else None, index_col=0
-        )
-        tissue_positions.columns = column_names
+    tissue_positions = pd.read_csv(
+        tissue_positions_path, header=0 if has_header else None, names=column_names
+    )
+    tissue_positions = tissue_positions.set_index("barcode")
+    tissue_positions["in_tissue"] = tissue_positions["in_tissue"].astype(bool)
 
-        if len(tissue_positions_paths) > 1:
-            tissue_positions.index = [f"{i+1}_{idx}" for idx in tissue_positions.index]
-
-        tissue_positions["in_tissue"] = tissue_positions["in_tissue"].astype(bool)
-        tissue_positions_combined.append(tissue_positions)
-
-    tissue_positions_combined = pd.concat(tissue_positions_combined)
-    return tissue_positions_combined
+    return tissue_positions
 
 
 def read_img_data(
@@ -48,6 +40,7 @@ def read_img_data(
     sample_ids: Optional[List[str]] = None,
     image_sources: Optional[List[str]] = None,
     scale_factors: str = None,
+    load: bool = True
 ) -> BiocFrame:
     """Read in images and scale factors for 10x Genomics Visium data, and return as a valid `img_data` object.
 
@@ -63,6 +56,10 @@ def read_img_data(
 
         scale_factors:
             The .json file where to find the scale factors.
+
+        load:
+            A boolean specifying whether the image(s) should be loaded into memory? If False, will store the path/URL instead.
+            Defaults to `True`.
     """
     # get sample identifiers
     if sample_ids is None:
@@ -120,17 +117,18 @@ def read_img_data(
                 scale_factor=scale_factor,
                 sample_id=sample_id,
                 image_id=image_id,
+                load=load
             )
             img_data = img_data.combine_rows(curr_image_data)
 
     return img_data
 
 
-def read_10x_visium(
+def read_tenx_visium(
     samples: List[Union[str, os.PathLike]],
     sample_ids: Optional[List[str]] = None,
     type: str = "HDF5",
-    data: str = ["filtered", "raw"],
+    data: str = "filtered",
     images: List[str] = "lowres",
     load: bool = True,
 ):
@@ -154,6 +152,7 @@ def read_10x_visium(
 
         load:
             A boolean specifying whether the image(s) should be loaded into memory? If False, will store the path/URL instead.
+            Defaults to `True`.
     """
     # check validity of input arguments
     allowed_types = ["HDF5", "sparse", "auto", "prefix"]
@@ -177,7 +176,7 @@ def read_10x_visium(
 
     if sample_ids is None:
         sample_ids = [f"sample{str(i).zfill(2)}" for i in range(1, len(samples) + 1)]
-    elif not is_list_of_type(sample_ids, str) and len(set(sample_ids)) != len(samples):
+    elif not ut.is_list_of_type(sample_ids, str) and len(set(sample_ids)) != len(samples):
         raise ValueError(
             "`sample_ids` should contain as many unique values as `samples`."
         )
@@ -261,13 +260,18 @@ def read_10x_visium(
         sample_ids=sample_ids,
         image_sources=image_file_paths,
         scale_factors=scale_factors_paths,
+        load=load
     )
 
+    spes = []
     for i, counts_dir_path in enumerate(counts_dir_paths):
         sce = read_tenx_mtx(counts_dir_path)
         tissue_positions = read_tissue_positions(tissue_positions_paths[i])
 
-        obs = set(sce.col_names).intersection(set(tissue_positions.index))
+        barcodes = sce.column_data["barcode"]
+        sce = sce.set_column_names(barcodes)
+
+        obs = list(set(sce.col_names).intersection(set(tissue_positions.index)))
         sce = sce[:, obs]
 
         tissue_positions = tissue_positions.loc[obs, :]
@@ -279,9 +283,17 @@ def read_10x_visium(
 
         spe = SpatialExperiment(
             assays=sce.assays,
-            row_data=sce.row_data["Symbol"],
+            row_data=BiocFrame(
+                {
+                    "symbol": sce.row_data["gene_symbols"]
+                }
+            ),
             column_data=column_data,
             spatial_coords=spatial_coords
         )
+        spes.append(spe)
 
-        # TODO: implement combine ops on SpatialExperiment objects
+    spe_combined = ut.combine_columns(*spes)
+    spe_combined.img_data = image
+
+    return spe_combined
