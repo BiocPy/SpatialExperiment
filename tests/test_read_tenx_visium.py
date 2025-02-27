@@ -2,13 +2,15 @@ import os
 import json
 import numpy as np
 import pandas as pd
-from spatialexperiment import read_tenx_visium, SpatialExperiment, VirtualSpatialImage
+
+import biocutils as ut
+from spatialexperiment import read_tenx_visium, SpatialExperiment, VirtualSpatialImage, LoadedSpatialImage
 
 
-def test_read_tenx_visium():
-    dir = "tests/10xVisium"
-    sample_ids = ["section1", "section2"]
-    samples = [os.path.join(dir, sample_id, "outs") for sample_id in sample_ids]
+def test_read_tenx_visium(samples, sample_ids):
+    # dir = "tests/10xVisium"
+    # sample_ids = ["section1", "section2"]
+    # samples = [os.path.join(dir, sample_id, "outs") for sample_id in sample_ids]
 
     spe = read_tenx_visium(
         samples=samples,
@@ -70,3 +72,110 @@ def test_read_tenx_visium():
     scale_factors = np.array(scale_factors)
 
     assert np.array_equal(spe.img_data["scale_factor"], scale_factors)
+
+
+def test_load_true(samples, sample_ids):
+    # dir = "tests/10xVisium"
+    # sample_ids = ["section1", "section2"]
+    # samples = [os.path.join(dir, sample_id, "outs") for sample_id in sample_ids]
+    spe = read_tenx_visium(
+        samples=samples,
+        sample_ids=sample_ids,
+        type="sparse",
+        data="raw",
+        images="lowres",
+        load=True,
+    )
+
+    assert all(
+        [
+            isinstance(img, LoadedSpatialImage)
+            for img in spe.get_img(sample_id=True, image_id=True)
+        ]
+    )
+
+
+def test_outs_dir(dir, samples, sample_ids):
+    dir = "tests/10xVisium"
+    sample_ids = ["section1", "section2"]
+    samples = [os.path.join(dir, sample_id, "outs") for sample_id in sample_ids]
+
+    samples2 = samples3 = [os.path.join(dir, sample_id) for sample_id in sample_ids]
+    samples3[0] = os.path.join(samples3[0], "outs")
+
+    spe1 = read_tenx_visium(
+        samples=samples,
+        sample_ids=sample_ids,
+        type="sparse",
+        data="raw",
+        images="lowres",
+        load=False,
+    )
+
+    spe2 = read_tenx_visium(
+        samples=samples2,
+        sample_ids=sample_ids,
+        type="sparse",
+        data="raw",
+        images="lowres",
+        load=False,
+    )
+
+    spe3 = read_tenx_visium(
+        samples=samples3,
+        sample_ids=sample_ids,
+        type="sparse",
+        data="raw",
+        images="lowres",
+        load=False,
+    )
+
+    assert spe1.column_data.to_pandas().equals(spe2.column_data.to_pandas())
+    assert spe1.column_data.to_pandas().equals(spe3.column_data.to_pandas())
+
+    assert spe1.row_data.to_pandas().equals(spe2.row_data.to_pandas())
+    assert spe1.row_data.to_pandas().equals(spe3.row_data.to_pandas())
+
+    assert spe1.img_data.to_pandas().equals(spe2.img_data.to_pandas())
+    assert spe1.img_data.to_pandas().equals(spe3.img_data.to_pandas())
+
+    assert spe1.spatial_coords.to_pandas().equals(spe2.spatial_coords.to_pandas())
+    assert spe1.spatial_coords.to_pandas().equals(spe3.spatial_coords.to_pandas())
+
+
+def test_tissue_positions_files(samples, sample_ids):
+    samples = samples + samples
+    sample_ids = sample_ids + [sample_id + "rep" for sample_id in sample_ids]
+
+    spatial_coords_1 = read_tenx_visium(
+        samples=samples[0],
+        sample_ids=sample_ids[0],
+        type="sparse",
+        data="raw",
+        images="lowres",
+        load=False
+    )
+
+    spatial_coords_2 = read_tenx_visium(
+        samples=samples[1],
+        sample_ids=sample_ids[1],
+        type="sparse",
+        data="raw",
+        images="lowres",
+        load=False
+    )
+
+    spatial_coords_multi = read_tenx_visium(
+        samples=samples,
+        sample_ids=sample_ids,
+        type="sparse",
+        data="raw",
+        images="lowres",
+        load=False
+    )
+
+    assert spatial_coords_multi.shape[0] == 2 * spatial_coords_1.shape[0] + 2 * spatial_coords_2.shape[0]
+    # assert spatial_coords_multi.to_pandas().equals(ut.combine_rows(spatial_coords_1, spatial_coords_2, spatial_coords_1, spatial_coords_2).to_pandas())
+
+    combined = ut.combine_rows(spatial_coords_1, spatial_coords_2, spatial_coords_1, spatial_coords_2)
+    assert spatial_coords_multi.to_pandas().equals(combined.to_pandas())

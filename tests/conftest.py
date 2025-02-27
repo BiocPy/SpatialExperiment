@@ -1,3 +1,4 @@
+import os
 import pytest
 import numpy as np
 from biocframe import BiocFrame
@@ -76,3 +77,15 @@ def spe():
     )
 
     return spe_instance
+
+@pytest.fixture
+def dir():
+    return "tests/10xVisium"
+
+@pytest.fixture
+def sample_ids():
+    return ["section1", "section2"]
+
+@pytest.fixture
+def samples(dir, sample_ids):
+    return [os.path.join(dir, sample_id, "outs") for sample_id in sample_ids]
