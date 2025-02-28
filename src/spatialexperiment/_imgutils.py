@@ -4,7 +4,6 @@ import os
 from io import BytesIO
 from pathlib import Path
 from urllib.parse import urlparse
-import requests
 from PIL import Image
 from biocframe import BiocFrame
 from .SpatialImage import construct_spatial_image_class
@@ -27,6 +26,8 @@ def read_image(input_image):
     Raises:
         TypeError: If input is not PIL Image, path string, or URL string.
     """
+    import requests
+
     if isinstance(input_image, Image.Image):
         return input_image
     

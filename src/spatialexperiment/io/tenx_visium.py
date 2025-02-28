@@ -5,7 +5,6 @@ from warnings import warn
 import os
 import re
 import json
-import pandas as pd
 
 from biocframe import BiocFrame
 import biocutils as ut
@@ -15,7 +14,17 @@ from .._imgutils import get_img_data
 from .._initutils import construct_spatial_coords_from_names
 
 
-def read_tissue_positions(tissue_positions_path):
+def read_tissue_positions(tissue_positions_path) -> 'pd.DataFrame':
+    """Read and parse tissue position file.
+
+    Args:
+        tissue_positions_path: The path to tissue positions file from Space Ranger output.
+            Can be either 'tissue_positions.csv' or 'tissue_positions_list.csv'.
+
+    Returns:
+        A DataFrame with the tissue positions.
+    """
+    import pandas as pd
     column_names = [
         "barcode",
         "in_tissue",
