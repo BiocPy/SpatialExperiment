@@ -1,6 +1,14 @@
 spatialexperiment package
 =========================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   spatialexperiment.io
+
 Submodules
 ----------
 
@@ -9,29 +17,29 @@ spatialexperiment.ProxySFE module
 
 .. automodule:: spatialexperiment.ProxySFE
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 spatialexperiment.SpatialExperiment module
 ------------------------------------------
 
 .. automodule:: spatialexperiment.SpatialExperiment
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 spatialexperiment.SpatialImage module
 -------------------------------------
 
 .. automodule:: spatialexperiment.SpatialImage
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Module contents
 ---------------
 
 .. automodule:: spatialexperiment
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:

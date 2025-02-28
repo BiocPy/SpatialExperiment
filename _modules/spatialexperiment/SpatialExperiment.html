@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment.SpatialExperiment - SpatialExperiment 0.0.5 documentation</title>
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
+        <title>spatialexperiment.SpatialExperiment - SpatialExperiment 0.0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.5 documentation</div></a>
+      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.6 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.5 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.6 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -205,7 +205,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">Module Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Module Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../api/spatialexperiment.html">spatialexperiment package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/spatialexperiment.html">spatialexperiment package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of spatialexperiment package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/spatialexperiment.io.html">spatialexperiment.io package</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -248,13 +251,25 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">biocutils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ut</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">biocframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">BiocFrame</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">singlecellexperiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleCellExperiment</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">biocframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">BiocFrame</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">biocutils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ut</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">summarizedexperiment._combineutils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">check_assays_are_equal</span><span class="p">,</span>
+    <span class="n">merge_assays</span><span class="p">,</span>
+    <span class="n">merge_se_colnames</span><span class="p">,</span>
+    <span class="n">relaxed_merge_assays</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">summarizedexperiment._frameutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_sanitize_frame</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">summarizedexperiment.RangedSummarizedExperiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">GRangesOrGRangesList</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">singlecellexperiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleCellExperiment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">singlecellexperiment._combineutils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">merge_generic</span><span class="p">,</span>
+    <span class="n">relaxed_merge_generic</span><span class="p">,</span>
+    <span class="n">relaxed_merge_numpy_generic</span>
+<span class="p">)</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">._imgutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">retrieve_rows_by_id</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._validators</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -266,7 +281,8 @@
     <span class="n">_validate_spatial_coords</span><span class="p">,</span>
     <span class="n">_validate_spatial_coords_names</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.SpatialImage</span><span class="w"> </span><span class="kn">import</span> <span class="n">VirtualSpatialImage</span><span class="p">,</span> <span class="n">construct_spatial_image_class</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._combineutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_spatial_frames</span><span class="p">,</span> <span class="n">merge_spatial_coordinates</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.SpatialImage</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct_spatial_image_class</span><span class="p">,</span> <span class="n">VirtualSpatialImage</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;keviny2&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;keviny2&quot;</span>
@@ -438,7 +454,9 @@
         <span class="n">column_data</span> <span class="o">=</span> <span class="n">_sanitize_frame</span><span class="p">(</span><span class="n">column_data</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">column_data</span><span class="o">.</span><span class="n">has_column</span><span class="p">(</span><span class="s2">&quot;sample_id&quot;</span><span class="p">):</span>
-            <span class="n">column_data</span><span class="p">[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sample01&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># hard code default sample_id as &quot;sample01&quot;</span>
+            <span class="n">column_data</span><span class="p">[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sample01&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span>
+                <span class="mi">1</span>
+            <span class="p">]</span>  <span class="c1"># hard code default sample_id as &quot;sample01&quot;</span>
 
         <span class="n">spatial_coords</span> <span class="o">=</span> <span class="n">_sanitize_frame</span><span class="p">(</span><span class="n">spatial_coords</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">img_data</span> <span class="o">=</span> <span class="n">_sanitize_frame</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -451,7 +469,9 @@
             <span class="n">_validate_column_data</span><span class="p">(</span><span class="n">column_data</span><span class="o">=</span><span class="n">column_data</span><span class="p">)</span>
             <span class="n">_validate_img_data</span><span class="p">(</span><span class="n">img_data</span><span class="o">=</span><span class="n">img_data</span><span class="p">)</span>
             <span class="n">_validate_sample_ids</span><span class="p">(</span><span class="n">column_data</span><span class="o">=</span><span class="n">column_data</span><span class="p">,</span> <span class="n">img_data</span><span class="o">=</span><span class="n">img_data</span><span class="p">)</span>
-            <span class="n">_validate_spatial_coords</span><span class="p">(</span><span class="n">spatial_coords</span><span class="o">=</span><span class="n">spatial_coords</span><span class="p">,</span> <span class="n">column_data</span><span class="o">=</span><span class="n">column_data</span><span class="p">)</span></div>
+            <span class="n">_validate_spatial_coords</span><span class="p">(</span>
+                <span class="n">spatial_coords</span><span class="o">=</span><span class="n">spatial_coords</span><span class="p">,</span> <span class="n">column_data</span><span class="o">=</span><span class="n">column_data</span>
+            <span class="p">)</span></div>
 
 
     <span class="c1">#########################</span>
@@ -567,10 +587,14 @@
             <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, row_ranges=&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_row_ranges</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alternative_experiments</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, alternative_experiments=&quot;</span> <span class="o">+</span> <span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alternative_experiment_names</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, alternative_experiments=&quot;</span> <span class="o">+</span> <span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alternative_experiment_names</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reduced_dims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, reduced_dims=&quot;</span> <span class="o">+</span> <span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reduced_dim_names</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, reduced_dims=&quot;</span> <span class="o">+</span> <span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reduced_dim_names</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_main_experiment_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, main_experiment_name=&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_main_experiment_name</span>
@@ -599,14 +623,10 @@
 
         <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;assays(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assay_names</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assay_names</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-        <span class="n">output</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;row_data columns(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
+        <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;row_data columns(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;row_names(</span><span class="si">{</span><span class="mi">0</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_row_names</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_row_names</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_row_names</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_row_names</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-        <span class="n">output</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;column_data columns(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cols</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cols</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
+        <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;column_data columns(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cols</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cols</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;column_names(</span><span class="si">{</span><span class="mi">0</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_column_names</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_column_names</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_column_names</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_column_names</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 
         <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;main_experiment_name: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_main_experiment_name</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_main_experiment_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -647,7 +667,9 @@
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coordinates">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coordinates">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coordinates</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set new spatial coordinates.</span>
 
@@ -683,10 +705,14 @@
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coords">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coords">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coords</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_spatial_coordinates`.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates</span><span class="p">(</span><span class="n">spatial_coords</span><span class="o">=</span><span class="n">spatial_coords</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates</span><span class="p">(</span>
+            <span class="n">spatial_coords</span><span class="o">=</span><span class="n">spatial_coords</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span>
+        <span class="p">)</span></div>
 
 
     <span class="nd">@property</span>
@@ -709,7 +735,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spatial_coordinates</span><span class="p">()</span>
 
     <span class="nd">@spatial_coordinates</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">spatial_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spatial_coordinates</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_spatial_coordinates`.&quot;&quot;&quot;</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Setting property &#39;spatial_coords&#39; is an in-place operation, use &#39;set_spatial_coordinates&#39; instead.&quot;</span><span class="p">,</span>
@@ -767,7 +795,9 @@
             <span class="n">new_spatial_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_validate_spatial_coords_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="p">)</span>
-            <span class="n">new_spatial_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="o">.</span><span class="n">set_column_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="p">)</span>
+            <span class="n">new_spatial_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_coords</span><span class="o">.</span><span class="n">set_column_names</span><span class="p">(</span>
+                <span class="n">spatial_coords_names</span>
+            <span class="p">)</span>
 
         <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_output</span><span class="p">(</span><span class="n">in_place</span><span class="p">)</span>
         <span class="n">output</span><span class="o">.</span><span class="n">_spatial_coords</span> <span class="o">=</span> <span class="n">new_spatial_coords</span>
@@ -776,9 +806,13 @@
 
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coords_names">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coords_names">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coords_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coords_names</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_spatial_coordinates_names`.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="o">=</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates_names</span><span class="p">(</span>
+            <span class="n">spatial_coords_names</span><span class="o">=</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span>
+        <span class="p">)</span></div>
 
 
     <span class="nd">@property</span>
@@ -793,7 +827,9 @@
             <span class="s2">&quot;Setting property &#39;spatial_coords_names&#39; is an in-place operation, use &#39;set_spatial_coordinates_names&#39; instead.&quot;</span><span class="p">,</span>
             <span class="ne">UserWarning</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="o">=</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates_names</span><span class="p">(</span>
+            <span class="n">spatial_coords_names</span><span class="o">=</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">spatial_coordinates_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -807,7 +843,9 @@
             <span class="s2">&quot;Setting property &#39;spatial_coords_names&#39; is an in-place operation, use &#39;set_spatial_coordinates_names&#39; instead.&quot;</span><span class="p">,</span>
             <span class="ne">UserWarning</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="o">=</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates_names</span><span class="p">(</span>
+            <span class="n">spatial_coords_names</span><span class="o">=</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
 
     <span class="c1">##############################</span>
     <span class="c1">########&gt;&gt; img_data &lt;&lt;########</span>
@@ -833,7 +871,9 @@
 
 <div class="viewcode-block" id="SpatialExperiment.set_image_data">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_image_data">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_image_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_image_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">img_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set new image data.</span>
 
 <span class="sd">        Args:</span>
@@ -865,7 +905,9 @@
 
 <div class="viewcode-block" id="SpatialExperiment.set_img_data">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_img_data">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_img_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_data</span><span class="p">:</span> <span class="n">BiocFrame</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_img_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">img_data</span><span class="p">:</span> <span class="n">BiocFrame</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_image_data`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_image_data</span><span class="p">(</span><span class="n">img_data</span><span class="o">=</span><span class="n">img_data</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span></div>
 
@@ -905,7 +947,9 @@
 <div class="viewcode-block" id="SpatialExperiment.get_scale_factors">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_scale_factors">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_scale_factors</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return scale factor(s) of image(s) based on the provided sample and image ids.</span>
 <span class="sd">            See :py:meth:`~get_img` for more details on the behavior for various</span>
@@ -928,7 +972,9 @@
         <span class="n">_validate_id</span><span class="p">(</span><span class="n">sample_id</span><span class="p">)</span>
         <span class="n">_validate_id</span><span class="p">(</span><span class="n">image_id</span><span class="p">)</span>
 
-        <span class="n">img_data_subset</span> <span class="o">=</span> <span class="n">retrieve_rows_by_id</span><span class="p">(</span><span class="n">img_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_data</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="n">sample_id</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">image_id</span><span class="p">)</span>
+        <span class="n">img_data_subset</span> <span class="o">=</span> <span class="n">retrieve_rows_by_id</span><span class="p">(</span>
+            <span class="n">img_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_data</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="n">sample_id</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">image_id</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">img_data_subset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">img_data_subset</span><span class="p">[</span><span class="s2">&quot;scale_factor&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -943,7 +989,10 @@
 <div class="viewcode-block" id="SpatialExperiment.set_column_data">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_column_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_column_data</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">cols</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span> <span class="n">replace_column_names</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cols</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span>
+        <span class="n">replace_column_names</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Override: Set sample data.</span>
 
@@ -988,14 +1037,18 @@
 <div class="viewcode-block" id="SpatialExperiment.get_slice">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_slice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_slice</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]],</span> <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]],</span>
+        <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:attr:`~__getitem__`.&quot;&quot;&quot;</span>
 
         <span class="n">spe</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
         <span class="n">slicer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generic_slice</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
-        <span class="n">do_slice_cols</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span> <span class="o">==</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+        <span class="n">do_slice_cols</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span> <span class="o">==</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="n">new_spatial_coords</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1003,7 +1056,9 @@
             <span class="n">new_spatial_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_coords</span><span class="p">[</span><span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span><span class="p">,</span> <span class="p">:]</span>
 
         <span class="n">column_sample_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">spe</span><span class="o">.</span><span class="n">column_data</span><span class="p">[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">])</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample_id</span> <span class="ow">in</span> <span class="n">column_sample_ids</span> <span class="k">for</span> <span class="n">sample_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_data</span><span class="p">[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">]]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">sample_id</span> <span class="ow">in</span> <span class="n">column_sample_ids</span> <span class="k">for</span> <span class="n">sample_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_data</span><span class="p">[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
 
         <span class="n">new_img_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_data</span><span class="p">[</span><span class="n">mask</span><span class="p">,]</span>
 
@@ -1033,7 +1088,9 @@
 <div class="viewcode-block" id="SpatialExperiment.get_img">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_img</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">VirtualSpatialImage</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">VirtualSpatialImage</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve spatial images based on the provided sample and image ids.</span>
@@ -1077,7 +1134,9 @@
         <span class="n">_validate_id</span><span class="p">(</span><span class="n">sample_id</span><span class="p">)</span>
         <span class="n">_validate_id</span><span class="p">(</span><span class="n">image_id</span><span class="p">)</span>
 
-        <span class="n">img_data_subset</span> <span class="o">=</span> <span class="n">retrieve_rows_by_id</span><span class="p">(</span><span class="n">img_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_data</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="n">sample_id</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">image_id</span><span class="p">)</span>
+        <span class="n">img_data_subset</span> <span class="o">=</span> <span class="n">retrieve_rows_by_id</span><span class="p">(</span>
+            <span class="n">img_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_data</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="n">sample_id</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">image_id</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">img_data_subset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
@@ -1130,7 +1189,9 @@
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If the sample_id and image_id pair already exists.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_validate_sample_image_ids</span><span class="p">(</span><span class="n">img_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_img_data</span><span class="p">,</span> <span class="n">new_sample_id</span><span class="o">=</span><span class="n">sample_id</span><span class="p">,</span> <span class="n">new_image_id</span><span class="o">=</span><span class="n">image_id</span><span class="p">)</span>
+        <span class="n">_validate_sample_image_ids</span><span class="p">(</span>
+            <span class="n">img_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_img_data</span><span class="p">,</span> <span class="n">new_sample_id</span><span class="o">=</span><span class="n">sample_id</span><span class="p">,</span> <span class="n">new_image_id</span><span class="o">=</span><span class="n">image_id</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image_source</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
             <span class="n">is_url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image_source</span><span class="p">))</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">,</span> <span class="s2">&quot;https&quot;</span><span class="p">,</span> <span class="s2">&quot;ftp&quot;</span><span class="p">)</span>
@@ -1161,15 +1222,24 @@
 <div class="viewcode-block" id="SpatialExperiment.rmv_img">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.rmv_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rmv_img</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.img_source">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.img_source">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">img_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;This function is irrelevant because it is for `RemoteSpatialImages`&quot;</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">img_source</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;This function is irrelevant because it is for `RemoteSpatialImages`&quot;</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.img_raster">
@@ -1196,12 +1266,168 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_spatial_experiment</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
-</div>
 
 
     <span class="c1">################################</span>
     <span class="c1">#######&gt;&gt; combine ops &lt;&lt;########</span>
     <span class="c1">################################</span>
+
+<div class="viewcode-block" id="SpatialExperiment.relaxed_combine_columns">
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.relaxed_combine_columns">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">relaxed_combine_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper around :py:func:`~relaxed_combine_columns`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">relaxed_combine_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SpatialExperiment.combine_columns">
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.combine_columns">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">combine_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper around :py:func:`~combine_columns`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">combine_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1">################################</span>
+<span class="c1">#######&gt;&gt; combine ops &lt;&lt;########</span>
+<span class="c1">################################</span>
+
+
+<div class="viewcode-block" id="combine_columns">
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.combine_columns">[docs]</a>
+<span class="nd">@ut</span><span class="o">.</span><span class="n">combine_columns</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">SpatialExperiment</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">combine_columns</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">SpatialExperiment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpatialExperiment</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine multiple ``SpatialExperiment`` objects by column.</span>
+
+<span class="sd">    All assays must contain the same assay names. If you need a</span>
+<span class="sd">    flexible combine operation, checkout :py:func:`~relaxed_combine_columns`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A combined ``SpatialExperiment``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;&#39;row_pairs&#39; and &#39;column_pairs&#39; are currently ignored during this operation.&quot;</span><span class="p">,</span>
+        <span class="ne">UserWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">first</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_all_assays</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="o">.</span><span class="n">assays</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+    <span class="n">check_assays_are_equal</span><span class="p">(</span><span class="n">_all_assays</span><span class="p">)</span>
+    <span class="n">_new_assays</span> <span class="o">=</span> <span class="n">merge_assays</span><span class="p">(</span><span class="n">_all_assays</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;column&quot;</span><span class="p">)</span>
+
+    <span class="n">_new_col_names</span> <span class="o">=</span> <span class="n">merge_se_colnames</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">_new_rdim</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_new_rdim</span> <span class="o">=</span> <span class="n">merge_generic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;reduced_dims&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot combine &#39;reduced_dimensions&#39; across experiments, </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="ne">UserWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">_new_alt_expt</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_new_alt_expt</span> <span class="o">=</span> <span class="n">merge_generic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;column&quot;</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;alternative_experiments&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot combine &#39;alternative_experiments&#39; across experiments, </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="ne">UserWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">_all_spatial_coords</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="o">.</span><span class="n">_spatial_coords</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+    <span class="n">_new_spatial_coords</span> <span class="o">=</span> <span class="n">merge_spatial_coordinates</span><span class="p">(</span><span class="n">_all_spatial_coords</span><span class="p">)</span>
+
+    <span class="n">_new_cols</span><span class="p">,</span> <span class="n">_new_img_data</span> <span class="o">=</span> <span class="n">merge_spatial_frames</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">current_class_const</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">first</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">current_class_const</span><span class="p">(</span>
+        <span class="n">assays</span><span class="o">=</span><span class="n">_new_assays</span><span class="p">,</span>
+        <span class="n">row_ranges</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_row_ranges</span><span class="p">,</span>
+        <span class="n">row_data</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_rows</span><span class="p">,</span>
+        <span class="n">column_data</span><span class="o">=</span><span class="n">_new_cols</span><span class="p">,</span>
+        <span class="n">row_names</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_row_names</span><span class="p">,</span>
+        <span class="n">column_names</span><span class="o">=</span><span class="n">_new_col_names</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_metadata</span><span class="p">,</span>
+        <span class="n">reduced_dims</span><span class="o">=</span><span class="n">_new_rdim</span><span class="p">,</span>
+        <span class="n">main_experiment_name</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_main_experiment_name</span><span class="p">,</span>
+        <span class="n">alternative_experiments</span><span class="o">=</span><span class="n">_new_alt_expt</span><span class="p">,</span>
+        <span class="n">spatial_coords</span><span class="o">=</span><span class="n">_new_spatial_coords</span><span class="p">,</span>
+        <span class="n">img_data</span><span class="o">=</span><span class="n">_new_img_data</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="relaxed_combine_columns">
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.relaxed_combine_columns">[docs]</a>
+<span class="nd">@ut</span><span class="o">.</span><span class="n">relaxed_combine_columns</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">SpatialExperiment</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">relaxed_combine_columns</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">SpatialExperiment</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpatialExperiment</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A relaxed version of the :py:func:`~biocutils.combine_rows.combine_columns` method for</span>
+<span class="sd">    :py:class:`~SpatialExperiment` objects.  Whereas ``combine_columns`` expects that all objects have the same rows,</span>
+<span class="sd">    ``relaxed_combine_columns`` allows for different rows. Absent columns in any object are filled in with appropriate</span>
+<span class="sd">    placeholder values before combining.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x:</span>
+<span class="sd">            One or more ``SpatialExperiment`` objects, possibly with differences in the</span>
+<span class="sd">            number and identity of their rows.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``SpatialExperiment`` that combines all ``experiments`` along their columns and contains</span>
+<span class="sd">        the union of all rows. Rows absent in any ``x`` are filled in</span>
+<span class="sd">        with placeholders consisting of Nones or masked NumPy values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;&#39;row_pairs&#39; and &#39;column_pairs&#39; are currently ignored during this operation.&quot;</span><span class="p">,</span>
+        <span class="ne">UserWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">first</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_new_assays</span> <span class="o">=</span> <span class="n">relaxed_merge_assays</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;column&quot;</span><span class="p">)</span>
+
+    <span class="n">_new_col_names</span> <span class="o">=</span> <span class="n">merge_se_colnames</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">_new_rdim</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_new_rdim</span> <span class="o">=</span> <span class="n">relaxed_merge_numpy_generic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;reduced_dims&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot combine &#39;reduced_dimensions&#39; across experiments, </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="ne">UserWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">_new_alt_expt</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_new_alt_expt</span> <span class="o">=</span> <span class="n">relaxed_merge_generic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;column&quot;</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;alternative_experiments&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot combine &#39;alternative_experiments&#39; across experiments, </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="ne">UserWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">_all_spatial_coords</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="o">.</span><span class="n">_spatial_coords</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+    <span class="n">_new_spatial_coords</span> <span class="o">=</span> <span class="n">merge_spatial_coordinates</span><span class="p">(</span><span class="n">_all_spatial_coords</span><span class="p">)</span>
+
+    <span class="n">_new_cols</span><span class="p">,</span> <span class="n">_new_img_data</span> <span class="o">=</span> <span class="n">merge_spatial_frames</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">current_class_const</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">first</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">current_class_const</span><span class="p">(</span>
+        <span class="n">assays</span><span class="o">=</span><span class="n">_new_assays</span><span class="p">,</span>
+        <span class="n">row_ranges</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_row_ranges</span><span class="p">,</span>
+        <span class="n">row_data</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_rows</span><span class="p">,</span>
+        <span class="n">column_data</span><span class="o">=</span><span class="n">_new_cols</span><span class="p">,</span>
+        <span class="n">row_names</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_row_names</span><span class="p">,</span>
+        <span class="n">column_names</span><span class="o">=</span><span class="n">_new_col_names</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_metadata</span><span class="p">,</span>
+        <span class="n">reduced_dims</span><span class="o">=</span><span class="n">_new_rdim</span><span class="p">,</span>
+        <span class="n">main_experiment_name</span><span class="o">=</span><span class="n">first</span><span class="o">.</span><span class="n">_main_experiment_name</span><span class="p">,</span>
+        <span class="n">alternative_experiments</span><span class="o">=</span><span class="n">_new_alt_expt</span><span class="p">,</span>
+        <span class="n">spatial_coords</span><span class="o">=</span><span class="n">_new_spatial_coords</span><span class="p">,</span>
+        <span class="n">img_data</span><span class="o">=</span><span class="n">_new_img_data</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
 </pre></div>
         </article>
       </div>
@@ -1234,7 +1460,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=282f96c0"></script>
+</div><script src="../../_static/documentation_options.js?v=1fd71caa"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>

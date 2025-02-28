@@ -1,0 +1,21 @@
+spatialexperiment.io package
+============================
+
+Submodules
+----------
+
+spatialexperiment.io.tenx\_visium module
+----------------------------------------
+
+.. automodule:: spatialexperiment.io.tenx_visium
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: spatialexperiment.io
+   :members:
+   :show-inheritance:
+   :undoc-members:

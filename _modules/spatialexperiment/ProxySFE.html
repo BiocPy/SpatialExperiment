@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment.ProxySFE - SpatialExperiment 0.0.5 documentation</title>
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
+        <title>spatialexperiment.ProxySFE - SpatialExperiment 0.0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.5 documentation</div></a>
+      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.6 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.5 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.6 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -205,7 +205,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">Module Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Module Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../api/spatialexperiment.html">spatialexperiment package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/spatialexperiment.html">spatialexperiment package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of spatialexperiment package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/spatialexperiment.io.html">spatialexperiment.io package</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -253,7 +256,11 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">summarizedexperiment._frameutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_sanitize_frame</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">summarizedexperiment.RangedSummarizedExperiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">GRangesOrGRangesList</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.SpatialExperiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpatialExperiment</span><span class="p">,</span> <span class="n">_validate_column_data</span><span class="p">,</span> <span class="n">_validate_sample_ids</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.SpatialExperiment</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SpatialExperiment</span><span class="p">,</span>
+    <span class="n">_validate_column_data</span><span class="p">,</span>
+    <span class="n">_validate_sample_ids</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;jkanche&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;jkanche&quot;</span>
@@ -289,7 +296,10 @@
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">geom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">geometries</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">prop_name</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="sa">f</span><span class="s2">&quot;rather than `GeoDataFrame`.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">prop_name</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;rather than `GeoDataFrame`.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_annotgeometries</span><span class="p">(</span><span class="n">geometries</span><span class="p">,</span> <span class="n">column_data</span><span class="p">):</span>
@@ -303,13 +313,16 @@
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">geom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">geometries</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
         <span class="k">if</span> <span class="s2">&quot;sample_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">geom</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> of &#39;annot_geometries&#39; does not have column &#39;sample_id&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> of &#39;annot_geometries&#39; does not have column &#39;sample_id&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">samples_seen</span> <span class="o">=</span> <span class="n">geom</span><span class="p">[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
             <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples_seen</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sample_ids</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Samples </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2"> in item </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> of &quot;</span> <span class="sa">f</span><span class="s2">&quot;annot_geometries are absent from &#39;column_data&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Samples </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2"> in item </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> of &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;annot_geometries are absent from &#39;column_data&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
 
 
@@ -320,7 +333,9 @@
 
     <span class="n">missing</span> <span class="o">=</span> <span class="n">graph_sample_ids</span> <span class="o">-</span> <span class="n">col_sample_ids</span>
     <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Samples </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2"> are in the graphs but not &#39;column_data&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Samples </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2"> are in the graphs but not &#39;column_data&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_graph_structure</span><span class="p">(</span><span class="n">spatial_graphs</span><span class="p">):</span>
@@ -334,7 +349,9 @@
             <span class="s2">&quot;and whose rows are margins (rows, columns, annotation).</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">spatial_graphs</span><span class="o">.</span><span class="n">get_row_names</span><span class="p">())</span> <span class="o">==</span> <span class="p">{</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="s2">&quot;col&quot;</span><span class="p">,</span> <span class="s2">&quot;annot&quot;</span><span class="p">}:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Row names of &#39;spatial_graphs&#39; must be &#39;row&#39;, &#39;col&#39;, and &#39;annot&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Row names of &#39;spatial_graphs&#39; must be &#39;row&#39;, &#39;col&#39;, and &#39;annot&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
 
 <div class="viewcode-block" id="ProxySpatialFeatureExperiment">
@@ -665,7 +682,9 @@
 
         <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, col_geometries=&quot;</span> <span class="o">+</span> <span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_col_geometries</span><span class="p">)</span>
         <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, row_geometries=&quot;</span> <span class="o">+</span> <span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_row_geometries</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, annot_geometries=&quot;</span> <span class="o">+</span> <span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_geometries</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, annot_geometries=&quot;</span> <span class="o">+</span> <span class="n">ut</span><span class="o">.</span><span class="n">print_truncated_dict</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_annot_geometries</span>
+        <span class="p">)</span>
 
         <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;, spatial_graphs=&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spatial_graphs</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
         <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;)&quot;</span>
@@ -715,7 +734,9 @@
 
 <div class="viewcode-block" id="ProxySpatialFeatureExperiment.set_unit">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.ProxySFE.ProxySpatialFeatureExperiment.set_unit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProxySpatialFeatureExperiment&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_unit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProxySpatialFeatureExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the coordinate unit.</span>
 
 <span class="sd">        Args:</span>
@@ -922,7 +943,9 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            A modified ``ProxySpatialFeatureExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_graphs</span> <span class="o">=</span> <span class="n">_sanitize_spatial_graphs</span><span class="p">(</span><span class="n">graphs</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_column_data</span><span class="p">()</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="s2">&quot;sample_id&quot;</span><span class="p">))))</span>
+        <span class="n">_graphs</span> <span class="o">=</span> <span class="n">_sanitize_spatial_graphs</span><span class="p">(</span>
+            <span class="n">graphs</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_column_data</span><span class="p">()</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="s2">&quot;sample_id&quot;</span><span class="p">)))</span>
+        <span class="p">)</span>
         <span class="n">_validate_graph_structure</span><span class="p">(</span><span class="n">_graphs</span><span class="p">)</span>
         <span class="n">_validate_graph_sample_id</span><span class="p">(</span><span class="n">_graphs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_column_data</span><span class="p">())</span>
 
@@ -952,7 +975,9 @@
 <div class="viewcode-block" id="ProxySpatialFeatureExperiment.get_slice">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.ProxySFE.ProxySpatialFeatureExperiment.get_slice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_slice</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProxySpatialFeatureExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a slice of the experiment.</span>
 
@@ -969,7 +994,9 @@
         <span class="n">sfe</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
         <span class="n">slicer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generic_slice</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
-        <span class="n">do_slice_cols</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span> <span class="o">==</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+        <span class="n">do_slice_cols</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slicer</span><span class="o">.</span><span class="n">col_indices</span> <span class="o">==</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Update geometries and graphs</span>
         <span class="k">if</span> <span class="n">do_slice_cols</span><span class="p">:</span>
@@ -992,7 +1019,9 @@
             <span class="n">new_graphs</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_graphs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Keep only columns for remaining samples</span>
-                <span class="n">cols_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_graphs</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">column_sample_ids</span><span class="p">]</span>
+                <span class="n">cols_to_keep</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_graphs</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">column_sample_ids</span>
+                <span class="p">]</span>
                 <span class="k">if</span> <span class="n">cols_to_keep</span><span class="p">:</span>
                     <span class="n">new_graphs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_graphs</span><span class="p">[</span><span class="n">cols_to_keep</span><span class="p">]</span>
 
@@ -1040,7 +1069,10 @@
 <div class="viewcode-block" id="ProxySpatialFeatureExperiment.set_column_data">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.ProxySFE.ProxySpatialFeatureExperiment.set_column_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_column_data</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">cols</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span> <span class="n">replace_column_names</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cols</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span>
+        <span class="n">replace_column_names</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProxySpatialFeatureExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Override: Set sample data.</span>
 
@@ -1113,7 +1145,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=282f96c0"></script>
+</div><script src="../../_static/documentation_options.js?v=1fd71caa"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
