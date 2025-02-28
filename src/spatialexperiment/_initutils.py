@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from biocframe import BiocFrame
 from PIL import Image
-from SpatialImage import SpatialImage
+from .SpatialImage import construct_spatial_image_class
 from summarizedexperiment._frameutils import _sanitize_frame
 
 __author__ = "keviny2"
@@ -96,7 +96,7 @@ def construct_img_data(
     spis = []
     for image_source in image_sources:
         result = Image.open(image_source) if load_image else image_source
-        spi = SpatialImage(result)
+        spi = construct_spatial_image_class(result)
         spis.append(spi)
 
     img_data = {

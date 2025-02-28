@@ -1,6 +1,7 @@
 # Changelog
 
 ## Version 0.0.6
+- Added `read_tenx_visium()` function to load 10x Visium data as SpatialExperiment
 - Added `combine_columns` function
 - Implemented `__eq__` override for `SpatialImage` subclasses
 
