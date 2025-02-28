@@ -2,6 +2,8 @@ from typing import Union
 
 import os
 from io import BytesIO
+from pathlib import Path
+from urllib.parse import urlparse
 import requests
 from PIL import Image
 from biocframe import BiocFrame
@@ -28,8 +30,9 @@ def read_image(input_image):
     if isinstance(input_image, Image.Image):
         return input_image
     
-    if isinstance(input_image, str):
-        if input_image.startswith(('http://', 'https://')):
+    if isinstance(input_image, (str, Path)):
+        is_url = urlparse(str(input_image)).scheme in ("http", "https", "ftp")
+        if is_url:
             response = requests.get(input_image)
             return Image.open(BytesIO(response.content))
         else:
