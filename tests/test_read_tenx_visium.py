@@ -8,10 +8,6 @@ from spatialexperiment import read_tenx_visium, SpatialExperiment, VirtualSpatia
 
 
 def test_read_tenx_visium(samples, sample_ids):
-    # dir = "tests/10xVisium"
-    # sample_ids = ["section1", "section2"]
-    # samples = [os.path.join(dir, sample_id, "outs") for sample_id in sample_ids]
-
     spe = read_tenx_visium(
         samples=samples,
         sample_ids=sample_ids,
@@ -75,9 +71,6 @@ def test_read_tenx_visium(samples, sample_ids):
 
 
 def test_load_true(samples, sample_ids):
-    # dir = "tests/10xVisium"
-    # sample_ids = ["section1", "section2"]
-    # samples = [os.path.join(dir, sample_id, "outs") for sample_id in sample_ids]
     spe = read_tenx_visium(
         samples=samples,
         sample_ids=sample_ids,
@@ -154,7 +147,7 @@ def test_tissue_positions_files(samples, sample_ids):
         data="raw",
         images="lowres",
         load=False
-    )
+    ).spatial_coords
 
     spatial_coords_2 = read_tenx_visium(
         samples=samples[1],
@@ -163,7 +156,7 @@ def test_tissue_positions_files(samples, sample_ids):
         data="raw",
         images="lowres",
         load=False
-    )
+    ).spatial_coords
 
     spatial_coords_multi = read_tenx_visium(
         samples=samples,
@@ -172,10 +165,9 @@ def test_tissue_positions_files(samples, sample_ids):
         data="raw",
         images="lowres",
         load=False
-    )
+    ).spatial_coords
 
     assert spatial_coords_multi.shape[0] == 2 * spatial_coords_1.shape[0] + 2 * spatial_coords_2.shape[0]
-    # assert spatial_coords_multi.to_pandas().equals(ut.combine_rows(spatial_coords_1, spatial_coords_2, spatial_coords_1, spatial_coords_2).to_pandas())
 
     combined = ut.combine_rows(spatial_coords_1, spatial_coords_2, spatial_coords_1, spatial_coords_2)
     assert spatial_coords_multi.to_pandas().equals(combined.to_pandas())

@@ -1,6 +1,7 @@
 """Creates a ``SpatialExperiment`` from the Space Ranger output directories for 10x Genomics Visium spatial gene expression data"""
 
 from typing import List, Union, Optional
+from warnings import warn
 import os
 import re
 import json
@@ -176,10 +177,17 @@ def read_tenx_visium(
 
     if sample_ids is None:
         sample_ids = [f"sample{str(i).zfill(2)}" for i in range(1, len(samples) + 1)]
-    elif not ut.is_list_of_type(sample_ids, str) and len(set(sample_ids)) != len(samples):
-        raise ValueError(
-            "`sample_ids` should contain as many unique values as `samples`."
-        )
+    elif isinstance(sample_ids, str):
+        warn(f"converting string sample_id to list: [{sample_ids}]")
+        sample_ids = [sample_ids]
+    elif not ut.is_list_of_type(sample_ids, str):
+        raise ValueError("`sample_ids` must be a list of strings")
+    elif len(set(sample_ids)) != len(samples):
+        raise ValueError("`sample_ids` should contain as many unique values as `samples`")
+
+    if isinstance(samples, str):
+        warn(f"converting string samples to list: [{samples}]")
+        samples = [samples]
 
     # add "outs/" directory if not already included
     for i, sample in enumerate(samples):
