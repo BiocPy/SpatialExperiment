@@ -1,3 +1,4 @@
+import os
 import pytest
 import numpy as np
 from biocframe import BiocFrame
@@ -43,6 +44,10 @@ def spe():
         }
     )
 
+    row_names = BiocFrame({"row_names": range(nrows)})
+
+    column_names = BiocFrame({"column_names": range(ncols)})
+
     x_coords = np.random.uniform(low=0.0, high=100.0, size=ncols)
     y_coords = np.random.uniform(low=0.0, high=100.0, size=ncols)
 
@@ -65,8 +70,22 @@ def spe():
         assays={"counts": counts},
         row_data=row_data,
         column_data=col_data,
+        row_names=row_names,
+        column_names=column_names,
         spatial_coords=spatial_coords,
         img_data=img_data,
     )
 
     return spe_instance
+
+@pytest.fixture
+def dir():
+    return "tests/10xVisium"
+
+@pytest.fixture
+def sample_ids():
+    return ["section1", "section2"]
+
+@pytest.fixture
+def samples(dir, sample_ids):
+    return [os.path.join(dir, sample_id, "outs") for sample_id in sample_ids]

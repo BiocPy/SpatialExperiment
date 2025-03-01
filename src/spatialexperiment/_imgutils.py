@@ -1,20 +1,103 @@
 from typing import Union
 
+import os
+from io import BytesIO
+from pathlib import Path
+from urllib.parse import urlparse
+from PIL import Image
 from biocframe import BiocFrame
+from .SpatialImage import construct_spatial_image_class
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
 __license__ = "MIT"
 
 
+
+def read_image(input_image):
+    """Read image from PIL Image, file path, or URL.
+
+    Args:
+        input_image: PIL Image, string path to local file, or URL string.
+
+    Returns:
+        The loaded image.
+
+    Raises:
+        TypeError: If input is not PIL Image, path string, or URL string.
+    """
+    import requests
+
+    if isinstance(input_image, Image.Image):
+        return input_image
+    
+    if isinstance(input_image, (str, Path)):
+        is_url = urlparse(str(input_image)).scheme in ("http", "https", "ftp")
+        if is_url:
+            response = requests.get(input_image)
+            return Image.open(BytesIO(response.content))
+        else:
+            return Image.open(input_image)
+            
+    raise TypeError(f"Expected PIL Image, path, or URL. Got {type(input_image)}")
+
+
+def get_img_data(
+    img: Union[str, os.PathLike],
+    scale_factor: str,
+    sample_id: str,
+    image_id: str,
+    load: bool = True
+) -> BiocFrame:
+    """
+    Construct an image data dataframe.
+
+    Args:
+        img:
+            A path or url to the image file.
+
+        scale_factor:
+            The scale factor associated with the image.
+
+        sample_id:
+            A unique identifier for the sample to which the image belongs.
+
+        image_id:
+            A unique identifier for the image itself.
+
+        load:
+            A boolean specifying whether the image(s) should be loaded into memory? If False, will store the path/URL instead.
+            Defaults to `True`.
+
+    Returns:
+        The image data.
+    """
+    if load:
+        img = read_image(img)
+
+    spi = construct_spatial_image_class(img)
+    return BiocFrame(
+        {
+            "sample_id": [sample_id],
+            "image_id": [image_id],
+            "data": [spi],
+            "scale_factor": [scale_factor]
+        }
+    )
+
+
 def retrieve_rows_by_id(
-    img_data: BiocFrame, sample_id: Union[str, bool, None] = None, image_id: Union[str, bool, None] = None
+    img_data: BiocFrame,
+    sample_id: Union[str, bool, None] = None,
+    image_id: Union[str, bool, None] = None,
 ) -> Union[BiocFrame, None]:
     """
     Retrieve rows from `img_data` based on specified `sample_id` and `image_id`.
 
     Args:
-        img_data: The data from which to retrieve rows.
+        img_data:
+            The data from which to retrieve rows.
+
         sample_id:
             - `sample_id=True`: Matches all samples.
             - `sample_id=None`: Matches the first sample.
@@ -51,11 +134,15 @@ def retrieve_rows_by_id(
                 else:
                     subset = subset.combine_rows(row)
         else:
-            subset = img_data[[_image_id == image_id for _image_id in img_data["image_id"]], :]
+            subset = img_data[
+                [_image_id == image_id for _image_id in img_data["image_id"]], :
+            ]
 
     elif sample_id is None:
         first_sample_id = img_data["sample_id"][0]
-        first_sample = img_data[[_sample_id == first_sample_id for _sample_id in img_data["sample_id"]], :]
+        first_sample = img_data[
+            [_sample_id == first_sample_id for _sample_id in img_data["sample_id"]], :
+        ]
 
         if image_id is True:
             subset = first_sample
@@ -63,10 +150,14 @@ def retrieve_rows_by_id(
         elif image_id is None:
             subset = first_sample[0, :]
         else:
-            subset = first_sample[[_image_id == image_id for _image_id in img_data["image_id"]], :]
+            subset = first_sample[
+                [_image_id == image_id for _image_id in img_data["image_id"]], :
+            ]
 
     else:
-        selected_sample = img_data[[_sample_id == sample_id for _sample_id in img_data["sample_id"]], :]
+        selected_sample = img_data[
+            [_sample_id == sample_id for _sample_id in img_data["sample_id"]], :
+        ]
 
         if selected_sample.shape[0] == 0:
             subset = selected_sample
@@ -75,6 +166,8 @@ def retrieve_rows_by_id(
         elif image_id is None:
             subset = selected_sample[0, :]
         else:
-            subset = selected_sample[[_image_id == image_id for _image_id in selected_sample["image_id"]]]
+            subset = selected_sample[
+                [_image_id == image_id for _image_id in selected_sample["image_id"]]
+            ]
 
     return subset
