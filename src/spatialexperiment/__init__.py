@@ -15,7 +15,6 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
-from .ProxySFE import ProxySpatialFeatureExperiment
 from .io import read_tenx_visium
 from .SpatialExperiment import SpatialExperiment
 from .SpatialImage import (
