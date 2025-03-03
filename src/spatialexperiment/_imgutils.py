@@ -42,7 +42,7 @@ def read_image(input_image):
     raise TypeError(f"Expected PIL Image, path, or URL. Got {type(input_image)}")
 
 
-def get_img_data(
+def construct_img_data(
     img: Union[str, os.PathLike],
     scale_factor: str,
     sample_id: str,

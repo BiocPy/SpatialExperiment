@@ -10,7 +10,7 @@ from biocframe import BiocFrame
 import biocutils as ut
 from singlecellexperiment import read_tenx_mtx
 from ..SpatialExperiment import SpatialExperiment
-from .._imgutils import get_img_data
+from .._imgutils import construct_img_data
 from .._initutils import construct_spatial_coords_from_names
 
 
@@ -122,7 +122,7 @@ def read_img_data(
                 ),
                 None,
             )
-            curr_image_data = get_img_data(
+            curr_image_data = construct_img_data(
                 img=image,
                 scale_factor=scale_factor,
                 sample_id=sample_id,
