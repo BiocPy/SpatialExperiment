@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.0.7
+- Refactored `get_img_idx` for improved maintainability
+- Disambiguated `get_img_data` between `_imgutils.py` and `SpatialExperiment.py`
+- Moved `SpatialFeatureExperiment` into its own package
+
 ## Version 0.0.6
 - Added `read_tenx_visium()` function to load 10x Visium data as SpatialExperiment
 - Added `combine_columns` function
