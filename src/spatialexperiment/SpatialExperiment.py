@@ -23,7 +23,7 @@ from singlecellexperiment._combineutils import (
     relaxed_merge_numpy_generic
 )
 
-from ._imgutils import retrieve_rows_by_id
+from ._imgutils import get_img_idx
 from ._validators import (
     _validate_column_data,
     _validate_id,
@@ -669,14 +669,11 @@ class SpatialExperiment(SingleCellExperiment):
         _validate_id(sample_id)
         _validate_id(image_id)
 
-        img_data_subset = retrieve_rows_by_id(
+        idxs = get_img_idx(
             img_data=self.img_data, sample_id=sample_id, image_id=image_id
         )
 
-        if img_data_subset.shape[0] == 1:
-            return img_data_subset["scale_factor"][0]
-
-        return img_data_subset["scale_factor"]
+        return self.img_data[idxs,]["scale_factor"]
 
     ################################
     ###>> OVERRIDE column_data <<###
@@ -772,7 +769,7 @@ class SpatialExperiment(SingleCellExperiment):
         )
 
     ################################
-    ######>> img_data funcs <<######
+    #####>> img_data methods <<#####
     ################################
 
     def get_img(
@@ -822,17 +819,15 @@ class SpatialExperiment(SingleCellExperiment):
         _validate_id(sample_id)
         _validate_id(image_id)
 
-        img_data_subset = retrieve_rows_by_id(
+        if not self.img_data:
+            return None
+
+        idxs = get_img_idx(
             img_data=self.img_data, sample_id=sample_id, image_id=image_id
         )
 
-        if img_data_subset is None:
-            return []
-
-        if img_data_subset.shape[0] == 1:
-            return img_data_subset["data"][0]
-
-        return img_data_subset["data"]
+        images = self.img_data[idxs,]["data"]
+        return images[0] if len(images) == 1 else images
 
     def add_img(
         self,
@@ -907,7 +902,25 @@ class SpatialExperiment(SingleCellExperiment):
         self,
         sample_id: Union[str, bool, None] = None,
         image_id: Union[str, bool, None] = None,
+        in_place: bool = False
     ) -> "SpatialExperiment":
+        """Remove an image entry.
+
+        Args:
+            sample_id:
+                - `sample_id=True`: Matches all samples.
+                - `sample_id=None`: Matches the first sample.
+                - `sample_id="<str>"`: Matches a sample by its id.
+
+            image_id:
+                - `image_id=True`: Matches all images for the specified sample(s).
+                - `image_id=None`: Matches the first image for the sample(s).
+                - `image_id="<str>"`: Matches image(s) by its(their) id.
+
+            in_place:
+                Whether to modify the ``SpatialExperiment`` in place.
+                Defaults to False.
+        """
         raise NotImplementedError()
 
     def img_source(

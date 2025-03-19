@@ -1,9 +1,10 @@
-from typing import Union
+from typing import Union, List
 
 import os
 from io import BytesIO
 from pathlib import Path
 from urllib.parse import urlparse
+import numpy as np
 from PIL import Image
 from biocframe import BiocFrame
 from .SpatialImage import construct_spatial_image_class
@@ -86,13 +87,13 @@ def construct_img_data(
     )
 
 
-def retrieve_rows_by_id(
+def get_img_idx(
     img_data: BiocFrame,
     sample_id: Union[str, bool, None] = None,
     image_id: Union[str, bool, None] = None,
-) -> Union[BiocFrame, None]:
+) -> List[int]:
     """
-    Retrieve rows from `img_data` based on specified `sample_id` and `image_id`.
+    Retrieve the row index/indices of image(s) with matching 'sample_id' and 'image_id' from the 'img_data'.
 
     Args:
         img_data:
@@ -109,65 +110,44 @@ def retrieve_rows_by_id(
             - `image_id="<str>"`: Matches image(s) by its(their) id.
 
     Returns:
-        The filtered `img_data` based on the specified ids, or `None` if `img_data` is empty.
+        The row index/indices of image(s) with matchine 'sample_id' and 'image_id' from the 'img_data'.
     """
+    sample_ids = np.array(img_data["sample_id"])
+    image_ids = np.array(img_data["image_id"])
+    if isinstance(sample_id, str) and isinstance(image_id, str):
+        sid = sample_ids == sample_id
+        iid = image_ids == image_id
+    elif sample_id is True and image_id is True:
+        sid = iid = np.full(len(img_data), True)
+    elif sample_id is None and image_id is None:
+        sid = iid = np.eye(len(img_data))[0, :]
+    elif isinstance(sample_id, str) and image_id is True:
+        sid = sample_ids == sample_id
+        iid = np.full(len(img_data), True)
+    elif sample_id is True and isinstance(image_id, str):
+        sid = np.full(len(img_data), True)
+        iid = image_ids == image_id
+    elif isinstance(sample_id, str) and image_id is None:
+        sid = sample_ids == sample_id
+        iid = np.zeros(len(img_data))
+        iid[np.where(sid)[0][0]] = 1
+    elif sample_id is None and isinstance(image_id, str):
+        first_sid = img_data["sample_id"][0]
+        sid = sample_ids == first_sid
+        iid = image_ids == image_id
+    elif sample_id is True and image_id is None:
+        sid = np.full(len(img_data), True)
+        iid = [img_data['sample_id'].index(x) for x in set(img_data['sample_id'])]
+        iid = np.eye(len(img_data))[iid, :].sum(axis=0)
+    elif sample_id is None and image_id is True:
+        first_sid = img_data["sample_id"][0]
+        sid = sample_ids == first_sid
+        iid = np.full(len(img_data), True)
+    
+    mask = sid.astype(bool) & iid.astype(bool)
+    if not any(mask):
+        raise ValueError(
+            f"No 'imgData' entry(ies) matched the specified image_id = '{image_id}' and sample_id = '{sample_id}'"
+        )
 
-    if img_data is None:
-        return None
-
-    if img_data.shape[0] == 0:
-        return None
-
-    if sample_id is True:
-        if image_id is True:
-            return img_data
-
-        elif image_id is None:
-            unique_sample_ids = list(set(img_data["sample_id"]))
-            sample_id_groups = img_data.split("sample_id")
-            subset = None
-
-            for sample_id in unique_sample_ids:
-                row = sample_id_groups[sample_id][0, :]
-                if subset is None:
-                    subset = row
-                else:
-                    subset = subset.combine_rows(row)
-        else:
-            subset = img_data[
-                [_image_id == image_id for _image_id in img_data["image_id"]], :
-            ]
-
-    elif sample_id is None:
-        first_sample_id = img_data["sample_id"][0]
-        first_sample = img_data[
-            [_sample_id == first_sample_id for _sample_id in img_data["sample_id"]], :
-        ]
-
-        if image_id is True:
-            subset = first_sample
-
-        elif image_id is None:
-            subset = first_sample[0, :]
-        else:
-            subset = first_sample[
-                [_image_id == image_id for _image_id in img_data["image_id"]], :
-            ]
-
-    else:
-        selected_sample = img_data[
-            [_sample_id == sample_id for _sample_id in img_data["sample_id"]], :
-        ]
-
-        if selected_sample.shape[0] == 0:
-            subset = selected_sample
-        elif image_id is True:
-            subset = selected_sample
-        elif image_id is None:
-            subset = selected_sample[0, :]
-        else:
-            subset = selected_sample[
-                [_image_id == image_id for _image_id in selected_sample["image_id"]]
-            ]
-
-    return subset
+    return np.where(mask)[0].tolist()
