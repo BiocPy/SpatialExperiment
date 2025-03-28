@@ -14,7 +14,7 @@ from .._imgutils import construct_img_data
 from .._initutils import construct_spatial_coords_from_names
 
 
-def read_tissue_positions(tissue_positions_path) -> 'pd.DataFrame':
+def read_tissue_positions(tissue_positions_path) -> "pd.DataFrame":
     """Read and parse tissue position file.
 
     Args:
@@ -25,6 +25,7 @@ def read_tissue_positions(tissue_positions_path) -> 'pd.DataFrame':
         A DataFrame with the tissue positions.
     """
     import pandas as pd
+
     column_names = [
         "barcode",
         "in_tissue",
@@ -36,9 +37,7 @@ def read_tissue_positions(tissue_positions_path) -> 'pd.DataFrame':
 
     has_header = "list" not in os.path.basename(tissue_positions_path)
 
-    tissue_positions = pd.read_csv(
-        tissue_positions_path, header=0 if has_header else None, names=column_names
-    )
+    tissue_positions = pd.read_csv(tissue_positions_path, header=0 if has_header else None, names=column_names)
     tissue_positions = tissue_positions.set_index("barcode")
     tissue_positions["in_tissue"] = tissue_positions["in_tissue"].astype(bool)
 
@@ -50,7 +49,7 @@ def read_img_data(
     sample_ids: Optional[List[str]] = None,
     image_sources: Optional[List[str]] = None,
     scale_factors: str = None,
-    load: bool = True
+    load: bool = True,
 ) -> BiocFrame:
     """Read in images and scale factors for 10x Genomics Visium data, and return as a valid `img_data` object.
 
@@ -75,15 +74,11 @@ def read_img_data(
     if sample_ids is None:
         raise ValueError("`sample_id` mustn't be NULL.")
 
-    if not isinstance(sample_ids, list) or not all(
-        isinstance(s, str) for s in sample_ids
-    ):
+    if not isinstance(sample_ids, list) or not all(isinstance(s, str) for s in sample_ids):
         raise TypeError("`sample_id` must be a list of strings.")
 
     if len(set(sample_ids)) != len(path):
-        raise ValueError(
-            "The number of unique sample_ids must match the length of path."
-        )
+        raise ValueError("The number of unique sample_ids must match the length of path.")
 
     # put images into list with one element per sample
     if image_sources is None:
@@ -94,9 +89,7 @@ def read_img_data(
 
     images = [[img for img in image_sources if p in img] for p in path]
 
-    img_data = BiocFrame(
-        {"sample_id": [], "image_id": [], "data": [], "scale_factor": []}
-    )
+    img_data = BiocFrame({"sample_id": [], "image_id": [], "data": [], "scale_factor": []})
     for i, sample_id in enumerate(sample_ids):
         with open(scale_factors[i], "r") as f:
             curr_scale_factors = json.load(f)
@@ -111,23 +104,13 @@ def read_img_data(
                 "aligned_fiducials": "aligned",
             }.get(image_name, None)
 
-            scale_factor_name = {"lowres": "tissue_lowres_scalef"}.get(
-                image_id, "tissue_hires_scalef"
-            )
+            scale_factor_name = {"lowres": "tissue_lowres_scalef"}.get(image_id, "tissue_hires_scalef")
             scale_factor = next(
-                (
-                    value
-                    for key, value in curr_scale_factors.items()
-                    if scale_factor_name in key
-                ),
+                (value for key, value in curr_scale_factors.items() if scale_factor_name in key),
                 None,
             )
             curr_image_data = construct_img_data(
-                img=image,
-                scale_factor=scale_factor,
-                sample_id=sample_id,
-                image_id=image_id,
-                load=load
+                img=image, scale_factor=scale_factor, sample_id=sample_id, image_id=image_id, load=load
             )
             img_data = img_data.combine_rows(curr_image_data)
 
@@ -180,9 +163,7 @@ def read_tenx_visium(
 
     for image in images:
         if image not in allowed_images:
-            raise ValueError(
-                f"`images` must be one of {allowed_images}. got `{image}`."
-            )
+            raise ValueError(f"`images` must be one of {allowed_images}. got `{image}`.")
 
     if sample_ids is None:
         sample_ids = [f"sample{str(i).zfill(2)}" for i in range(1, len(samples) + 1)]
@@ -206,9 +187,7 @@ def read_tenx_visium(
     # setup file paths
     ext = ".h5" if type == "HDF5" else ""
     counts_dirs = [f"{data}_feature_bc_matrix{ext}" for _ in samples]
-    counts_dir_paths = [
-        os.path.join(sample, fn) for sample, fn in zip(samples, counts_dirs)
-    ]
+    counts_dir_paths = [os.path.join(sample, fn) for sample, fn in zip(samples, counts_dirs)]
 
     # spatial parts
     spatial_dir_paths = [os.path.join(sample, "spatial") for sample in samples]
@@ -228,10 +207,7 @@ def read_tenx_visium(
         for tissue_positions_path in tissue_positions_paths
         if os.path.exists(tissue_positions_path)
     ]
-    scale_factors_paths = [
-        os.path.join(spatial_dir, "scalefactors_json.json")
-        for spatial_dir in spatial_dir_paths
-    ]
+    scale_factors_paths = [os.path.join(spatial_dir, "scalefactors_json.json") for spatial_dir in spatial_dir_paths]
 
     # read image data
     image_files_mapper = {
@@ -241,18 +217,12 @@ def read_tenx_visium(
         "aligned": "aligned_fiducials.jpg",
     }
 
-    image_files = [
-        image_files_mapper[image] for image in images if image in image_files_mapper
-    ]
+    image_files = [image_files_mapper[image] for image in images if image in image_files_mapper]
     image_file_paths = [
-        os.path.join(spatial_dir, image_file)
-        for spatial_dir in spatial_dir_paths
-        for image_file in image_files
+        os.path.join(spatial_dir, image_file) for spatial_dir in spatial_dir_paths for image_file in image_files
     ]
 
-    missing_files = [
-        not os.path.exists(image_file_path) for image_file_path in image_file_paths
-    ]
+    missing_files = [not os.path.exists(image_file_path) for image_file_path in image_file_paths]
 
     if all(missing_files):
         raise FileNotFoundError(f"No matching files found for 'images={images}'")
@@ -261,15 +231,11 @@ def read_tenx_visium(
         print(
             "Skipping missing images\n  "
             + "\n  ".join(
-                image_file_path
-                for image_file_path, missing in zip(image_file_paths, missing_files)
-                if missing
+                image_file_path for image_file_path, missing in zip(image_file_paths, missing_files) if missing
             )
         )
         image_file_paths = [
-            image_file_path
-            for image_file_path, missing in zip(image_file_paths, missing_files)
-            if not missing
+            image_file_path for image_file_path, missing in zip(image_file_paths, missing_files) if not missing
         ]
 
     image = read_img_data(
@@ -277,7 +243,7 @@ def read_tenx_visium(
         sample_ids=sample_ids,
         image_sources=image_file_paths,
         scale_factors=scale_factors_paths,
-        load=load
+        load=load,
     )
 
     spes = []
@@ -294,19 +260,14 @@ def read_tenx_visium(
         tissue_positions = tissue_positions.loc[obs, :]
         tissue_positions["sample_id"] = sample_ids[i]
         spatial_coords, column_data = construct_spatial_coords_from_names(
-            spatial_coords_names=["pxl_col_in_fullres", "pxl_row_in_fullres"],
-            column_data=tissue_positions
+            spatial_coords_names=["pxl_col_in_fullres", "pxl_row_in_fullres"], column_data=tissue_positions
         )
 
         spe = SpatialExperiment(
             assays=sce.assays,
-            row_data=BiocFrame(
-                {
-                    "symbol": sce.row_data["gene_symbols"]
-                }
-            ),
+            row_data=BiocFrame({"symbol": sce.row_data["gene_symbols"]}),
             column_data=column_data,
-            spatial_coords=spatial_coords
+            spatial_coords=spatial_coords,
         )
         spes.append(spe)
 

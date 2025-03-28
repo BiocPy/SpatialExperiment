@@ -50,9 +50,7 @@ class VirtualSpatialImage(ABC):
         """
         return self._metadata
 
-    def set_metadata(
-        self, metadata: dict, in_place: bool = False
-    ) -> "VirtualSpatialImage":
+    def set_metadata(self, metadata: dict, in_place: bool = False) -> "VirtualSpatialImage":
         """Set additional metadata.
 
         Args:
@@ -67,9 +65,7 @@ class VirtualSpatialImage(ABC):
             or as a reference to the (in-place-modified) original.
         """
         if not isinstance(metadata, dict):
-            raise TypeError(
-                f"`metadata` must be a dictionary, provided {type(metadata)}."
-            )
+            raise TypeError(f"`metadata` must be a dictionary, provided {type(metadata)}.")
         output = self._define_output(in_place)
         output._metadata = metadata
         return output
@@ -150,9 +146,7 @@ def _sanitize_loaded_image(image):
 class LoadedSpatialImage(VirtualSpatialImage):
     """Class for images loaded into memory."""
 
-    def __init__(
-        self, image: Union[Image.Image, np.ndarray], metadata: Optional[dict] = None
-    ):
+    def __init__(self, image: Union[Image.Image, np.ndarray], metadata: Optional[dict] = None):
         """Initialize the object.
 
         Args:
@@ -256,9 +250,7 @@ class LoadedSpatialImage(VirtualSpatialImage):
 
         return self._image
 
-    def set_image(
-        self, image: Union[Image.Image, np.ndarray], in_place: bool = False
-    ) -> "LoadedSpatialImage":
+    def set_image(self, image: Union[Image.Image, np.ndarray], in_place: bool = False) -> "LoadedSpatialImage":
         """Set new image.
 
         Args:
@@ -410,9 +402,7 @@ class StoredSpatialImage(VirtualSpatialImage):
         """Get the path to the image file."""
         return self._path
 
-    def set_path(
-        self, path: Union[str, Path], in_place: bool = False
-    ) -> "StoredSpatialImage":
+    def set_path(self, path: Union[str, Path], in_place: bool = False) -> "StoredSpatialImage":
         """Update the path to the image file.
 
         Args:
@@ -473,9 +463,7 @@ def _validate_url(url):
 class RemoteSpatialImage(VirtualSpatialImage):
     """Class for remotely hosted images."""
 
-    def __init__(
-        self, url: str, metadata: Optional[dict] = None, validate: bool = True
-    ):
+    def __init__(self, url: str, metadata: Optional[dict] = None, validate: bool = True):
         """Initialize the object.
 
         Args:
