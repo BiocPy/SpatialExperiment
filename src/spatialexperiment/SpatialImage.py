@@ -106,6 +106,18 @@ class VirtualSpatialImage(ABC):
     ############################
 
     @abstractmethod
+    def img_source(self, as_path: bool = False) -> Union[str, None]:
+        """Get the source of the image.
+
+        Args:
+            as_path: If True, returns path as string. Defaults to False.
+
+        Returns:
+            Source path/URL of the image, or None if loaded in memory.
+        """
+        pass
+
+    @abstractmethod
     def img_raster(self) -> Image.Image:
         """Get the image as a PIL Image object."""
         pass
@@ -282,6 +294,14 @@ class LoadedSpatialImage(VirtualSpatialImage):
         )
         return self.set_image(image=image, in_place=True)
 
+    def img_source(self, as_path: bool = False) -> None:
+        """Get the source of the loaded image.
+        
+        Returns:
+            Always returns None.
+        """
+        return None
+
     ############################
     ######>> img utils <<#######
     ############################
@@ -440,7 +460,14 @@ class StoredSpatialImage(VirtualSpatialImage):
         return self.set_path(path=path, in_place=True)
 
     def img_source(self, as_path: bool = False) -> str:
-        """Get the source path of the image."""
+        """Get the source path of the image.
+
+        Args:
+            as_path: If True, returns string path. Defaults to False.
+
+        Returns:
+            Path to the image.
+        """
         return str(self._path) if as_path is True else self._path
 
     ############################
@@ -633,7 +660,14 @@ class RemoteSpatialImage(VirtualSpatialImage):
         return Image.open(cache_path)
 
     def img_source(self, as_path: bool = False) -> str:
-        """Get the source URL or cached path of the image."""
+        """Get the source URL or cached path of the image.
+
+        Args:
+            as_path: If True, returns downloaded path. Defaults to False.
+
+        Returns:
+            URL or cached path of the image. 
+        """
         if as_path:
             return str(self._download_image())
         return self._url
