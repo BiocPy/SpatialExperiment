@@ -921,7 +921,15 @@ class SpatialExperiment(SingleCellExperiment):
                 Whether to modify the ``SpatialExperiment`` in place.
                 Defaults to False.
         """
-        raise NotImplementedError()
+        _validate_id(sample_id)
+        _validate_id(image_id)
+
+        indices = get_img_idx(
+            img_data=self.img_data, sample_id=sample_id, image_id=image_id
+        )
+
+        output = self._define_output(in_place=in_place)
+        # TODO: refer to https://github.com/BiocPy/BiocFrame/issues/121
 
     def img_source(
         self,
