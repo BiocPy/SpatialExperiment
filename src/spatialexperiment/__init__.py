@@ -35,4 +35,3 @@ __all__ = [
     "VirtualSpatialImage",
     "construct_spatial_image_class",
 ]
-

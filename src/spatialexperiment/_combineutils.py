@@ -25,9 +25,7 @@ def _append_indices_to_samples(bframes: List[BiocFrame]) -> List[BiocFrame]:
     modified_bframes = []
     for i, bframe in enumerate(bframes, start=1):
         bframe_copy = deepcopy(bframe)
-        bframe_copy["sample_id"] = [
-            f"{sample_id}_{i}" for sample_id in bframe_copy["sample_id"]
-        ]
+        bframe_copy["sample_id"] = [f"{sample_id}_{i}" for sample_id in bframe_copy["sample_id"]]
         modified_bframes.append(bframe_copy)
     return modified_bframes
 
@@ -41,7 +39,7 @@ def merge_spatial_frames(x: List[SpatialExperiment], relaxed: bool = False) -> T
 
     Args:
         x: List of ``SpatialExperiment`` objects
-        relaxed: If `True`, allows frames with different columns to be combined. 
+        relaxed: If `True`, allows frames with different columns to be combined.
             Absent columns in any frame are filled with appropriate placeholder values.
             Defaults to `False`.
 
@@ -52,9 +50,7 @@ def merge_spatial_frames(x: List[SpatialExperiment], relaxed: bool = False) -> T
     img_datas = [y._img_data for y in x]
 
     expected_unique = sum([len(set(_cols["sample_id"])) for _cols in cols])
-    all_sample_ids = list(
-        itertools.chain.from_iterable(_cols["sample_id"] for _cols in cols)
-    )
+    all_sample_ids = list(itertools.chain.from_iterable(_cols["sample_id"] for _cols in cols))
 
     if len(set(all_sample_ids)) < expected_unique:
         warn(
@@ -80,7 +76,7 @@ def merge_spatial_coordinates(spatial_coords: List[BiocFrame], relaxed: bool = F
 
     Args:
         spatial_coords: List of `BiocFrame`s containing spatial coordinates.
-        relaxed: If `True`, allows frames with different columns to be combined. 
+        relaxed: If `True`, allows frames with different columns to be combined.
             Absent columns in any frame are filled with appropriate placeholder values.
             Defaults to `False`.
 
