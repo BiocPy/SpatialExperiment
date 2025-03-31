@@ -14,7 +14,6 @@ __copyright__ = "keviny2"
 __license__ = "MIT"
 
 
-
 def read_image(input_image):
     """Read image from PIL Image, file path, or URL.
 
@@ -31,7 +30,7 @@ def read_image(input_image):
 
     if isinstance(input_image, Image.Image):
         return input_image
-    
+
     if isinstance(input_image, (str, Path)):
         is_url = urlparse(str(input_image)).scheme in ("http", "https", "ftp")
         if is_url:
@@ -39,16 +38,12 @@ def read_image(input_image):
             return Image.open(BytesIO(response.content))
         else:
             return Image.open(input_image)
-            
+
     raise TypeError(f"Expected PIL Image, path, or URL. Got {type(input_image)}")
 
 
 def construct_img_data(
-    img: Union[str, os.PathLike],
-    scale_factor: str,
-    sample_id: str,
-    image_id: str,
-    load: bool = True
+    img: Union[str, os.PathLike], scale_factor: str, sample_id: str, image_id: str, load: bool = True
 ) -> BiocFrame:
     """
     Construct an image data dataframe.
@@ -77,14 +72,7 @@ def construct_img_data(
         img = read_image(img)
 
     spi = construct_spatial_image_class(img)
-    return BiocFrame(
-        {
-            "sample_id": [sample_id],
-            "image_id": [image_id],
-            "data": [spi],
-            "scale_factor": [scale_factor]
-        }
-    )
+    return BiocFrame({"sample_id": [sample_id], "image_id": [image_id], "data": [spi], "scale_factor": [scale_factor]})
 
 
 def get_img_idx(
@@ -137,13 +125,13 @@ def get_img_idx(
         iid = image_ids == image_id
     elif sample_id is True and image_id is None:
         sid = np.full(len(img_data), True)
-        iid = [img_data['sample_id'].index(x) for x in set(img_data['sample_id'])]
+        iid = [img_data["sample_id"].index(x) for x in set(img_data["sample_id"])]
         iid = np.eye(len(img_data))[iid, :].sum(axis=0)
     elif sample_id is None and image_id is True:
         first_sid = img_data["sample_id"][0]
         sid = sample_ids == first_sid
         iid = np.full(len(img_data), True)
-    
+
     mask = sid.astype(bool) & iid.astype(bool)
     if not any(mask):
         raise ValueError(
