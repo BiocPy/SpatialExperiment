@@ -790,9 +790,9 @@ class SpatialExperiment(SingleCellExperiment):
         if not self.img_data:
             return None
 
-        idxs = get_img_idx(img_data=self.img_data, sample_id=sample_id, image_id=image_id)
+        indices = get_img_idx(img_data=self.img_data, sample_id=sample_id, image_id=image_id)
 
-        images = self.img_data[idxs,]["data"]
+        images = self.img_data[indices,]["data"]
         return images[0] if len(images) == 1 else images
 
     def add_img(
@@ -861,8 +861,7 @@ class SpatialExperiment(SingleCellExperiment):
         output._img_data = new_img_data
         return output
 
-    # TODO: implement rmv_img()
-    def rmv_img(
+    def remove_img(
         self, sample_id: Union[str, bool, None] = None, image_id: Union[str, bool, None] = None, in_place: bool = False
     ) -> "SpatialExperiment":
         """Remove an image entry.
@@ -887,8 +886,11 @@ class SpatialExperiment(SingleCellExperiment):
 
         indices = get_img_idx(img_data=self.img_data, sample_id=sample_id, image_id=image_id)
 
+        new_img_data = self._img_data.remove_rows(indices)
+
         output = self._define_output(in_place=in_place)
-        # TODO: refer to https://github.com/BiocPy/BiocFrame/issues/121
+        output._img_data = new_img_data
+        return output
 
     def img_source(
         self,
