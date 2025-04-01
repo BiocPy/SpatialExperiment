@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+- Added `remove_img` function
 - Refactored `get_img_idx` for improved maintainability
 - Disambiguated `get_img_data` between `_imgutils.py` and `SpatialExperiment.py`
 - Moved `SpatialFeatureExperiment` into its own package
