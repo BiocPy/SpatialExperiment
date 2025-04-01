@@ -13,9 +13,7 @@ def _validate_spatial_coords_names(spatial_coords_names, spatial_coords):
         raise TypeError("'spatial_coords_names' is not a list of strings")
 
     if len(spatial_coords_names) != spatial_coords.shape[1]:
-        raise ValueError(
-            f"Expected {spatial_coords.shape[1]} names. Got {len(spatial_coords_names)} names."
-        )
+        raise ValueError(f"Expected {spatial_coords.shape[1]} names. Got {len(spatial_coords_names)} names.")
 
 
 def _validate_column_data(column_data):
@@ -45,9 +43,7 @@ def _validate_sample_image_ids(img_data, new_sample_id, new_image_id):
     for row in img_data:
         data = row[1]
         if data["sample_id"] == new_sample_id and data["image_id"] == new_image_id:
-            raise ValueError(
-                f"Image with Sample ID: {new_sample_id} and Image ID: {new_image_id} already exists"
-            )
+            raise ValueError(f"Image with Sample ID: {new_sample_id} and Image ID: {new_image_id} already exists")
 
     # TODO: check if 'new_sample_id' is present in column_data['sample_id']
 
@@ -57,10 +53,7 @@ def _validate_spatial_coords(spatial_coords, column_data):
         return
 
     if not hasattr(spatial_coords, "shape"):
-        raise TypeError(
-            "Spatial coordinates must be a dataframe-like object."
-            "Does not contain a `shape` property."
-        )
+        raise TypeError("Spatial coordinates must be a dataframe-like object." "Does not contain a `shape` property.")
 
     if column_data.shape[0] != spatial_coords.shape[0]:
         raise ValueError("'spatial_coords' do not contain coordinates for all cells.")
@@ -91,9 +84,7 @@ def _validate_sample_ids(column_data, img_data):
     column_data_sample_ids = set(column_data["sample_id"])
 
     if not img_data_sample_ids <= column_data_sample_ids:
-        raise ValueError(
-            "All 'sample_id's in 'img_data' must be present in 'column_data['sample_id']"
-        )
+        raise ValueError("All 'sample_id's in 'img_data' must be present in 'column_data['sample_id']")
 
     if img_data_sample_ids != column_data_sample_ids:
         warnings.warn(

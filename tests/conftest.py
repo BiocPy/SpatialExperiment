@@ -54,7 +54,7 @@ def spe():
     spatial_coords = BiocFrame({"x": x_coords, "y": y_coords})
 
     img_data = BiocFrame(
-        {
+        data={
             "sample_id": ["sample_1", "sample_1", "sample_2"],
             "image_id": ["aurora", "dice", "desert"],
             "data": [
@@ -63,7 +63,8 @@ def spe():
                 construct_spatial_image_class("tests/images/sample_image3.jpg"),
             ],
             "scale_factor": [1, 1, 1],
-        }
+        },
+        row_names=[0, 1, 2]
     )
 
     spe_instance = SpatialExperiment(
