@@ -33,7 +33,7 @@ def test_add_img_already_exists(spe):
 def test_add_img_in_place(spe):
     original_count = spe.img_data.shape[0]
     original_id = id(spe)
-    
+
     result = spe.add_img(
         image_source="tests/images/sample_image4.png",
         scale_factor=1.5,
@@ -41,7 +41,7 @@ def test_add_img_in_place(spe):
         image_id="new_image",
         in_place=True
     )
-    
+
     # Check if in-place
     assert id(result) == original_id
     assert spe.img_data.shape[0] == original_count + 1
@@ -54,7 +54,7 @@ def test_add_img_not_in_place(spe):
         sample_id="sample_4",
         image_id="another_image"
     )
-    
+
     # Check if not in-place
     assert id(result) != id(spe)
     assert spe.img_data.shape[0] == spe.img_data.shape[0]
