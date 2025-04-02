@@ -45,16 +45,18 @@ def test_spi_constructor_image():
 
 
 def test_spi_constructor_url():
-    image_url = "https://i.redd.it/3pw5uah7xo041.jpg"
+    image_url = "https://example.com/test_image.jpg"
     spi_remote = construct_spatial_image_class(image_url, is_url=True)
     assert issubclass(type(spi_remote), VirtualSpatialImage)
     assert isinstance(spi_remote, RemoteSpatialImage)
     assert spi_remote.url == image_url
 
 
-def test_invalid_input():
-    with pytest.raises(Exception):
-        construct_spatial_image_class(5, is_url=False)
+def test_auto_detect_url():
+    url = "https://example.com/image.jpg"
+    img = construct_spatial_image_class(url)
+    assert isinstance(img, RemoteSpatialImage)
+    assert img.img_source() == url
 
 
 def test_spi_equality():
@@ -67,7 +69,7 @@ def test_spi_equality():
 
     assert spi_path_1 == spi_path_2
 
-    image_url = "https://i.redd.it/3pw5uah7xo041.jpg"
+    image_url = "https://example.com/test_image.jpg"
     spi_url_1 = construct_spatial_image_class(image_url, is_url=True)
     spi_url_2 = construct_spatial_image_class(image_url, is_url=True)
 
@@ -82,3 +84,8 @@ def test_spi_equality():
     assert spi_path_1 != spi_url_1
     assert spi_path_1 != spi_image_1
     assert spi_url_1 != spi_image_1
+
+
+def test_invalid_input():
+    with pytest.raises(Exception):
+        construct_spatial_image_class(5, is_url=False)
