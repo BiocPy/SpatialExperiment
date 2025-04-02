@@ -296,7 +296,7 @@ class LoadedSpatialImage(VirtualSpatialImage):
 
     def img_source(self, as_path: bool = False) -> None:
         """Get the source of the loaded image.
-        
+
         Returns:
             Always returns None.
         """
@@ -666,7 +666,7 @@ class RemoteSpatialImage(VirtualSpatialImage):
             as_path: If True, returns downloaded path. Defaults to False.
 
         Returns:
-            URL or cached path of the image. 
+            URL or cached path of the image.
         """
         if as_path:
             return str(self._download_image())
