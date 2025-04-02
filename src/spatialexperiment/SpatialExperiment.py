@@ -901,7 +901,7 @@ class SpatialExperiment(SingleCellExperiment):
         path=False,
     ):
         """Retrieve the source(s) for images stored in the SpatialExperiment object.
-        
+
         Args:
             sample_id:
                 - `sample_id=True`: Matches all samples.
@@ -912,9 +912,9 @@ class SpatialExperiment(SingleCellExperiment):
                 - `image_id=True`: Matches all images for the specified sample(s).
                 - `image_id=None`: Matches the first image for the sample(s).
                 - `image_id="<str>"`: Matches image(s) by its(their) id.
-            
+
             path: If True, returns path as string. Defaults to False.
-        
+
         Returns:
             If a single image matches the criteria, returns its source (str, Path, or None).
             If multiple images match, returns a list of sources.
