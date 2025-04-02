@@ -745,8 +745,7 @@ class SpatialExperiment(SingleCellExperiment):
         sample_id: Union[str, bool, None] = None,
         image_id: Union[str, bool, None] = None,
     ) -> Union[VirtualSpatialImage, List[VirtualSpatialImage]]:
-        """
-        Retrieve spatial images based on the provided sample and image ids.
+        """Retrieve spatial images based on the provided sample and image ids.
 
         Args:
             sample_id:
@@ -880,6 +879,9 @@ class SpatialExperiment(SingleCellExperiment):
             in_place:
                 Whether to modify the ``SpatialExperiment`` in place.
                 Defaults to False.
+
+        Returns:
+            A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
         """
         _validate_id(sample_id)
         _validate_id(image_id)
@@ -898,7 +900,44 @@ class SpatialExperiment(SingleCellExperiment):
         image_id: Union[str, bool, None] = None,
         path=False,
     ):
-        raise NotImplementedError("This function is irrelevant because it is for `RemoteSpatialImages`")
+        """Retrieve the source(s) for images stored in the SpatialExperiment object.
+        
+        Args:
+            sample_id:
+                - `sample_id=True`: Matches all samples.
+                - `sample_id=None`: Matches the first sample.
+                - `sample_id="<str>"`: Matches a sample by its id.
+
+            image_id:
+                - `image_id=True`: Matches all images for the specified sample(s).
+                - `image_id=None`: Matches the first image for the sample(s).
+                - `image_id="<str>"`: Matches image(s) by its(their) id.
+            
+            path: If True, returns path as string. Defaults to False.
+        
+        Returns:
+            If a single image matches the criteria, returns its source (str, Path, or None).
+            If multiple images match, returns a list of sources.
+
+        Raises:
+            ValueError: If no row matches the provided sample_id and image_id pair.
+        """
+        _validate_id(sample_id)
+        _validate_id(image_id)
+
+        indices = get_img_idx(img_data=self.img_data, sample_id=sample_id, image_id=image_id)
+
+        if len(indices) == 0:
+            raise ValueError(f"No matching rows for sample_id={sample_id} and image_id={image_id}")
+
+        spis = self.img_data[indices,]["data"]
+
+        img_sources = []
+        for spi in spis:
+            source = spi.img_source(as_path=path)
+            img_sources.append(source)
+
+        return img_sources[0] if len(img_sources) == 1 else img_sources
 
     def img_raster(self, sample_id=None, image_id=None):
         # NOTE: this function seems redundant, might be an artifact of the different subclasses of SpatialImage in the R implementation? just call `get_img()` for now
