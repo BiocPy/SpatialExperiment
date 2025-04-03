@@ -759,7 +759,9 @@ class SpatialExperiment(SingleCellExperiment):
                 - `image_id="<str>"`: Matches image(s) by its(their) id.
 
         Returns:
-            Zero, one, or more `VirtualSpatialImage` objects.
+            The image(s) matching the specified criteria. Returns `None` if `img_data` is `None`.
+            When a single image matches, returns a :py:class:`~VirtualSpatialImage` object.
+            When multiple images match, returns a list of :py:class:`~VirtualSpatialImage` objects.
 
         Behavior:
             - sample_id = True, image_id = True:
@@ -782,6 +784,9 @@ class SpatialExperiment(SingleCellExperiment):
 
             - sample_id = <str>, image_id = <str>:
                 Returns the image matching the specified sample and image identifiers.
+
+        Raises:
+            ValueError: If no row matches the provided sample_id and image_id pair.
         """
         _validate_id(sample_id)
         _validate_id(image_id)
@@ -790,6 +795,9 @@ class SpatialExperiment(SingleCellExperiment):
             return None
 
         indices = get_img_idx(img_data=self.img_data, sample_id=sample_id, image_id=image_id)
+
+        if len(indices) == 0:
+            raise ValueError(f"No matching rows for sample_id={sample_id} and image_id={image_id}")
 
         images = self.img_data[indices,]["data"]
         return images[0] if len(images) == 1 else images
@@ -833,6 +841,9 @@ class SpatialExperiment(SingleCellExperiment):
 
         Raises:
             ValueError: If the sample_id and image_id pair already exists.
+
+        Note:
+            See :py:meth:`~get_img` for detailed behavior regarding sample_id and image_id parameters.
         """
         _validate_sample_image_ids(img_data=self._img_data, new_sample_id=sample_id, new_image_id=image_id)
 
@@ -882,11 +893,20 @@ class SpatialExperiment(SingleCellExperiment):
 
         Returns:
             A modified ``SpatialExperiment`` object, either as a copy of the original or as a reference to the (in-place-modified) original.
+
+        Raises:
+            ValueError: If no row matches the provided sample_id and image_id pair.
+
+        Note:
+            See :py:meth:`~get_img` for detailed behavior regarding sample_id and image_id parameters.
         """
         _validate_id(sample_id)
         _validate_id(image_id)
 
         indices = get_img_idx(img_data=self.img_data, sample_id=sample_id, image_id=image_id)
+
+        if len(indices) == 0:
+            raise ValueError(f"No matching rows for sample_id={sample_id} and image_id={image_id}")
 
         new_img_data = self._img_data.remove_rows(indices)
 
@@ -916,28 +936,27 @@ class SpatialExperiment(SingleCellExperiment):
             path: If True, returns path as string. Defaults to False.
         
         Returns:
-            If a single image matches the criteria, returns its source (str, Path, or None).
-            If multiple images match, returns a list of sources.
+            The image source(s) for the matching criteria. Returns `None` if `img_data` is `None`.
+            When a single image matches, returns its source as a `str`, `Path`, or `None`.
+            When multiple images match, returns a list of sources.
 
         Raises:
             ValueError: If no row matches the provided sample_id and image_id pair.
+
+        Note:
+            See :py:meth:`~get_img` for detailed behavior regarding sample_id and image_id parameters.
         """
-        _validate_id(sample_id)
-        _validate_id(image_id)
+        spis = self.get_img(sample_id=sample_id, image_id=image_id)
 
-        indices = get_img_idx(img_data=self.img_data, sample_id=sample_id, image_id=image_id)
+        if spis is None:
+            return None
 
-        if len(indices) == 0:
-            raise ValueError(f"No matching rows for sample_id={sample_id} and image_id={image_id}")
+        if isinstance(spis, VirtualSpatialImage):
+            return spis.img_source(as_path=path)
 
-        spis = self.img_data[indices,]["data"]
+        img_sources = [spi.img_source(as_path=path) for spi in spis]
 
-        img_sources = []
-        for spi in spis:
-            source = spi.img_source(as_path=path)
-            img_sources.append(source)
-
-        return img_sources[0] if len(img_sources) == 1 else img_sources
+        return img_sources
 
     def img_raster(self, sample_id=None, image_id=None):
         # NOTE: this function seems redundant, might be an artifact of the different subclasses of SpatialImage in the R implementation? just call `get_img()` for now
