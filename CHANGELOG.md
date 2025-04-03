@@ -1,6 +1,7 @@
 # Changelog
 
-## [Unreleased]
+## Version 0.0.7
+- Added `img_source` function in main SpatialExperiment class and child classes of VirtualSpatialExperiment (PR #36)
 - Added `remove_img` function (PR #34)
 - Refactored `get_img_idx` for improved maintainability
 - Disambiguated `get_img_data` between `_imgutils.py` and `SpatialExperiment.py`
