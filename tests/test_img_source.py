@@ -1,3 +1,5 @@
+import pytest
+from copy import deepcopy
 from pathlib import Path
 from PIL import Image
 import numpy as np
@@ -68,3 +70,107 @@ def test_remote_spatial_image_img_source_with_mock(monkeypatch):
     
     # Test default behavior returns URL
     assert spi_remote.img_source() == image_url
+
+
+def test_img_source_no_img_data(spe):
+    tspe = deepcopy(spe)
+    tspe.img_data = None
+    assert not tspe.img_source()
+
+
+def test_img_source_no_matches(spe):
+    with pytest.raises(ValueError):
+        sources = spe.img_source(sample_id="foo", image_id="foo")
+
+
+def test_img_source_both_str(spe):
+    res = spe.img_source(sample_id="sample_1", image_id="dice")
+    expected_source = spe.get_img(sample_id="sample_1", image_id="dice").img_source()
+    
+    assert isinstance(res, Path)
+    assert res == expected_source
+
+
+def test_img_source_both_str_path(spe):
+    res = spe.img_source(sample_id="sample_1", image_id="dice", path=True)
+    expected_source = spe.get_img(sample_id="sample_1", image_id="dice").img_source(as_path=True)
+    
+    assert isinstance(res, str)
+    assert res == expected_source
+
+
+def test_img_source_both_true(spe):
+    res = spe.img_source(sample_id=True, image_id=True)
+    images = spe.get_img(sample_id=True, image_id=True)
+    expected_sources = [img.img_source() for img in images]
+    
+    assert isinstance(res, list)
+    assert res == expected_sources
+
+
+def test_img_source_both_true_path(spe):
+    res = spe.img_source(sample_id=True, image_id=True, path=True)
+    images = spe.get_img(sample_id=True, image_id=True)
+    expected_sources = [img.img_source(as_path=True) for img in images]
+    
+    assert isinstance(res, list)
+    assert res == expected_sources
+
+
+def test_img_source_both_none(spe):
+    res = spe.img_source(sample_id=None, image_id=None)
+    expected_source = spe.get_img(sample_id=None, image_id=None).img_source()
+    
+    assert isinstance(res, Path)
+    assert res == expected_source
+
+
+def test_img_source_sample_str_image_true(spe):
+    res = spe.img_source(sample_id="sample_1", image_id=True)
+    images = spe.get_img(sample_id="sample_1", image_id=True)
+    expected_sources = [img.img_source() for img in images]
+    
+    assert isinstance(res, list)
+    assert res == expected_sources
+
+
+def test_img_source_sample_true_image_str(spe):
+    res = spe.img_source(sample_id=True, image_id="desert")
+    expected_source = spe.get_img(sample_id=True, image_id="desert").img_source()
+    
+    assert isinstance(res, Path)
+    assert res == expected_source
+
+
+def test_img_source_sample_str_image_none(spe):
+    res = spe.img_source(sample_id="sample_1", image_id=None)
+    expected_source = spe.get_img(sample_id="sample_1", image_id=None).img_source()
+    
+    assert isinstance(res, Path)
+    assert res == expected_source
+
+
+def test_img_source_sample_none_image_str(spe):
+    res = spe.img_source(sample_id=None, image_id="aurora")
+    expected_source = spe.get_img(sample_id=None, image_id="aurora").img_source()
+    
+    assert isinstance(res, Path)
+    assert res == expected_source
+
+
+def test_img_source_sample_true_image_none(spe):
+    res = spe.img_source(sample_id=True, image_id=None)
+    images = spe.get_img(sample_id=True, image_id=None)
+    expected_sources = [img.img_source() for img in images]
+    
+    assert isinstance(res, list)
+    assert res == expected_sources
+
+
+def test_img_source_sample_none_image_true(spe):
+    res = spe.img_source(sample_id=None, image_id=True)
+    images = spe.get_img(sample_id=None, image_id=True)
+    expected_sources = [img.img_source() for img in images]
+    
+    assert isinstance(res, list)
+    assert res == expected_sources
