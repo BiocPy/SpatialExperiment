@@ -12,14 +12,6 @@ Subpackages
 Submodules
 ----------
 
-spatialexperiment.ProxySFE module
----------------------------------
-
-.. automodule:: spatialexperiment.ProxySFE
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 spatialexperiment.SpatialExperiment module
 ------------------------------------------
 
