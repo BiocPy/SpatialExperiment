@@ -960,7 +960,7 @@ class SpatialExperiment(SingleCellExperiment):
 
     def img_raster(self, sample_id=None, image_id=None):
         """Retrieve and load (if necessary) the images stored in the SpatialExperiment object.
-        
+
         Args:
             sample_id:
                 - `sample_id=True`: Matches all samples.
@@ -987,7 +987,7 @@ class SpatialExperiment(SingleCellExperiment):
 
         if spis is None:
             return None
-        
+
         if isinstance(spis, VirtualSpatialImage):
             return spis.img_raster()
 
