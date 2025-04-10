@@ -959,8 +959,41 @@ class SpatialExperiment(SingleCellExperiment):
         return img_sources
 
     def img_raster(self, sample_id=None, image_id=None):
-        # NOTE: this function seems redundant, might be an artifact of the different subclasses of SpatialImage in the R implementation? just call `get_img()` for now
-        self.get_img(sample_id=sample_id, image_id=image_id)
+        """Retrieve and load (if necessary) the images stored in the SpatialExperiment object.
+        
+        Args:
+            sample_id:
+                - `sample_id=True`: Matches all samples.
+                - `sample_id=None`: Matches the first sample.
+                - `sample_id="<str>"`: Matches a sample by its id.
+
+            image_id:
+                - `image_id=True`: Matches all images for the specified sample(s).
+                - `image_id=None`: Matches the first image for the sample(s).
+                - `image_id="<str>"`: Matches image(s) by its(their) id.
+
+        Returns:
+            The loaded image(s) for the matching criteria. Returns `None` if `img_data` is `None`.
+            When a single image matches, returns its loaded image.
+            When multiple images match, returns a list of loaded images.
+
+        Raises:
+            ValueError: If no row matches the provided sample_id and image_id pair.
+
+        Note:
+            See :py:meth:`~get_img` for detailed behavior regarding sample_id and image_id parameters.
+        """
+        spis = self.get_img(sample_id=sample_id, image_id=image_id)
+
+        if spis is None:
+            return None
+        
+        if isinstance(spis, VirtualSpatialImage):
+            return spis.img_raster()
+
+        img_rasters = [spi.img_raster() for spi in spis]
+
+        return img_rasters
 
     def rotate_img(self, sample_id=None, image_id=None, degrees=90):
         raise NotImplementedError()
