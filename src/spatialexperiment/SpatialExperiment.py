@@ -919,7 +919,7 @@ class SpatialExperiment(SingleCellExperiment):
         sample_id: Union[str, bool, None] = None,
         image_id: Union[str, bool, None] = None,
         path=False,
-    ):
+    ) -> Union[str, Path, None, List[Union[str, Path]]]:
         """Retrieve the source(s) for images stored in the SpatialExperiment object.
 
         Args:
@@ -958,7 +958,7 @@ class SpatialExperiment(SingleCellExperiment):
 
         return img_sources
 
-    def img_raster(self, sample_id=None, image_id=None):
+    def img_raster(self, sample_id=None, image_id=None) -> Union[Image.Image, List[Image.Image], None]:
         """Retrieve and load (if necessary) the images stored in the SpatialExperiment object.
         
         Args:
