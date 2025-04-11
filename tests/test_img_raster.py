@@ -1,6 +1,5 @@
 import pytest
 from copy import deepcopy
-from pathlib import Path
 from PIL import Image
 import numpy as np
 from spatialexperiment import construct_spatial_image_class
