@@ -53,7 +53,7 @@ def _validate_spatial_coords(spatial_coords, column_data):
         return
 
     if not hasattr(spatial_coords, "shape"):
-        raise TypeError("Spatial coordinates must be a dataframe-like object." "Does not contain a `shape` property.")
+        raise TypeError("Spatial coordinates must be a dataframe-like object.Does not contain a `shape` property.")
 
     if column_data.shape[0] != spatial_coords.shape[0]:
         raise ValueError("'spatial_coords' do not contain coordinates for all cells.")
