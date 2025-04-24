@@ -3,11 +3,12 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 from urllib.parse import urlparse
 from warnings import warn
 
-import numpy as np
-from PIL import Image
-
-from biocframe import BiocFrame
 import biocutils as ut
+import numpy as np
+from biocframe import BiocFrame
+from PIL import Image
+from singlecellexperiment import SingleCellExperiment
+from singlecellexperiment._combineutils import merge_generic, relaxed_merge_generic, relaxed_merge_numpy_generic
 from summarizedexperiment._combineutils import (
     check_assays_are_equal,
     merge_assays,
@@ -16,9 +17,8 @@ from summarizedexperiment._combineutils import (
 )
 from summarizedexperiment._frameutils import _sanitize_frame
 from summarizedexperiment.RangedSummarizedExperiment import GRangesOrGRangesList
-from singlecellexperiment import SingleCellExperiment
-from singlecellexperiment._combineutils import merge_generic, relaxed_merge_generic, relaxed_merge_numpy_generic
 
+from ._combineutils import merge_spatial_coordinates, merge_spatial_frames
 from ._imgutils import get_img_idx
 from ._validators import (
     _validate_column_data,
@@ -29,8 +29,7 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from ._combineutils import merge_spatial_frames, merge_spatial_coordinates
-from .SpatialImage import construct_spatial_image_class, VirtualSpatialImage
+from .SpatialImage import VirtualSpatialImage, construct_spatial_image_class
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -201,6 +200,11 @@ class SpatialExperiment(SingleCellExperiment):
             column_data["sample_id"] = ["sample01"] * self.shape[1]  # hard code default sample_id as "sample01"
 
         spatial_coords = _sanitize_frame(spatial_coords, num_rows=self.shape[1])
+
+        if img_data is None:
+            img_data = BiocFrame(
+                data={"sample_id": [], "image_id": [], "data": [], "scale_factor": []}, number_of_rows=0
+            )
         img_data = _sanitize_frame(img_data, num_rows=0)
 
         self._img_data = img_data
