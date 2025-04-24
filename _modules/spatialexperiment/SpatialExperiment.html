@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment.SpatialExperiment - SpatialExperiment 0.0.7 documentation</title>
+        <title>spatialexperiment.SpatialExperiment - SpatialExperiment 0.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.7 documentation</div></a>
+      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.8 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.7 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.8 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -251,11 +251,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">biocframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">BiocFrame</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">biocutils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ut</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">biocframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">BiocFrame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">singlecellexperiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleCellExperiment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">singlecellexperiment._combineutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_generic</span><span class="p">,</span> <span class="n">relaxed_merge_generic</span><span class="p">,</span> <span class="n">relaxed_merge_numpy_generic</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">summarizedexperiment._combineutils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">check_assays_are_equal</span><span class="p">,</span>
     <span class="n">merge_assays</span><span class="p">,</span>
@@ -264,9 +265,8 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">summarizedexperiment._frameutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_sanitize_frame</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">summarizedexperiment.RangedSummarizedExperiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">GRangesOrGRangesList</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">singlecellexperiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleCellExperiment</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">singlecellexperiment._combineutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_generic</span><span class="p">,</span> <span class="n">relaxed_merge_generic</span><span class="p">,</span> <span class="n">relaxed_merge_numpy_generic</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">._combineutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_spatial_coordinates</span><span class="p">,</span> <span class="n">merge_spatial_frames</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._imgutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_img_idx</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._validators</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">_validate_column_data</span><span class="p">,</span>
@@ -277,8 +277,7 @@
     <span class="n">_validate_spatial_coords</span><span class="p">,</span>
     <span class="n">_validate_spatial_coords_names</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">._combineutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_spatial_frames</span><span class="p">,</span> <span class="n">merge_spatial_coordinates</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.SpatialImage</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct_spatial_image_class</span><span class="p">,</span> <span class="n">VirtualSpatialImage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.SpatialImage</span><span class="w"> </span><span class="kn">import</span> <span class="n">VirtualSpatialImage</span><span class="p">,</span> <span class="n">construct_spatial_image_class</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;keviny2&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;keviny2&quot;</span>
@@ -453,6 +452,11 @@
             <span class="n">column_data</span><span class="p">[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sample01&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># hard code default sample_id as &quot;sample01&quot;</span>
 
         <span class="n">spatial_coords</span> <span class="o">=</span> <span class="n">_sanitize_frame</span><span class="p">(</span><span class="n">spatial_coords</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">img_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">img_data</span> <span class="o">=</span> <span class="n">BiocFrame</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sample_id&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;image_id&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;scale_factor&quot;</span><span class="p">:</span> <span class="p">[]},</span> <span class="n">number_of_rows</span><span class="o">=</span><span class="mi">0</span>
+            <span class="p">)</span>
         <span class="n">img_data</span> <span class="o">=</span> <span class="n">_sanitize_frame</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_img_data</span> <span class="o">=</span> <span class="n">img_data</span>
@@ -1240,7 +1244,7 @@
         <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the source(s) for images stored in the SpatialExperiment object.</span>
 
 <span class="sd">        Args:</span>
@@ -1282,9 +1286,42 @@
 
 <div class="viewcode-block" id="SpatialExperiment.img_raster">
 <a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.img_raster">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">img_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="c1"># NOTE: this function seems redundant, might be an artifact of the different subclasses of SpatialImage in the R implementation? just call `get_img()` for now</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_img</span><span class="p">(</span><span class="n">sample_id</span><span class="o">=</span><span class="n">sample_id</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">image_id</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">img_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve and load (if necessary) the images stored in the SpatialExperiment object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sample_id:</span>
+<span class="sd">                - `sample_id=True`: Matches all samples.</span>
+<span class="sd">                - `sample_id=None`: Matches the first sample.</span>
+<span class="sd">                - `sample_id=&quot;&lt;str&gt;&quot;`: Matches a sample by its id.</span>
+
+<span class="sd">            image_id:</span>
+<span class="sd">                - `image_id=True`: Matches all images for the specified sample(s).</span>
+<span class="sd">                - `image_id=None`: Matches the first image for the sample(s).</span>
+<span class="sd">                - `image_id=&quot;&lt;str&gt;&quot;`: Matches image(s) by its(their) id.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The loaded image(s) for the matching criteria. Returns `None` if `img_data` is `None`.</span>
+<span class="sd">            When a single image matches, returns its loaded image.</span>
+<span class="sd">            When multiple images match, returns a list of loaded images.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If no row matches the provided sample_id and image_id pair.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            See :py:meth:`~get_img` for detailed behavior regarding sample_id and image_id parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">spis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_img</span><span class="p">(</span><span class="n">sample_id</span><span class="o">=</span><span class="n">sample_id</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="n">image_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">spis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spis</span><span class="p">,</span> <span class="n">VirtualSpatialImage</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">spis</span><span class="o">.</span><span class="n">img_raster</span><span class="p">()</span>
+
+        <span class="n">img_rasters</span> <span class="o">=</span> <span class="p">[</span><span class="n">spi</span><span class="o">.</span><span class="n">img_raster</span><span class="p">()</span> <span class="k">for</span> <span class="n">spi</span> <span class="ow">in</span> <span class="n">spis</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">img_rasters</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.rotate_img">
@@ -1498,7 +1535,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=bbaf98b3"></script>
+</div><script src="../../_static/documentation_options.js?v=53b53b71"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>

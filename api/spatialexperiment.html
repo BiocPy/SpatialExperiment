@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="spatialexperiment.io package" href="spatialexperiment.io.html" /><link rel="prev" title="spatialexperiment" href="modules.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment package - SpatialExperiment 0.0.7 documentation</title>
+        <title>spatialexperiment package - SpatialExperiment 0.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">SpatialExperiment 0.0.7 documentation</div></a>
+      <a href="../index.html"><div class="brand">SpatialExperiment 0.0.8 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -191,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.7 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.8 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -676,7 +676,41 @@ combinations of <cite>sample_id</cite> and <cite>image_id</cite> values.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="spatialexperiment.SpatialExperiment.SpatialExperiment.img_raster">
 <span class="sig-name descname"><span class="pre">img_raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialExperiment.html#SpatialExperiment.img_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialExperiment.SpatialExperiment.img_raster" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve and load (if necessary) the images stored in the SpatialExperiment object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_id</strong> – <ul>
+<li><p><cite>sample_id=True</cite>: Matches all samples.</p></li>
+<li><p><cite>sample_id=None</cite>: Matches the first sample.</p></li>
+<li><p><cite>sample_id=”&lt;str&gt;”</cite>: Matches a sample by its id.</p></li>
+</ul>
+</p></li>
+<li><p><strong>image_id</strong> – <ul>
+<li><p><cite>image_id=True</cite>: Matches all images for the specified sample(s).</p></li>
+<li><p><cite>image_id=None</cite>: Matches the first image for the sample(s).</p></li>
+<li><p><cite>image_id=”&lt;str&gt;”</cite>: Matches image(s) by its(their) id.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>, <a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>], <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The loaded image(s) for the matching criteria. Returns <cite>None</cite> if <cite>img_data</cite> is <cite>None</cite>.
+When a single image matches, returns its loaded image.
+When multiple images match, returns a list of loaded images.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If no row matches the provided sample_id and image_id pair.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#spatialexperiment.SpatialExperiment.get_img" title="spatialexperiment.SpatialExperiment.get_img"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_img()</span></code></a> for detailed behavior regarding sample_id and image_id parameters.</p>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="spatialexperiment.SpatialExperiment.SpatialExperiment.img_source">
@@ -700,13 +734,16 @@ combinations of <cite>sample_id</cite> and <cite>image_id</cite> values.</p>
 <li><p><strong>path</strong> – If True, returns path as string. Defaults to False.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The image source(s) for the matching criteria. Returns <cite>None</cite> if <cite>img_data</cite> is <cite>None</cite>.
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The image source(s) for the matching criteria. Returns <cite>None</cite> if <cite>img_data</cite> is <cite>None</cite>.
 When a single image matches, returns its source as a <cite>str</cite>, <cite>Path</cite>, or <cite>None</cite>.
 When multiple images match, returns a list of sources.</p>
 </dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If no row matches the provided sample_id and image_id pair.</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If no row matches the provided sample_id and image_id pair.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -2293,7 +2330,41 @@ combinations of <cite>sample_id</cite> and <cite>image_id</cite> values.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="spatialexperiment.SpatialExperiment.img_raster">
 <span class="sig-name descname"><span class="pre">img_raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spatialexperiment/SpatialExperiment.html#SpatialExperiment.img_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spatialexperiment.SpatialExperiment.img_raster" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve and load (if necessary) the images stored in the SpatialExperiment object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_id</strong> – <ul>
+<li><p><cite>sample_id=True</cite>: Matches all samples.</p></li>
+<li><p><cite>sample_id=None</cite>: Matches the first sample.</p></li>
+<li><p><cite>sample_id=”&lt;str&gt;”</cite>: Matches a sample by its id.</p></li>
+</ul>
+</p></li>
+<li><p><strong>image_id</strong> – <ul>
+<li><p><cite>image_id=True</cite>: Matches all images for the specified sample(s).</p></li>
+<li><p><cite>image_id=None</cite>: Matches the first image for the sample(s).</p></li>
+<li><p><cite>image_id=”&lt;str&gt;”</cite>: Matches image(s) by its(their) id.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>, <a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>], <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The loaded image(s) for the matching criteria. Returns <cite>None</cite> if <cite>img_data</cite> is <cite>None</cite>.
+When a single image matches, returns its loaded image.
+When multiple images match, returns a list of loaded images.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If no row matches the provided sample_id and image_id pair.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#spatialexperiment.SpatialExperiment.get_img" title="spatialexperiment.SpatialExperiment.get_img"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_img()</span></code></a> for detailed behavior regarding sample_id and image_id parameters.</p>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="spatialexperiment.SpatialExperiment.img_source">
@@ -2317,13 +2388,16 @@ combinations of <cite>sample_id</cite> and <cite>image_id</cite> values.</p>
 <li><p><strong>path</strong> – If True, returns path as string. Defaults to False.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The image source(s) for the matching criteria. Returns <cite>None</cite> if <cite>img_data</cite> is <cite>None</cite>.
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.11/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The image source(s) for the matching criteria. Returns <cite>None</cite> if <cite>img_data</cite> is <cite>None</cite>.
 When a single image matches, returns its source as a <cite>str</cite>, <cite>Path</cite>, or <cite>None</cite>.
 When multiple images match, returns a list of sources.</p>
 </dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If no row matches the provided sample_id and image_id pair.</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If no row matches the provided sample_id and image_id pair.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -3188,7 +3262,7 @@ Defaults to <cite>True</cite>.</p></li>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=bbaf98b3"></script>
+</div><script src="../_static/documentation_options.js?v=53b53b71"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
