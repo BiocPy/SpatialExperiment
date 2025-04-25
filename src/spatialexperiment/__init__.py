@@ -16,8 +16,8 @@ finally:
     del version, PackageNotFoundError
 
 from .io import read_tenx_visium
-from .SpatialExperiment import SpatialExperiment
-from .SpatialImage import (
+from .spatialexperiment import SpatialExperiment
+from .spatialimage import (
     LoadedSpatialImage,
     RemoteSpatialImage,
     StoredSpatialImage,

@@ -2,7 +2,7 @@ import pytest
 from copy import deepcopy
 import numpy as np
 
-from spatialexperiment.SpatialImage import VirtualSpatialImage
+from spatialexperiment import VirtualSpatialImage
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"

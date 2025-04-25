@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 import numpy as np
 from PIL import Image
 from biocframe import BiocFrame
-from .SpatialImage import construct_spatial_image_class
+from .spatialimage import construct_spatial_image_class
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"

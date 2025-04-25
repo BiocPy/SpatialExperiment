@@ -1,11 +1,11 @@
 import pytest
 from PIL import Image
-from spatialexperiment import construct_spatial_image_class
-from spatialexperiment.SpatialImage import (
+from spatialexperiment import (
     VirtualSpatialImage,
     StoredSpatialImage,
     LoadedSpatialImage,
     RemoteSpatialImage,
+    construct_spatial_image_class
 )
 
 __author__ = "keviny2"
