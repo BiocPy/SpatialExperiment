@@ -3,11 +3,11 @@ from copy import deepcopy
 from pathlib import Path
 from PIL import Image
 import numpy as np
-from spatialexperiment import construct_spatial_image_class
-from spatialexperiment.SpatialImage import (
+from spatialexperiment import (
     LoadedSpatialImage,
     StoredSpatialImage,
-    RemoteSpatialImage
+    RemoteSpatialImage,
+    construct_spatial_image_class
 )
 
 def test_loaded_spatial_image_img_source():

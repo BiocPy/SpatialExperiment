@@ -7,7 +7,6 @@ import itertools
 
 from biocframe import BiocFrame
 import biocutils as ut
-from spatialexperiment import SpatialExperiment
 
 
 def _append_indices_to_samples(bframes: List[BiocFrame]) -> List[BiocFrame]:
@@ -30,7 +29,7 @@ def _append_indices_to_samples(bframes: List[BiocFrame]) -> List[BiocFrame]:
     return modified_bframes
 
 
-def merge_spatial_frames(x: List[SpatialExperiment], relaxed: bool = False) -> Tuple[BiocFrame, BiocFrame]:
+def merge_spatial_frames(x: List["SpatialExperiment"], relaxed: bool = False) -> Tuple[BiocFrame, BiocFrame]:
     """Merge column data and image data from multiple ``SpatialExperiment`` objects.
 
     If duplicate sample IDs exist across objects, appends indices to make them unique.

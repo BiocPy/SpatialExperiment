@@ -9,7 +9,7 @@ import json
 from biocframe import BiocFrame
 import biocutils as ut
 from singlecellexperiment import read_tenx_mtx
-from ..SpatialExperiment import SpatialExperiment
+from ..spatialexperiment import SpatialExperiment
 from .._imgutils import construct_img_data
 from .._initutils import construct_spatial_coords_from_names
 

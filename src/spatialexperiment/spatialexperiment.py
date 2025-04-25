@@ -29,7 +29,7 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from .SpatialImage import VirtualSpatialImage, construct_spatial_image_class
+from .spatialimage import VirtualSpatialImage, construct_spatial_image_class
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"

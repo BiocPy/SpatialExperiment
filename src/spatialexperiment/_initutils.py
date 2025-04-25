@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from biocframe import BiocFrame
 from PIL import Image
-from .SpatialImage import construct_spatial_image_class
+from .spatialimage import construct_spatial_image_class
 from summarizedexperiment._frameutils import _sanitize_frame
 
 __author__ = "keviny2"
