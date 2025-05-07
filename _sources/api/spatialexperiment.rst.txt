@@ -12,18 +12,18 @@ Subpackages
 Submodules
 ----------
 
-spatialexperiment.SpatialExperiment module
+spatialexperiment.spatialexperiment module
 ------------------------------------------
 
-.. automodule:: spatialexperiment.SpatialExperiment
+.. automodule:: spatialexperiment.spatialexperiment
    :members:
    :show-inheritance:
    :undoc-members:
 
-spatialexperiment.SpatialImage module
+spatialexperiment.spatialimage module
 -------------------------------------
 
-.. automodule:: spatialexperiment.SpatialImage
+.. automodule:: spatialexperiment.spatialimage
    :members:
    :show-inheritance:
    :undoc-members:

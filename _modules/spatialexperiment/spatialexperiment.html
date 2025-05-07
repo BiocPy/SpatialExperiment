@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment.SpatialExperiment - SpatialExperiment 0.0.8 documentation</title>
+        <title>spatialexperiment.spatialexperiment - SpatialExperiment 0.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.8 documentation</div></a>
+      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.9 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.8 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.9 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -245,7 +245,7 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for spatialexperiment.SpatialExperiment</h1><div class="highlight"><pre>
+          <h1>Source code for spatialexperiment.spatialexperiment</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span>
@@ -277,7 +277,13 @@
     <span class="n">_validate_spatial_coords</span><span class="p">,</span>
     <span class="n">_validate_spatial_coords_names</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.SpatialImage</span><span class="w"> </span><span class="kn">import</span> <span class="n">VirtualSpatialImage</span><span class="p">,</span> <span class="n">construct_spatial_image_class</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.spatialimage</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">VirtualSpatialImage</span><span class="p">,</span>
+    <span class="n">StoredSpatialImage</span><span class="p">,</span>
+    <span class="n">RemoteSpatialImage</span><span class="p">,</span>
+    <span class="n">LoadedSpatialImage</span><span class="p">,</span>
+    <span class="n">construct_spatial_image_class</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;keviny2&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;keviny2&quot;</span>
@@ -285,7 +291,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SpatialExperiment</span><span class="p">(</span><span class="n">SingleCellExperiment</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Container class for storing data from spatial -omics experiments, extending</span>
 <span class="sd">    :py:class:`~singlecellexperiment.SingleCellExperiment` to provide slots for</span>
@@ -297,7 +303,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SpatialExperiment.__init__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.__init__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">assays</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -475,7 +481,7 @@
     <span class="c1">#########################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.__deepcopy__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.__deepcopy__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.__deepcopy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_nil</span><span class="o">=</span><span class="p">[]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -518,7 +524,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.__copy__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.__copy__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.__copy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -544,7 +550,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.copy">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.copy">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.copy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~__copy__`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__copy__</span><span class="p">()</span></div>
@@ -555,7 +561,7 @@
     <span class="c1">##########################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.__repr__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.__repr__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.__repr__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -643,7 +649,7 @@
     <span class="c1">##############################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.get_spatial_coordinates">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_spatial_coordinates">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_spatial_coordinates">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_spatial_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Access spatial coordinates.</span>
 
@@ -654,14 +660,14 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.get_spatial_coords">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_spatial_coords">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_spatial_coords">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_spatial_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BiocFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~get_spatial_coordinates`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spatial_coordinates</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coordinates">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coordinates">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.set_spatial_coordinates">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coordinates</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
@@ -699,7 +705,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coords">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coords">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.set_spatial_coords">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coords</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">spatial_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
@@ -742,7 +748,7 @@
     <span class="c1">##############################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.get_spatial_coordinates_names">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_spatial_coordinates_names">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_spatial_coordinates_names">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_spatial_coordinates_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Access spatial coordinates names.</span>
 
@@ -756,14 +762,14 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.get_spatial_coords_names">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_spatial_coords_names">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_spatial_coords_names">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_spatial_coords_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~get_spatial_coordinate_names`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spatial_coordinate_names</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coordinates_names">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coordinates_names">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.set_spatial_coordinates_names">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coordinates_names</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
@@ -795,7 +801,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.set_spatial_coords_names">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_spatial_coords_names">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.set_spatial_coords_names">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_spatial_coords_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_coords_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_spatial_coordinates_names`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial_coordinates_names</span><span class="p">(</span><span class="n">spatial_coords_names</span><span class="o">=</span><span class="n">spatial_coords_names</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span></div>
@@ -834,7 +840,7 @@
     <span class="c1">##############################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.get_image_data">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_image_data">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_image_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_image_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BiocFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Access image data.</span>
 
@@ -845,14 +851,14 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.get_img_data">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_img_data">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_img_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_img_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BiocFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~get_image_data`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_image_data</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.set_image_data">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_image_data">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.set_image_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_image_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set new image data.</span>
 
@@ -884,7 +890,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.set_img_data">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_img_data">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.set_img_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_img_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_data</span><span class="p">:</span> <span class="n">BiocFrame</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~set_image_data`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_image_data</span><span class="p">(</span><span class="n">img_data</span><span class="o">=</span><span class="n">img_data</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span></div>
@@ -923,7 +929,7 @@
     <span class="c1">##############################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.get_scale_factors">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_scale_factors">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_scale_factors">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_scale_factors</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -960,7 +966,7 @@
     <span class="c1">################################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.set_column_data">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.set_column_data">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.set_column_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_column_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">cols</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span>
@@ -1008,7 +1014,7 @@
     <span class="c1">################################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.get_slice">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_slice">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_slice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_slice</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]],</span>
@@ -1055,7 +1061,7 @@
     <span class="c1">################################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.get_img">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.get_img">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.get_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_img</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1120,7 +1126,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.add_img">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.add_img">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.add_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_img</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">image_source</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
@@ -1192,7 +1198,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.remove_img">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.remove_img">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.remove_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">remove_img</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
@@ -1238,7 +1244,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.img_source">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.img_source">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.img_source">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_source</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">sample_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1285,7 +1291,7 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.img_raster">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.img_raster">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.img_raster">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve and load (if necessary) the images stored in the SpatialExperiment object.</span>
 
@@ -1325,22 +1331,65 @@
 
 
 <div class="viewcode-block" id="SpatialExperiment.rotate_img">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.rotate_img">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.rotate_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rotate_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">degrees</span><span class="o">=</span><span class="mi">90</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.mirror_img">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.mirror_img">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.mirror_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">mirror_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">)):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.to_spatial_experiment">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.to_spatial_experiment">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.to_spatial_experiment">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_spatial_experiment</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+    <span class="c1">################################</span>
+    <span class="c1">######&gt;&gt; AnnData interop &lt;&lt;#####</span>
+    <span class="c1">################################</span>
+
+<div class="viewcode-block" id="SpatialExperiment.to_anndata">
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.to_anndata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_anndata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_alternative_experiments</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;anndata.AnnData&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform :py:class:`~SpatialExperiment`-like into a :py:class:`~anndata.AnnData` representation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            include_alternative_experiments:</span>
+<span class="sd">                Whether to transform alternative experiments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An ``AnnData`` representation of the experiment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">alt_exps</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to_anndata</span><span class="p">(</span><span class="n">include_alternative_experiments</span><span class="o">=</span><span class="n">include_alternative_experiments</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;spatial&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">uns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;spatial&#39; key already exists in the metadata. Rename to something else.&quot;</span><span class="p">)</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;spatial&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_data</span><span class="p">:</span>
+            <span class="n">library_id</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;image_id&quot;</span><span class="p">]</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;spatial&quot;</span><span class="p">][</span><span class="n">library_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="n">spi</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spi</span><span class="p">,</span> <span class="n">LoadedSpatialImage</span><span class="p">):</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">spi</span><span class="o">.</span><span class="n">image</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spi</span><span class="p">,</span> <span class="p">(</span><span class="n">StoredSpatialImage</span><span class="p">,</span> <span class="n">RemoteSpatialImage</span><span class="p">)):</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">spi</span><span class="o">.</span><span class="n">img_source</span><span class="p">()</span>
+
+            <span class="n">obj</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;spatial&quot;</span><span class="p">][</span><span class="n">library_id</span><span class="p">][</span><span class="s2">&quot;images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hires&quot;</span><span class="p">:</span> <span class="n">img</span><span class="p">}</span>  <span class="c1"># default to `hires` for now</span>
+
+            <span class="n">obj</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;spatial&quot;</span><span class="p">][</span><span class="n">library_id</span><span class="p">][</span><span class="s2">&quot;scalefactors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;tissue_hires_scalef&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;scale_factor&quot;</span><span class="p">]</span>
+            <span class="p">}</span>  <span class="c1"># default to `tissue_hires_scalef` for now</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;spatial&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">spatial_coordinates</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_coords_names</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">obj</span><span class="p">,</span> <span class="n">alt_exps</span></div>
 
 
     <span class="c1">################################</span>
@@ -1348,14 +1397,14 @@
     <span class="c1">################################</span>
 
 <div class="viewcode-block" id="SpatialExperiment.relaxed_combine_columns">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.relaxed_combine_columns">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.relaxed_combine_columns">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">relaxed_combine_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper around :py:func:`~relaxed_combine_columns`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">relaxed_combine_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SpatialExperiment.combine_columns">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.SpatialExperiment.combine_columns">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.SpatialExperiment.combine_columns">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">combine_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpatialExperiment&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper around :py:func:`~combine_columns`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">combine_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="p">)</span></div>
@@ -1369,7 +1418,7 @@
 
 
 <div class="viewcode-block" id="combine_columns">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.combine_columns">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.combine_columns">[docs]</a>
 <span class="nd">@ut</span><span class="o">.</span><span class="n">combine_columns</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">SpatialExperiment</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">combine_columns</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">SpatialExperiment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpatialExperiment</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine multiple ``SpatialExperiment`` objects by column.</span>
@@ -1434,7 +1483,7 @@
 
 
 <div class="viewcode-block" id="relaxed_combine_columns">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialExperiment.relaxed_combine_columns">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialexperiment.relaxed_combine_columns">[docs]</a>
 <span class="nd">@ut</span><span class="o">.</span><span class="n">relaxed_combine_columns</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">SpatialExperiment</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">relaxed_combine_columns</span><span class="p">(</span>
     <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">SpatialExperiment</span><span class="p">,</span>
@@ -1535,7 +1584,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=53b53b71"></script>
+</div><script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>

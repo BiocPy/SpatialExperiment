@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>spatialexperiment.SpatialImage - SpatialExperiment 0.0.8 documentation</title>
+        <title>spatialexperiment.spatialimage - SpatialExperiment 0.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.8 documentation</div></a>
+      <a href="../../index.html"><div class="brand">SpatialExperiment 0.0.9 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">SpatialExperiment 0.0.8 documentation</span>
+  <span class="sidebar-brand-text">SpatialExperiment 0.0.9 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -245,7 +245,7 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for spatialexperiment.SpatialImage</h1><div class="highlight"><pre>
+          <h1>Source code for spatialexperiment.spatialimage</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
@@ -267,12 +267,12 @@
 
 <span class="c1"># Keeping the same names as the R classes</span>
 <div class="viewcode-block" id="VirtualSpatialImage">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">VirtualSpatialImage</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for spatial images.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="VirtualSpatialImage.__init__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.__init__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span> <span class="o">=</span> <span class="n">metadata</span> <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span></div>
 
@@ -282,7 +282,7 @@
     <span class="c1">#########################</span>
 
 <div class="viewcode-block" id="VirtualSpatialImage.__eq__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.__eq__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.__eq__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -291,7 +291,7 @@
 
 
 <div class="viewcode-block" id="VirtualSpatialImage.__hash__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.__hash__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.__hash__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Note: This exists primarily to support lru_cache.</span>
         <span class="c1"># Generally, these classes are mutable and shouldn&#39;t be used as dict keys or in sets.</span>
@@ -303,7 +303,7 @@
     <span class="c1">###########################</span>
 
 <div class="viewcode-block" id="VirtualSpatialImage.get_metadata">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.get_metadata">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.get_metadata">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -313,7 +313,7 @@
 
 
 <div class="viewcode-block" id="VirtualSpatialImage.set_metadata">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.set_metadata">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.set_metadata">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;VirtualSpatialImage&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set additional metadata.</span>
 
@@ -357,7 +357,7 @@
     <span class="c1">############################</span>
 
 <div class="viewcode-block" id="VirtualSpatialImage.get_dimensions">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.get_dimensions">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.get_dimensions">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get image dimensions (width, height).&quot;&quot;&quot;</span>
         <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_raster</span><span class="p">()</span>
@@ -374,7 +374,7 @@
     <span class="c1">############################</span>
 
 <div class="viewcode-block" id="VirtualSpatialImage.img_source">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.img_source">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.img_source">[docs]</a>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the source of the image.</span>
@@ -389,7 +389,7 @@
 
 
 <div class="viewcode-block" id="VirtualSpatialImage.img_raster">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.img_raster">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.img_raster">[docs]</a>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the image as a PIL Image object.&quot;&quot;&quot;</span>
@@ -397,7 +397,7 @@
 
 
 <div class="viewcode-block" id="VirtualSpatialImage.rotate_img">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.rotate_img">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.rotate_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rotate_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">degrees</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">90</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;LoadedSpatialImage&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Rotate image by specified degrees clockwise.&quot;&quot;&quot;</span>
         <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_raster</span><span class="p">()</span>
@@ -408,7 +408,7 @@
 
 
 <div class="viewcode-block" id="VirtualSpatialImage.mirror_img">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.VirtualSpatialImage.mirror_img">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.VirtualSpatialImage.mirror_img">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">mirror_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;h&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;LoadedSpatialImage&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Mirror image horizontally or vertically.&quot;&quot;&quot;</span>
         <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_raster</span><span class="p">()</span>
@@ -437,12 +437,12 @@
 
 
 <div class="viewcode-block" id="LoadedSpatialImage">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LoadedSpatialImage</span><span class="p">(</span><span class="n">VirtualSpatialImage</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for images loaded into memory.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LoadedSpatialImage.__init__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.__init__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.</span>
 
@@ -469,7 +469,7 @@
     <span class="c1">#########################</span>
 
 <div class="viewcode-block" id="LoadedSpatialImage.__eq__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.__eq__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.__eq__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="n">diff</span> <span class="o">=</span> <span class="n">ImageChops</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
 
@@ -477,7 +477,7 @@
 
 
 <div class="viewcode-block" id="LoadedSpatialImage.__hash__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.__hash__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.__hash__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__hash__</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()))</span></div>
 
@@ -487,7 +487,7 @@
     <span class="c1">#########################</span>
 
 <div class="viewcode-block" id="LoadedSpatialImage.__deepcopy__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.__deepcopy__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.__deepcopy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_nil</span><span class="o">=</span><span class="p">[]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -506,7 +506,7 @@
 
 
 <div class="viewcode-block" id="LoadedSpatialImage.__copy__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.__copy__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.__copy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -520,7 +520,7 @@
 
 
 <div class="viewcode-block" id="LoadedSpatialImage.copy">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.copy">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.copy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~__copy__`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__copy__</span><span class="p">()</span></div>
@@ -531,7 +531,7 @@
     <span class="c1">##########################</span>
 
 <div class="viewcode-block" id="LoadedSpatialImage.__repr__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.__repr__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.__repr__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -562,15 +562,15 @@
     <span class="c1">############################</span>
 
 <div class="viewcode-block" id="LoadedSpatialImage.get_image">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.get_image">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the image as a PIL Image object.&quot;&quot;&quot;</span>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.get_image">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the image as a PIL Image object or ndarray.&quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span></div>
 
 
 <div class="viewcode-block" id="LoadedSpatialImage.set_image">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.set_image">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.set_image">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;LoadedSpatialImage&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set new image.</span>
 
@@ -605,7 +605,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_image</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LoadedSpatialImage.img_source">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.img_source">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.img_source">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the source of the loaded image.</span>
 
@@ -620,7 +620,7 @@
     <span class="c1">############################</span>
 
 <div class="viewcode-block" id="LoadedSpatialImage.img_raster">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.LoadedSpatialImage.img_raster">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.LoadedSpatialImage.img_raster">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span></div>
 </div>
@@ -636,12 +636,12 @@
 
 
 <div class="viewcode-block" id="StoredSpatialImage">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StoredSpatialImage</span><span class="p">(</span><span class="n">VirtualSpatialImage</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for images stored on local filesystem.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="StoredSpatialImage.__init__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.__init__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.</span>
 
@@ -668,13 +668,13 @@
     <span class="c1">#########################</span>
 
 <div class="viewcode-block" id="StoredSpatialImage.__eq__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.__eq__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.__eq__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">path</span></div>
 
 
 <div class="viewcode-block" id="StoredSpatialImage.__hash__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.__hash__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.__hash__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__hash__</span><span class="p">(),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)))</span></div>
 
@@ -684,7 +684,7 @@
     <span class="c1">#########################</span>
 
 <div class="viewcode-block" id="StoredSpatialImage.__deepcopy__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.__deepcopy__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.__deepcopy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_nil</span><span class="o">=</span><span class="p">[]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -703,7 +703,7 @@
 
 
 <div class="viewcode-block" id="StoredSpatialImage.__copy__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.__copy__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.__copy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -717,7 +717,7 @@
 
 
 <div class="viewcode-block" id="StoredSpatialImage.copy">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.copy">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.copy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~__copy__`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__copy__</span><span class="p">()</span></div>
@@ -728,7 +728,7 @@
     <span class="c1">##########################</span>
 
 <div class="viewcode-block" id="StoredSpatialImage.__repr__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.__repr__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.__repr__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -759,14 +759,14 @@
     <span class="c1">#############################</span>
 
 <div class="viewcode-block" id="StoredSpatialImage.get_path">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.get_path">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.get_path">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the path to the image file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span></div>
 
 
 <div class="viewcode-block" id="StoredSpatialImage.set_path">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.set_path">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.set_path">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StoredSpatialImage&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the path to the image file.</span>
 
@@ -806,7 +806,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="StoredSpatialImage.img_source">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.img_source">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.img_source">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the source path of the image.</span>
 
@@ -825,7 +825,7 @@
 
     <span class="c1"># Simple in-memory cache</span>
 <div class="viewcode-block" id="StoredSpatialImage.img_raster">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.StoredSpatialImage.img_raster">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.StoredSpatialImage.img_raster">[docs]</a>
     <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load and cache the image.&quot;&quot;&quot;</span>
@@ -841,12 +841,12 @@
 
 
 <div class="viewcode-block" id="RemoteSpatialImage">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RemoteSpatialImage</span><span class="p">(</span><span class="n">VirtualSpatialImage</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for remotely hosted images.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RemoteSpatialImage.__init__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.__init__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.</span>
 
@@ -881,13 +881,13 @@
     <span class="c1">#########################</span>
 
 <div class="viewcode-block" id="RemoteSpatialImage.__eq__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.__eq__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.__eq__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">url</span></div>
 
 
 <div class="viewcode-block" id="RemoteSpatialImage.__hash__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.__hash__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.__hash__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__hash__</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">))</span></div>
 
@@ -897,7 +897,7 @@
     <span class="c1">#########################</span>
 
 <div class="viewcode-block" id="RemoteSpatialImage.__deepcopy__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.__deepcopy__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.__deepcopy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_nil</span><span class="o">=</span><span class="p">[]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -916,7 +916,7 @@
 
 
 <div class="viewcode-block" id="RemoteSpatialImage.__copy__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.__copy__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.__copy__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -930,7 +930,7 @@
 
 
 <div class="viewcode-block" id="RemoteSpatialImage.copy">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.copy">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.copy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :py:meth:`~__copy__`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__copy__</span><span class="p">()</span></div>
@@ -941,7 +941,7 @@
     <span class="c1">##########################</span>
 
 <div class="viewcode-block" id="RemoteSpatialImage.__repr__">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.__repr__">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.__repr__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
@@ -972,14 +972,14 @@
     <span class="c1">############################</span>
 
 <div class="viewcode-block" id="RemoteSpatialImage.get_url">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.get_url">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.get_url">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the url to the image file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span></div>
 
 
 <div class="viewcode-block" id="RemoteSpatialImage.set_url">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.set_url">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.set_url">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RemoteSpatialImage&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the url to the image file.</span>
 
@@ -1036,7 +1036,7 @@
         <span class="k">return</span> <span class="n">cache_path</span>
 
 <div class="viewcode-block" id="RemoteSpatialImage.img_raster">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.img_raster">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.img_raster">[docs]</a>
     <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Download (if needed) and load the image.&quot;&quot;&quot;</span>
@@ -1045,7 +1045,7 @@
 
 
 <div class="viewcode-block" id="RemoteSpatialImage.img_source">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.RemoteSpatialImage.img_source">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.RemoteSpatialImage.img_source">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">img_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the source URL or cached path of the image.</span>
 
@@ -1063,7 +1063,7 @@
 
 
 <div class="viewcode-block" id="construct_spatial_image_class">
-<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.SpatialImage.construct_spatial_image_class">[docs]</a>
+<a class="viewcode-back" href="../../api/spatialexperiment.html#spatialexperiment.spatialimage.construct_spatial_image_class">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">construct_spatial_image_class</span><span class="p">(</span>
     <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">is_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VirtualSpatialImage</span><span class="p">:</span>
@@ -1115,7 +1115,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=53b53b71"></script>
+</div><script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
