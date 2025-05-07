@@ -11,7 +11,7 @@ def test_to_anndata(spe):
     obj, alt_exps = spe.to_anndata()
 
     assert obj.shape == (500, 200)
-    
+
     # check that uns has the correct components
     assert 'spatial' in obj.uns
     assert len(obj.uns['spatial']) == 3
