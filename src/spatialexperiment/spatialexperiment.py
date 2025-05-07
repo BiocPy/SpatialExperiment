@@ -29,7 +29,7 @@ from ._validators import (
     _validate_spatial_coords,
     _validate_spatial_coords_names,
 )
-from .spatialimage import VirtualSpatialImage, construct_spatial_image_class
+from .spatialimage import VirtualSpatialImage, StoredSpatialImage, RemoteSpatialImage, LoadedSpatialImage, construct_spatial_image_class
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -1008,6 +1008,52 @@ class SpatialExperiment(SingleCellExperiment):
     @staticmethod
     def to_spatial_experiment():
         raise NotImplementedError()
+
+    ################################
+    ######>> AnnData interop <<#####
+    ################################
+
+    def to_anndata(self, include_alternative_experiments: bool = False) -> "anndata.AnnData":
+        """Transform :py:class:`~SpatialExperiment`-like into a :py:class:`~anndata.AnnData` representation.
+
+        Args:
+            include_alternative_experiments:
+                Whether to transform alternative experiments.
+
+        Returns:
+            An ``AnnData`` representation of the experiment.
+        """
+        obj, alt_exps = super().to_anndata(include_alternative_experiments=include_alternative_experiments)
+
+        if 'spatial' in obj.uns:
+            raise ValueError("'spatial' key already exists in the metadata. Rename to something else.")
+
+        obj.uns['spatial'] = {}
+        for _, row in self.img_data:
+            library_id = row['sample_id'] + '-' + row['image_id']
+            obj.uns['spatial'][library_id] = {}
+
+            spi = row['data']
+            if isinstance(spi, LoadedSpatialImage):
+                img = spi.image 
+            elif isinstance(spi, (StoredSpatialImage, RemoteSpatialImage)):
+                img = spi.img_source()
+            
+            obj.uns['spatial'][library_id]['images'] = {
+                'hires': img
+            }  # default to `hires` for now
+
+            obj.uns['spatial'][library_id]['scalefactors'] = {
+                'tissue_hires_scalef': row['scale_factor']
+            }  # default to `tissue_hires_scalef` for now
+
+        obj.obsm['spatial'] = np.column_stack(
+            [self.spatial_coordinates[axis]
+             for axis in self.spatial_coords_names]
+        )
+
+        return obj, alt_exps
+
 
     ################################
     #######>> combine ops <<########

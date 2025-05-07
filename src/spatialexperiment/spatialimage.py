@@ -257,8 +257,8 @@ class LoadedSpatialImage(VirtualSpatialImage):
     ######>> img props <<#######
     ############################
 
-    def get_image(self) -> Image.Image:
-        """Get the image as a PIL Image object."""
+    def get_image(self) -> Union[Image.Image, np.ndarray]:
+        """Get the image as a PIL Image object or ndarray."""
 
         return self._image
 

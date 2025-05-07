@@ -26,7 +26,6 @@ from .spatialimage import (
 )
 
 __all__ = [
-    "ProxySpatialFeatureExperiment",
     "read_tenx_visium",
     "SpatialExperiment",
     "LoadedSpatialImage",
