@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.0.9
+- Added `to_anndata()` in main `SpatialExperiment` class (PR #50)
+
+## Version 0.0.8
+- Set the expected column names for image data slot (PR #46)
+
 ## Version 0.0.7
 - Added `img_source` function in main SpatialExperiment class and child classes of VirtualSpatialExperiment (PR #36)
 - Added `remove_img` function (PR #34)
