@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 0.0.10
+
+- Add an affine function that computes a `rasterio.Affine` object given a `scale_factor`. This assumes a simple scaling where the origin is (0,0) in the spatial coordinate system corresponding to the top-left pixel (0,0). More complex alignments would require explicit affine transforms.
+- Ensure img_raster() consistently returns a PIL.Image.Image.
+- Add to_numpy() method.
+- Changes to how caching works in remote images.
+
+
 ## Version 0.0.9
 - Added `to_anndata()` in main `SpatialExperiment` class (PR #50)
 
