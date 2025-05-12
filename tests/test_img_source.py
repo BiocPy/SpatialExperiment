@@ -60,9 +60,9 @@ def test_remote_spatial_image_img_source_with_mock(monkeypatch):
 
     assert isinstance(spi_remote, RemoteSpatialImage)
 
-    # Mock the _download_image method to return a fixed path
+    # Mock the _get_cached_path method to return a fixed path
     mock_path = Path("/tmp/image.jpg")
-    monkeypatch.setattr(spi_remote, "_download_image", lambda: mock_path)
+    monkeypatch.setattr(spi_remote, "_get_cached_path", lambda: mock_path)
 
     # Test with as_path=True (returns the cached path)
     source_path = spi_remote.img_source(as_path=True)

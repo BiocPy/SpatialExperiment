@@ -38,9 +38,9 @@ def test_remote_spatial_image_img_raster(monkeypatch):
     image_url = "https://example.com/test_image.jpg"
     spi_remote = construct_spatial_image_class(image_url, is_url=True)
 
-    # Mock the _download_image method to return an image
+    # Mock the _get_cached_path method to return an image
     mock_path = "tests/images/sample_image1.jpg"
-    monkeypatch.setattr(spi_remote, "_download_image", lambda: mock_path)
+    monkeypatch.setattr(spi_remote, "_get_cached_path", lambda: mock_path)
 
     raster = spi_remote.img_raster()
 
@@ -54,7 +54,7 @@ def test_remote_spatial_image_img_raster(monkeypatch):
         num_calls += 1
         return mock_path
 
-    monkeypatch.setattr(spi_remote, "_download_image", mock_download)
+    monkeypatch.setattr(spi_remote, "_get_cached_path", mock_download)
 
     raster2 = spi_remote.img_raster()
     assert num_calls == 0
