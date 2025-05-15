@@ -1,6 +1,9 @@
+import pytest
 from copy import deepcopy
 from pathlib import Path
-import pytest
+import anndata as ad
+
+from spatialexperiment import SpatialExperiment
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -26,6 +29,14 @@ def test_to_anndata(spe):
     # check that obsm has the correct components
     assert 'spatial' in obj.obsm
     assert obj.obsm['spatial'].shape == (500, 2)
+
+
+def test_to_anndata_empty():
+    tspe = SpatialExperiment()
+
+    obj, alt_exps = tspe.to_anndata()
+
+    assert isinstance(obj, ad.AnnData)
 
 
 def test_to_anndata_spatial_key_exists(spe):
