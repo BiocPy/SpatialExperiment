@@ -1051,7 +1051,7 @@ class SpatialExperiment(SingleCellExperiment):
                 "tissue_hires_scalef": row["scale_factor"]
             }  # default to `tissue_hires_scalef` for now
 
-        if len(self.spatial_coordinates) > 0:
+        if self.spatial_coords_names:
             coords_by_axis = [self.spatial_coordinates[axis] for axis in self.spatial_coords_names]
             obj.obsm["spatial"] = np.column_stack(coords_by_axis)
 
