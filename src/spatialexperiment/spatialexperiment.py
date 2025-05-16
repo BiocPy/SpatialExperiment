@@ -1019,7 +1019,9 @@ class SpatialExperiment(SingleCellExperiment):
     ######>> AnnData interop <<#####
     ################################
 
-    def to_anndata(self, include_alternative_experiments: bool = False) -> Tuple["anndata.AnnData", Dict[str, "anndata.AnnData"]]:
+    def to_anndata(
+        self, include_alternative_experiments: bool = False
+    ) -> Tuple["anndata.AnnData", Dict[str, "anndata.AnnData"]]:
         """Transform :py:class:`~SpatialExperiment`-like into a :py:class:`~anndata.AnnData` representation.
 
         This method converts the main experiment data, spatial coordinates,
