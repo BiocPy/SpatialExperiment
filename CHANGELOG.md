@@ -1,7 +1,8 @@
 # Changelog
 
-## Version 0.0.11-0.0.12
+## Version 0.0.11-0.0.13
 - BUGFIX: `to_anndata()` only populates `obsm` with spatial coordinates if the original `SpatialExperiment` has spatial coordinates (PR #53, #54)
+- Enhance docstring for `to_anndata()` to describe the structure of returned AnnData object (PR #55)
 
 
 ## Version 0.0.10
