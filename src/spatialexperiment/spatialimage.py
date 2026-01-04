@@ -19,11 +19,11 @@ __license__ = "MIT"
 
 
 # Keeping the same names as the R classes
-class VirtualSpatialImage(ABC):
+class VirtualSpatialImage(ut.BiocObject):
     """Base class for spatial images."""
 
     def __init__(self, metadata: Optional[dict] = None):
-        self._metadata = metadata if metadata is not None else {}
+        super().__init__(metadata=metadata)
 
     #########################
     ######>> Equality <<#####
@@ -39,54 +39,6 @@ class VirtualSpatialImage(ABC):
         # Note: This exists primarily to support lru_cache.
         # Generally, these classes are mutable and shouldn't be used as dict keys or in sets.
         return hash(frozenset(self._metadata.items()))
-
-    ###########################
-    ######>> metadata <<#######
-    ###########################
-
-    def get_metadata(self) -> dict:
-        """
-        Returns:
-            Dictionary of metadata for this object.
-        """
-        return self._metadata
-
-    def set_metadata(self, metadata: dict, in_place: bool = False) -> "VirtualSpatialImage":
-        """Set additional metadata.
-
-        Args:
-            metadata:
-                New metadata for this object.
-
-            in_place:
-                Whether to modify the ``VirtualSpatialImage`` in place.
-
-        Returns:
-            A modified ``VirtualSpatialImage`` object, either as a copy of the original
-            or as a reference to the (in-place-modified) original.
-        """
-        if not isinstance(metadata, dict):
-            raise TypeError(f"`metadata` must be a dictionary, provided {type(metadata)}.")
-        output = self._define_output(in_place)
-        output._metadata = metadata
-        return output
-
-    @property
-    def metadata(self) -> dict:
-        """Alias for :py:attr:`~get_metadata`."""
-        return self.get_metadata()
-
-    @metadata.setter
-    def metadata(self, metadata: dict):
-        """Alias for :py:attr:`~set_metadata` with ``in_place = True``.
-
-        As this mutates the original object, a warning is raised.
-        """
-        warn(
-            "Setting property 'metadata' is an in-place operation, use 'set_metadata' instead",
-            UserWarning,
-        )
-        self.set_metadata(metadata, in_place=True)
 
     ##################################
     ######>> Spatial Props <<#########
