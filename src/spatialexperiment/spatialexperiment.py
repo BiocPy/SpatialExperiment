@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence, Union, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 from urllib.parse import urlparse
 from warnings import warn
 
@@ -30,10 +32,10 @@ from ._validators import (
     _validate_spatial_coords_names,
 )
 from .spatialimage import (
-    VirtualSpatialImage,
-    StoredSpatialImage,
-    RemoteSpatialImage,
     LoadedSpatialImage,
+    RemoteSpatialImage,
+    StoredSpatialImage,
+    VirtualSpatialImage,
     construct_spatial_image_class,
 )
 
@@ -60,7 +62,7 @@ class SpatialExperiment(SingleCellExperiment):
         column_data: Optional[BiocFrame] = None,
         row_names: Optional[List[str]] = None,
         column_names: Optional[List[str]] = None,
-        metadata: Optional[dict] = None,
+        metadata: Optional[Union[Dict[str, Any], ut.NamedList]] = None,
         reduced_dims: Optional[Dict[str, Any]] = None,
         main_experiment_name: Optional[str] = None,
         alternative_experiments: Optional[Dict[str, Any]] = None,
@@ -69,7 +71,7 @@ class SpatialExperiment(SingleCellExperiment):
         column_pairs: Optional[Any] = None,
         spatial_coords: Optional[Union[BiocFrame, np.ndarray]] = None,
         img_data: Optional[BiocFrame] = None,
-        validate: bool = True,
+        _validate: bool = True,
         **kwargs,
     ) -> None:
         """Initialize a spatial experiment.
@@ -179,7 +181,7 @@ class SpatialExperiment(SingleCellExperiment):
                 Image data are coerced to a
                 :py:class:`~biocframe.BiocFrame.BiocFrame`. Defaults to None.
 
-            validate:
+            _validate:
                 Internal use only.
         """
         super().__init__(
@@ -196,7 +198,7 @@ class SpatialExperiment(SingleCellExperiment):
             row_pairs=row_pairs,
             column_pairs=column_pairs,
             alternative_experiment_check_dim_names=alternative_experiment_check_dim_names,
-            validate=validate,
+            _validate=_validate,
             **kwargs,
         )
 
@@ -217,7 +219,7 @@ class SpatialExperiment(SingleCellExperiment):
         self._cols = column_data
         self._spatial_coords = spatial_coords
 
-        if validate:
+        if _validate:
             _validate_column_data(column_data=column_data)
             _validate_img_data(img_data=img_data)
             _validate_sample_ids(column_data=column_data, img_data=img_data)
@@ -265,6 +267,7 @@ class SpatialExperiment(SingleCellExperiment):
             column_pairs=_col_pair_copy,
             spatial_coords=_spatial_coords_copy,
             img_data=_img_data_copy,
+            _validate=False,
         )
 
     def __copy__(self):
@@ -288,6 +291,7 @@ class SpatialExperiment(SingleCellExperiment):
             column_pairs=self._column_pairs,
             spatial_coords=self._spatial_coords,
             img_data=self._img_data,
+            _validate=False,
         )
 
     def copy(self):
@@ -399,7 +403,7 @@ class SpatialExperiment(SingleCellExperiment):
         self,
         spatial_coords: Optional[Union[BiocFrame, np.ndarray]],
         in_place: bool = False,
-    ) -> "SpatialExperiment":
+    ) -> SpatialExperiment:
         """Set new spatial coordinates.
 
         Args:
@@ -434,7 +438,7 @@ class SpatialExperiment(SingleCellExperiment):
         self,
         spatial_coords: Optional[Union[BiocFrame, np.ndarray]],
         in_place: bool = False,
-    ) -> "SpatialExperiment":
+    ) -> SpatialExperiment:
         """Alias for :py:meth:`~set_spatial_coordinates`."""
         return self.set_spatial_coordinates(spatial_coords=spatial_coords, in_place=in_place)
 
@@ -487,7 +491,7 @@ class SpatialExperiment(SingleCellExperiment):
 
     def set_spatial_coordinates_names(
         self, spatial_coords_names: List[str], in_place: bool = False
-    ) -> "SpatialExperiment":
+    ) -> SpatialExperiment:
         """Set new spatial coordinates names.
 
         Args:
@@ -514,7 +518,7 @@ class SpatialExperiment(SingleCellExperiment):
         output._spatial_coords = new_spatial_coords
         return output
 
-    def set_spatial_coords_names(self, spatial_coords_names: List[str], in_place: bool = False) -> "SpatialExperiment":
+    def set_spatial_coords_names(self, spatial_coords_names: List[str], in_place: bool = False) -> SpatialExperiment:
         """Alias for :py:meth:`~set_spatial_coordinates_names`."""
         return self.set_spatial_coordinates_names(spatial_coords_names=spatial_coords_names, in_place=in_place)
 
@@ -562,7 +566,7 @@ class SpatialExperiment(SingleCellExperiment):
         """Alias for :py:meth:`~get_image_data`."""
         return self.get_image_data()
 
-    def set_image_data(self, img_data: Optional[BiocFrame], in_place: bool = False) -> "SpatialExperiment":
+    def set_image_data(self, img_data: Optional[BiocFrame], in_place: bool = False) -> SpatialExperiment:
         """Set new image data.
 
         Args:
@@ -591,7 +595,7 @@ class SpatialExperiment(SingleCellExperiment):
         output._img_data = img_data
         return output
 
-    def set_img_data(self, img_data: BiocFrame, in_place: bool = False) -> "SpatialExperiment":
+    def set_img_data(self, img_data: BiocFrame, in_place: bool = False) -> SpatialExperiment:
         """Alias for :py:meth:`~set_image_data`."""
         return self.set_image_data(img_data=img_data, in_place=in_place)
 
@@ -666,7 +670,7 @@ class SpatialExperiment(SingleCellExperiment):
         cols: Optional[BiocFrame],
         replace_column_names: bool = False,
         in_place: bool = False,
-    ) -> "SpatialExperiment":
+    ) -> SpatialExperiment:
         """Override: Set sample data.
 
         Args:
@@ -710,7 +714,7 @@ class SpatialExperiment(SingleCellExperiment):
         self,
         rows: Optional[Union[str, int, bool, Sequence]],
         columns: Optional[Union[str, int, bool, Sequence]],
-    ) -> "SpatialExperiment":
+    ) -> SpatialExperiment:
         """Alias for :py:attr:`~__getitem__`."""
 
         spe = super().get_slice(rows=rows, columns=columns)
@@ -820,7 +824,7 @@ class SpatialExperiment(SingleCellExperiment):
         image_id: Union[str, bool, None],
         load: bool = True,
         in_place: bool = False,
-    ) -> "SpatialExperiment":
+    ) -> SpatialExperiment:
         """Add a new image entry.
 
         Args:
@@ -883,7 +887,7 @@ class SpatialExperiment(SingleCellExperiment):
 
     def remove_img(
         self, sample_id: Union[str, bool, None] = None, image_id: Union[str, bool, None] = None, in_place: bool = False
-    ) -> "SpatialExperiment":
+    ) -> SpatialExperiment:
         """Remove an image entry.
 
         Args:
@@ -1083,11 +1087,11 @@ class SpatialExperiment(SingleCellExperiment):
     #######>> combine ops <<########
     ################################
 
-    def relaxed_combine_columns(self, *other) -> "SpatialExperiment":
+    def relaxed_combine_columns(self, *other) -> SpatialExperiment:
         """Wrapper around :py:func:`~relaxed_combine_columns`."""
         return relaxed_combine_columns(self, *other)
 
-    def combine_columns(self, *other) -> "SpatialExperiment":
+    def combine_columns(self, *other) -> SpatialExperiment:
         """Wrapper around :py:func:`~combine_columns`."""
         return combine_columns(self, *other)
 
