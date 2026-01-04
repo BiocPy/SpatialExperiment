@@ -1,6 +1,6 @@
 import shutil
 import tempfile
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional, Tuple, Union
