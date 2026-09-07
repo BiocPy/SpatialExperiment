@@ -3,7 +3,6 @@ import tempfile
 from abc import abstractmethod
 from functools import lru_cache
 from pathlib import Path
-from typing import Optional, Tuple, Union
 from urllib.parse import urlparse
 from warnings import warn
 
@@ -22,7 +21,7 @@ __license__ = "MIT"
 class VirtualSpatialImage(ut.BiocObject):
     """Base class for spatial images."""
 
-    def __init__(self, metadata: Optional[dict] = None):
+    def __init__(self, metadata: dict | None = None):
         super().__init__(metadata=metadata)
 
     #########################
@@ -53,13 +52,13 @@ class VirtualSpatialImage(ut.BiocObject):
         """
         return Affine.scale(scale_factor, scale_factor)
 
-    def get_dimensions(self) -> Tuple[int, int]:
+    def get_dimensions(self) -> tuple[int, int]:
         """Get image dimensions (width, height) in pixels."""
         img = self.img_raster()
         return img.size
 
     @property
-    def dimensions(self) -> Tuple[int, int]:
+    def dimensions(self) -> tuple[int, int]:
         """Alias for :py:meth:`~get_dimensions`."""
         return self.get_dimensions()
 
@@ -68,7 +67,7 @@ class VirtualSpatialImage(ut.BiocObject):
     ############################
 
     @abstractmethod
-    def img_source(self, as_path: bool = False) -> Union[str, Path, None]:
+    def img_source(self, as_path: bool = False) -> str | Path | None:
         """Get the source of the image.
 
         Args:
@@ -77,12 +76,10 @@ class VirtualSpatialImage(ut.BiocObject):
         Returns:
             Source path/URL of the image, or None if loaded in memory.
         """
-        pass
 
     @abstractmethod
     def img_raster(self) -> Image.Image:
         """Get the image as a PIL Image object."""
-        pass
 
     def to_numpy(self, **kwargs) -> np.ndarray:
         """Convert the image raster to a NumPy array.
@@ -132,7 +129,7 @@ class VirtualSpatialImage(ut.BiocObject):
         )
 
 
-def _sanitize_loaded_image(image: Union[Image.Image, np.ndarray]) -> Image.Image:
+def _sanitize_loaded_image(image: Image.Image | np.ndarray) -> Image.Image:
     if isinstance(image, np.ndarray):
         # trying to infer mode for multi-channel arrays if not RGBA/RGB
         if image.ndim == 3:
@@ -159,7 +156,7 @@ def _sanitize_loaded_image(image: Union[Image.Image, np.ndarray]) -> Image.Image
 class LoadedSpatialImage(VirtualSpatialImage):
     """Class for images loaded into memory."""
 
-    def __init__(self, image: Union[Image.Image, np.ndarray], metadata: Optional[dict] = None):
+    def __init__(self, image: Image.Image | np.ndarray, metadata: dict | None = None):
         """Initialize the object.
 
         Args:
@@ -260,7 +257,7 @@ class LoadedSpatialImage(VirtualSpatialImage):
         """
         output = f"class: {type(self).__name__}\n"
         output += f"image: ({self._image})\n"
-        output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+        output += f"metadata({len(self.metadata)!s}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
         return output
 
@@ -272,7 +269,7 @@ class LoadedSpatialImage(VirtualSpatialImage):
         """Get the PIL Image object."""
         return self._image
 
-    def set_image(self, image: Union[Image.Image, np.ndarray], in_place: bool = False) -> "LoadedSpatialImage":
+    def set_image(self, image: Image.Image | np.ndarray, in_place: bool = False) -> "LoadedSpatialImage":
         """Set new image.
 
         Args:
@@ -295,7 +292,7 @@ class LoadedSpatialImage(VirtualSpatialImage):
         return self.get_image()
 
     @image.setter
-    def image(self, image: Union[Image.Image, np.ndarray]):
+    def image(self, image: Image.Image | np.ndarray):
         """Alias for :py:attr:`~set_image` with ``in_place = True``.
 
         As this mutates the original object, a warning is raised.
@@ -308,7 +305,7 @@ class LoadedSpatialImage(VirtualSpatialImage):
 
     def img_source(self, as_path: bool = False) -> None:
         """Get the source of the loaded image (always None for in-memory)."""
-        return None
+        return
 
     ############################
     ######>> img utils <<#######
@@ -319,7 +316,7 @@ class LoadedSpatialImage(VirtualSpatialImage):
         return self._image
 
 
-def _sanitize_path(path: Union[str, Path]) -> Path:
+def _sanitize_path(path: str | Path) -> Path:
     _path = Path(path).resolve()
     if not _path.exists():
         raise FileNotFoundError(f"Image file not found: {path}")
@@ -330,7 +327,7 @@ def _sanitize_path(path: Union[str, Path]) -> Path:
 class StoredSpatialImage(VirtualSpatialImage):
     """Class for images stored on local filesystem."""
 
-    def __init__(self, path: Union[str, Path], metadata: Optional[dict] = None):
+    def __init__(self, path: str | Path, metadata: dict | None = None):
         """Initialize the object.
 
         Args:
@@ -414,8 +411,8 @@ class StoredSpatialImage(VirtualSpatialImage):
             A pretty-printed string containing the contents of this object.
         """
         output = f"class: {type(self).__name__}\n"
-        output += f"path: ({str(self._path)})\n"
-        output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+        output += f"path: ({self._path!s})\n"
+        output += f"metadata({len(self.metadata)!s}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
         return output
 
@@ -427,7 +424,7 @@ class StoredSpatialImage(VirtualSpatialImage):
         """Get the path to the image file."""
         return self._path
 
-    def set_path(self, path: Union[str, Path], in_place: bool = False) -> "StoredSpatialImage":
+    def set_path(self, path: str | Path, in_place: bool = False) -> "StoredSpatialImage":
         """Update the path to the image file.
 
         Args:
@@ -455,7 +452,7 @@ class StoredSpatialImage(VirtualSpatialImage):
         return self.get_path()
 
     @path.setter
-    def path(self, path: Union[str, Path]):
+    def path(self, path: str | Path):
         """Alias for :py:attr:`~set_path` with ``in_place = True``.
 
         As this mutates the original object, a warning is raised.
@@ -499,7 +496,7 @@ def _validate_url(url: str):
 class RemoteSpatialImage(VirtualSpatialImage):
     """Class for remotely hosted images."""
 
-    def __init__(self, url: str, metadata: Optional[dict] = None, validate: bool = True):
+    def __init__(self, url: str, metadata: dict | None = None, validate: bool = True):
         """Initialize the object.
 
         Args:
@@ -592,7 +589,7 @@ class RemoteSpatialImage(VirtualSpatialImage):
         """
         output = f"class: {type(self).__name__}\n"
         output += f"url: ({self._url})\n"
-        output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+        output += f"metadata({len(self.metadata)!s}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
         return output
 
@@ -676,7 +673,7 @@ class RemoteSpatialImage(VirtualSpatialImage):
                 # If download fails, remove incomplete cache file and re-raise
                 if cache_path.exists():
                     cache_path.unlink(missing_ok=True)
-                raise IOError(f"Failed to download image from {self._url}: {e}.") from e
+                raise OSError(f"Failed to download image from {self._url}: {e}.") from e
             except ValueError as e:
                 raise ValueError(f"Invalid URL for download {self._url}: {e}.") from e
         return cache_path
@@ -713,9 +710,9 @@ class RemoteSpatialImage(VirtualSpatialImage):
 
 
 def construct_spatial_image_class(
-    x: Union[str, Path, Image.Image, np.ndarray, VirtualSpatialImage],
-    metadata: Optional[dict] = None,
-    is_url: Optional[bool] = None,
+    x: str | Path | Image.Image | np.ndarray | VirtualSpatialImage,
+    metadata: dict | None = None,
+    is_url: bool | None = None,
 ) -> VirtualSpatialImage:
     """Factory function to create appropriate SpatialImage object.
 

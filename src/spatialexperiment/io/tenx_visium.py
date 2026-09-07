@@ -1,17 +1,17 @@
 """Creates a ``SpatialExperiment`` from the Space Ranger output directories for 10x Genomics Visium spatial gene expression data"""
 
-from typing import List, Union, Optional
-from warnings import warn
+import json
 import os
 import re
-import json
+from warnings import warn
 
-from biocframe import BiocFrame
 import biocutils as ut
+from biocframe import BiocFrame
 from singlecellexperiment import read_tenx_mtx
-from ..spatialexperiment import SpatialExperiment
+
 from .._imgutils import construct_img_data
 from .._initutils import construct_spatial_coords_from_names
+from ..spatialexperiment import SpatialExperiment
 
 
 def read_tissue_positions(tissue_positions_path) -> "pd.DataFrame":
@@ -46,8 +46,8 @@ def read_tissue_positions(tissue_positions_path) -> "pd.DataFrame":
 
 def read_img_data(
     path: str = ".",
-    sample_ids: Optional[List[str]] = None,
-    image_sources: Optional[List[str]] = None,
+    sample_ids: list[str] | None = None,
+    image_sources: list[str] | None = None,
     scale_factors: str = None,
     load: bool = True,
 ) -> BiocFrame:
@@ -118,11 +118,11 @@ def read_img_data(
 
 
 def read_tenx_visium(
-    samples: List[Union[str, os.PathLike]],
-    sample_ids: Optional[List[str]] = None,
+    samples: list[str | os.PathLike],
+    sample_ids: list[str] | None = None,
     type: str = "HDF5",
     data: str = "filtered",
-    images: List[str] = "lowres",
+    images: list[str] = "lowres",
     load: bool = True,
 ):
     """Create a ``SpatialExperiment`` from the Space Ranger output directories for 10x Genomics Visium spatial gene expression data.

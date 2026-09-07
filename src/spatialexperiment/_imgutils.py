@@ -1,12 +1,12 @@
-from typing import Union, List
-
 import os
 from io import BytesIO
 from pathlib import Path
 from urllib.parse import urlparse
+
 import numpy as np
-from PIL import Image
 from biocframe import BiocFrame
+from PIL import Image
+
 from .spatialimage import construct_spatial_image_class
 
 __author__ = "keviny2"
@@ -43,7 +43,7 @@ def read_image(input_image):
 
 
 def construct_img_data(
-    img: Union[str, os.PathLike], scale_factor: str, sample_id: str, image_id: str, load: bool = True
+    img: str | os.PathLike, scale_factor: str, sample_id: str, image_id: str, load: bool = True
 ) -> BiocFrame:
     """
     Construct an image data dataframe.
@@ -77,9 +77,9 @@ def construct_img_data(
 
 def get_img_idx(
     img_data: BiocFrame,
-    sample_id: Union[str, bool, None] = None,
-    image_id: Union[str, bool, None] = None,
-) -> List[int]:
+    sample_id: str | bool | None = None,
+    image_id: str | bool | None = None,
+) -> list[int]:
     """
     Retrieve the row index/indices of image(s) with matching 'sample_id' and 'image_id' from the 'img_data'.
 

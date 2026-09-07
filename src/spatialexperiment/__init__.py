@@ -26,11 +26,11 @@ from .spatialimage import (
 )
 
 __all__ = [
-    "read_tenx_visium",
-    "SpatialExperiment",
     "LoadedSpatialImage",
     "RemoteSpatialImage",
+    "SpatialExperiment",
     "StoredSpatialImage",
     "VirtualSpatialImage",
     "construct_spatial_image_class",
+    "read_tenx_visium",
 ]
