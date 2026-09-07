@@ -1,7 +1,7 @@
 import warnings
 
-from biocframe import BiocFrame
 import biocutils as ut
+from biocframe import BiocFrame
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"

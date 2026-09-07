@@ -51,36 +51,38 @@ ncols = 500  # Number of spots/cells
 counts = np.random.rand(nrows, ncols)
 
 # Create feature annotations
-row_data = BiocFrame({
-    "gene_ids": [f"gene_{i}" for i in range(nrows)],
-    "gene_names": [f"Gene_{i}" for i in range(nrows)]
-})
+row_data = BiocFrame(
+    {"gene_ids": [f"gene_{i}" for i in range(nrows)], "gene_names": [f"Gene_{i}" for i in range(nrows)]}
+)
 
 # Create spot/cell annotations
-col_data = BiocFrame({
-    "n_genes": [50, 200] * int(ncols / 2),
-    "condition": ["healthy", "tumor"] * int(ncols / 2),
-    "cell_id": [f"spot_{i}" for i in range(ncols)],
-    "sample_id": ["sample_1"] * int(ncols / 2) + ["sample_2"] * int(ncols / 2),
-})
+col_data = BiocFrame(
+    {
+        "n_genes": [50, 200] * int(ncols / 2),
+        "condition": ["healthy", "tumor"] * int(ncols / 2),
+        "cell_id": [f"spot_{i}" for i in range(ncols)],
+        "sample_id": ["sample_1"] * int(ncols / 2) + ["sample_2"] * int(ncols / 2),
+    }
+)
 
 # Generate spatial coordinates
-spatial_coords = BiocFrame({
-    "x": np.random.uniform(low=0.0, high=100.0, size=ncols),
-    "y": np.random.uniform(low=0.0, high=100.0, size=ncols)
-})
+spatial_coords = BiocFrame(
+    {"x": np.random.uniform(low=0.0, high=100.0, size=ncols), "y": np.random.uniform(low=0.0, high=100.0, size=ncols)}
+)
 
 # Create image data
-img_data = BiocFrame({
-    "sample_id": ["sample_1", "sample_1", "sample_2"],
-    "image_id": ["aurora", "dice", "desert"],
-    "data": [
-        construct_spatial_image_class("tests/images/sample_image1.jpg"),
-        construct_spatial_image_class("tests/images/sample_image2.png"),
-        construct_spatial_image_class("tests/images/sample_image3.jpg"),
-    ],
-    "scale_factor": [1, 1, 1],
-})
+img_data = BiocFrame(
+    {
+        "sample_id": ["sample_1", "sample_1", "sample_2"],
+        "image_id": ["aurora", "dice", "desert"],
+        "data": [
+            construct_spatial_image_class("tests/images/sample_image1.jpg"),
+            construct_spatial_image_class("tests/images/sample_image2.png"),
+            construct_spatial_image_class("tests/images/sample_image3.jpg"),
+        ],
+        "scale_factor": [1, 1, 1],
+    }
+)
 
 # Create SpatialExperiment object
 spe = SpatialExperiment(

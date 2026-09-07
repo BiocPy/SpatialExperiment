@@ -1,10 +1,10 @@
 from copy import deepcopy
-from typing import List, Tuple
 
 from biocframe import BiocFrame
 from PIL import Image
-from .spatialimage import construct_spatial_image_class
 from summarizedexperiment._frameutils import _sanitize_frame
+
+from .spatialimage import construct_spatial_image_class
 
 __author__ = "keviny2"
 __copyright__ = "keviny2"
@@ -12,8 +12,8 @@ __license__ = "MIT"
 
 
 def construct_spatial_coords_from_names(
-    spatial_coords_names: List[str], column_data: BiocFrame
-) -> Tuple[BiocFrame, BiocFrame]:
+    spatial_coords_names: list[str], column_data: BiocFrame
+) -> tuple[BiocFrame, BiocFrame]:
     """Construct the `spatial_coords` dataframe from names.
 
     Args:
@@ -54,8 +54,8 @@ def construct_spatial_coords_from_names(
 def construct_img_data(
     sample_id: str,
     image_id: str,
-    image_sources: List[str],
-    scale_factors: List[float],
+    image_sources: list[str],
+    scale_factors: list[float],
     load_image: bool = False,
 ) -> BiocFrame:
     """Construct the image data for a `SpatialExperiment`.

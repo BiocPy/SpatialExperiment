@@ -1,15 +1,14 @@
 from __future__ import annotations
-from typing import List, Tuple
 
-from warnings import warn
-from copy import deepcopy
 import itertools
+from copy import deepcopy
+from warnings import warn
 
-from biocframe import BiocFrame
 import biocutils as ut
+from biocframe import BiocFrame
 
 
-def _append_indices_to_samples(bframes: List[BiocFrame]) -> List[BiocFrame]:
+def _append_indices_to_samples(bframes: list[BiocFrame]) -> list[BiocFrame]:
     """Append indices to sample IDs for a list of `BiocFrames`.
 
     For each `BiocFrame`, appends an index to all sample IDs to ensure uniqueness
@@ -29,7 +28,7 @@ def _append_indices_to_samples(bframes: List[BiocFrame]) -> List[BiocFrame]:
     return modified_bframes
 
 
-def merge_spatial_frames(x: List["SpatialExperiment"], relaxed: bool = False) -> Tuple[BiocFrame, BiocFrame]:
+def merge_spatial_frames(x: list[SpatialExperiment], relaxed: bool = False) -> tuple[BiocFrame, BiocFrame]:
     """Merge column data and image data from multiple ``SpatialExperiment`` objects.
 
     If duplicate sample IDs exist across objects, appends indices to make them unique.
@@ -70,7 +69,7 @@ def merge_spatial_frames(x: List["SpatialExperiment"], relaxed: bool = False) ->
     return _new_cols, _new_img_data
 
 
-def merge_spatial_coordinates(spatial_coords: List[BiocFrame], relaxed: bool = False) -> BiocFrame:
+def merge_spatial_coordinates(spatial_coords: list[BiocFrame], relaxed: bool = False) -> BiocFrame:
     """Merge spatial coordinates from multiple frames.
 
     Args:
